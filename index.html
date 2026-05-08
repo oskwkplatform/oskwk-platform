@@ -17,1636 +17,478 @@
             --radius-lg: 20px;
             --radius-md: 16px;
             --radius-xl: 28px;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-            --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.08);
             --danger: #ef4444;
             --danger-light: #fecaca;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background: var(--bg);
             color: var(--text-primary);
-            background-image: radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.03) 0%, transparent 30%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.04) 0%, transparent 40%);
-            min-height: 100vh;
-            line-height: 1.5;
+            background-image: radial-gradient(circle at 10% 20%, rgba(79,70,229,0.03) 0%, transparent 30%),
+                              radial-gradient(circle at 90% 80%, rgba(168,85,247,0.04) 0%, transparent 40%);
+            min-height: 100vh; line-height: 1.5;
         }
-        #particles {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-        }
+        #particles { position:fixed; inset:0; z-index:0; pointer-events:none; }
         .loading {
-            position: fixed;
-            inset: 0;
-            background: #0a0a0a;
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 56px;
-            font-weight: 700;
-            color: white;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: pulse 1.5s infinite;
-            transition: opacity 0.5s ease;
+            position:fixed; inset:0; background:#0a0a0a; z-index:999;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            font-size:56px; font-weight:700; color:white;
+            background: var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            background-clip:text; animation:pulse 1.5s infinite; transition:opacity 0.5s;
         }
-        @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-        .loading.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .loading.hidden { opacity:0; pointer-events:none; }
         .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            padding: 32px;
-            background: var(--accent-gradient);
-            position: relative;
-            overflow: hidden;
+            min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+            color:white; text-align:center; padding:32px; background:var(--accent-gradient); position:relative; overflow:hidden;
         }
         .hero::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.08)" d="M0,160L48,186.7C96,213,192,267,288,261.3C384,256,480,192,576,181.3C672,171,768,213,864,234.7C960,256,1056,256,1152,240C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
-            background-size: 100% 120px;
-            pointer-events: none;
+            content:''; position:absolute; inset:0;
+            background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.08)" d="M0,160L48,186.7C96,213,192,267,288,261.3C384,256,480,192,576,181.3C672,171,768,213,864,234.7C960,256,1056,256,1152,240C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size:100% 120px; pointer-events:none;
         }
-        .hero h1 {
-            font-size: clamp(36px, 8vw, 72px);
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
-        }
-        .hero p {
-            font-size: 20px;
-            margin-top: 24px;
-            opacity: 0.95;
-            position: relative;
-            z-index: 1;
-        }
+        .hero h1 { font-size:clamp(36px,8vw,72px); font-weight:700; position:relative; z-index:1; text-shadow:0 2px 20px rgba(0,0,0,0.2); }
+        .hero p { font-size:20px; margin-top:24px; opacity:0.95; position:relative; z-index:1; }
         .hero button {
-            background: white;
-            color: var(--accent);
-            padding: 18px 56px;
-            border-radius: 100px;
-            font-size: 18px;
-            font-weight: 600;
-            border: none;
-            margin-top: 40px;
-            cursor: pointer;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            z-index: 1;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
+            background:white; color:var(--accent); padding:18px 56px; border-radius:100px; font-size:18px; font-weight:600; border:none;
+            margin-top:40px; cursor:pointer; box-shadow:0 12px 40px rgba(0,0,0,0.15); transition:transform 0.2s; position:relative; z-index:1;
+            -webkit-tap-highlight-color:transparent; user-select:none;
         }
-        .hero button:hover {
-            transform: scale(1.04);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
-        }
-        .hero button:active {
-            transform: scale(0.97);
-        }
+        .hero button:hover { transform:scale(1.04); }
+        .hero button:active { transform:scale(0.97); }
         .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 200;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: fadeInOverlay 0.3s ease;
+            position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+            z-index:200; display:none; align-items:center; justify-content:center; padding:20px;
         }
-        @keyframes fadeInOverlay {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        .modal-overlay.show {
-            display: flex;
-        }
+        .modal-overlay.show { display:flex; }
         .modal {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            width: 100%;
-            max-width: 440px;
-            border-radius: var(--radius-xl);
-            padding: 48px 32px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
-            animation: slideUp 0.35s ease;
-        }
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .modal h2 {
-            font-size: 32px;
-            text-align: center;
-            margin-bottom: 28px;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .field {
-            margin-bottom: 18px;
-        }
-        .field label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-            letter-spacing: 0.3px;
-        }
-        .field input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid rgba(0, 0, 0, 0.08);
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            background: rgba(0, 0, 0, 0.02);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            outline: none;
-        }
-        .field input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-        .flex {
-            display: flex;
-            gap: 10px;
-        }
-        .flex input {
-            flex: 1;
-        }
-        .flex button {
-            padding: 14px 20px;
-            background: var(--accent-light);
-            color: var(--accent);
-            border: 1.5px solid rgba(79, 70, 229, 0.2);
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .flex button:hover {
-            background: rgba(79, 70, 229, 0.15);
-        }
-        .check {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            font-size: 13px;
-            cursor: pointer;
-            user-select: none;
-        }
-        .check input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--accent);
-        }
-        .terms {
-            background: rgba(0, 0, 0, 0.02);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            max-height: 120px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-        }
-        .btn-submit {
-            width: 100%;
-            padding: 16px;
-            background: var(--accent-gradient);
-            color: #fff;
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .btn-submit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.25);
-        }
-        .btn-submit:active {
-            transform: scale(0.98);
-        }
-        .toast {
-            position: fixed;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.85);
-            color: #fff;
-            padding: 14px 28px;
-            border-radius: 100px;
-            font-size: 14px;
-            z-index: 400;
-            display: none;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            pointer-events: none;
-            white-space: nowrap;
-            animation: toastIn 0.3s ease;
-        }
-        @keyframes toastIn {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-        .toast.show {
-            display: block;
-        }
-        .main {
-            display: none;
-            padding: 100px 20px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-        .main.active {
-            display: block;
-            animation: fadeInMain 0.5s ease;
-        }
-        @keyframes fadeInMain {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            overflow-x: auto;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.03);
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-        .nav::-webkit-scrollbar {
-            display: none;
-        }
-        .nav span {
-            font-weight: 700;
-            font-size: 20px;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-right: 12px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .nav button {
-            background: none;
-            border: none;
-            color: #888;
-            padding: 10px 18px;
-            border-radius: 100px;
-            font-size: 13px;
-            white-space: nowrap;
-            transition: all 0.2s;
-            cursor: pointer;
-            flex-shrink: 0;
-            -webkit-tap-highlight-color: transparent;
-            font-weight: 500;
-        }
-        .nav button:hover {
-            color: #555;
-            background: rgba(0, 0, 0, 0.03);
-        }
-        .nav button.active {
-            background: var(--accent-light);
-            color: var(--accent);
-            font-weight: 600;
-        }
-        .page {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-        .page.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .pg-hero {
-            height: 280px;
-            border-radius: var(--radius-xl);
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 36px;
-            font-weight: 700;
-            position: relative;
-            overflow: hidden;
-            background-size: cover;
-            background-position: center;
-            box-shadow: var(--shadow-md);
-        }
-        .pg-hero::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.3);
-        }
-        .pg-hero span {
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        }
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius-xl);
-            padding: 40px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
-            transition: box-shadow 0.3s;
-        }
-        .card:hover {
-            box-shadow: var(--shadow-md);
-        }
-        .btn-write {
-            background: var(--accent-gradient);
-            color: #fff;
-            padding: 12px 28px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            cursor: pointer;
-            margin-bottom: 16px;
-            display: inline-block;
-            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
-            -webkit-tap-highlight-color: transparent;
-            font-weight: 600;
-        }
-        .btn-write:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(79, 70, 229, 0.3);
-        }
-        .btn-write:active {
-            transform: scale(0.97);
-        }
-        .editor {
-            display: none;
-            margin-bottom: 16px;
-            padding: 20px;
-            background: var(--bg);
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            animation: fadeIn 0.3s ease;
-        }
-        .editor input,
-        .editor textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            font-size: 15px;
-            margin-bottom: 12px;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.2s;
-            resize: vertical;
-        }
-        .editor input:focus,
-        .editor textarea:focus {
-            border-color: var(--accent);
-        }
-        .editor textarea {
-            height: 150px;
-            min-height: 120px;
-        }
-        .list {
-            display: grid;
-            gap: 16px;
-        }
-        .item {
-            background: var(--bg);
-            border-radius: 16px;
-            padding: 24px;
-            transition: 0.2s;
-            cursor: default;
-            border: 1px solid transparent;
-        }
-        .item:hover {
-            background: white;
-            box-shadow: var(--shadow-md);
-            border-color: var(--border);
-        }
-        .item h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-        .item p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-        .item .meta {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 14px;
-            font-size: 12px;
-            color: #999;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .ch-search {
-            width: 100%;
-            padding: 16px 20px;
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            margin-bottom: 20px;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            background: var(--bg);
-        }
-        .ch-search:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
-            background: #fff;
-        }
-        .ch-grid {
-            display: grid;
-            gap: 14px;
-        }
-        @media(min-width:768px) {
-            .ch-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        .ch-card {
-            background: var(--bg);
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-        }
-        .ch-card:hover {
-            border-color: var(--accent);
-            background: var(--accent-light);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-        }
-        .ch-card:active {
-            transform: scale(0.98);
-        }
-        .ch-card.hidden {
-            display: none;
-        }
-        .ch-em {
-            font-size: 36px;
-            flex-shrink: 0;
-        }
-        .ch-info {
-            flex: 1;
-            min-width: 0;
-        }
-        .ch-name {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        .ch-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-        .chat-container {
-            margin-top: 20px;
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        .chat-container.active {
-            display: block;
-        }
-        .messages-box {
-            height: 55vh;
-            overflow-y: auto;
-            background: var(--bg);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            margin-bottom: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            border: 1px solid var(--border);
-            -webkit-overflow-scrolling: touch;
-        }
-        .msg {
-            max-width: 80%;
-            padding: 12px 18px;
-            border-radius: 20px;
-            font-size: 15px;
-            line-height: 1.5;
-            position: relative;
-            word-break: break-word;
-            animation: msgIn 0.25s ease;
-        }
-        @keyframes msgIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .msg.mine {
-            align-self: flex-end;
-            background: var(--accent-gradient);
-            color: #fff;
-            border-bottom-right-radius: 4px;
-        }
-        .msg.other {
-            align-self: flex-start;
-            background: white;
-            border: 1px solid var(--border);
-            border-bottom-left-radius: 4px;
-        }
-        .msg .sender {
-            font-size: 11px;
-            opacity: 0.7;
-            margin-bottom: 4px;
-            display: flex;
-            gap: 4px;
-            font-weight: 600;
-        }
-        .msg img {
-            max-width: 200px;
-            border-radius: 12px;
-            margin-top: 6px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .msg img:hover {
-            transform: scale(1.02);
-        }
-        .chat-input-area {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .chat-input-area input {
-            flex: 1;
-            padding: 14px 16px;
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            outline: none;
-            transition: border-color 0.2s;
-            min-width: 0;
-        }
-        .chat-input-area input:focus {
-            border-color: var(--accent);
-        }
-        .chat-input-area button {
-            padding: 14px 24px;
-            background: var(--accent-gradient);
-            color: #fff;
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: transform 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .chat-input-area button:hover {
-            transform: translateY(-1px);
-        }
-        .chat-input-area button:active {
-            transform: scale(0.95);
-        }
-        .upload-btn {
-            background: var(--bg) !important;
-            color: var(--accent) !important;
-            border: 1.5px solid var(--border) !important;
-            font-size: 18px;
-            padding: 14px 18px !important;
-        }
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-        }
-        .avatar {
-            width: 88px;
-            height: 88px;
-            border-radius: 50%;
-            background: var(--accent-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            color: #fff;
-            font-weight: 600;
-            flex-shrink: 0;
-            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.3);
-        }
-        .lang {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 50;
-            display: flex;
-            gap: 4px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 6px;
-            border-radius: 100px;
-            box-shadow: var(--shadow-md);
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .lang button {
-            background: none;
-            border: none;
-            color: #999;
-            padding: 8px 14px;
-            border-radius: 100px;
-            font-size: 12px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-            font-weight: 500;
-        }
-        .lang button:hover {
-            color: #555;
-        }
-        .lang button.active {
-            background: var(--accent-light);
-            color: var(--accent);
-            font-weight: 700;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-top: 24px;
-        }
-        .stat-item {
-            background: var(--bg);
-            padding: 24px;
-            border-radius: var(--radius-lg);
-            text-align: center;
-            border: 1px solid var(--border);
-            transition: transform 0.2s;
-        }
-        .stat-item:hover {
-            transform: translateY(-2px);
-        }
-        .stat-item .num {
-            font-size: 28px;
-            font-weight: 700;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .stat-item div:last-child {
-            font-size: 13px;
-            color: #999;
-            margin-top: 4px;
-        }
-        .logout-btn {
-            margin-top: 32px;
-            width: 100%;
-            padding: 16px;
-            background: transparent;
-            color: var(--danger);
-            border: 1.5px solid var(--danger-light);
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .logout-btn:hover {
-            background: #fef2f2;
-            border-color: var(--danger);
-        }
-        .back-btn {
-            margin-bottom: 12px;
-            padding: 8px 20px;
-            background: var(--bg);
-            border: 1.5px solid var(--border);
-            border-radius: 100px;
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--text-secondary);
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .back-btn:hover {
-            background: #fff;
-            color: var(--text-primary);
-            border-color: #ccc;
-        }
-        @media(max-width:600px) {
-            .pg-hero {
-                height: 200px;
-                font-size: 28px;
-            }
-            .card {
-                padding: 24px 16px;
-            }
-            .modal {
-                padding: 32px 20px;
-            }
-            .stats {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
-            }
-            .stat-item {
-                padding: 16px 8px;
-            }
-            .stat-item .num {
-                font-size: 22px;
-            }
-            .chat-input-area button {
-                padding: 14px 16px;
-                font-size: 14px;
-            }
-            .profile-header {
-                gap: 16px;
-            }
-            .avatar {
-                width: 64px;
-                height: 64px;
-                font-size: 28px;
-            }
-        }
+            background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); width:100%; max-width:440px; border-radius:var(--radius-xl);
+            padding:48px 32px; max-height:90vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,0.25);
+        }
+        .modal h2 { font-size:32px; text-align:center; margin-bottom:28px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .field { margin-bottom:18px; }
+        .field label { display:block; font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; }
+        .field input { width:100%; padding:14px 16px; border:1.5px solid rgba(0,0,0,0.08); border-radius:var(--radius-md); font-size:15px; background:rgba(0,0,0,0.02); outline:none; }
+        .flex { display:flex; gap:10px; }
+        .flex input { flex:1; }
+        .flex button { padding:14px 20px; background:var(--accent-light); color:var(--accent); border:1.5px solid rgba(79,70,229,0.2); border-radius:var(--radius-md); font-size:14px; cursor:pointer; white-space:nowrap; }
+        .check { display:flex; align-items:center; gap:8px; margin-bottom:12px; font-size:13px; }
+        .terms { background:rgba(0,0,0,0.02); border-radius:var(--radius-md); padding:16px; font-size:12px; color:var(--text-secondary); max-height:120px; overflow-y:auto; margin-bottom:20px; }
+        .btn-submit { width:100%; padding:16px; background:var(--accent-gradient); color:#fff; border:none; border-radius:var(--radius-md); font-size:16px; font-weight:600; cursor:pointer; }
+        .toast { position:fixed; top:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.85); color:#fff; padding:14px 28px; border-radius:100px; font-size:14px; z-index:400; display:none; pointer-events:none; white-space:nowrap; }
+        .toast.show { display:block; }
+        .main { display:none; padding:100px 20px 40px; max-width:1200px; margin:0 auto; position:relative; z-index:1; }
+        .main.active { display:block; }
+        .nav { position:fixed; top:0; left:0; right:0; z-index:50; background:rgba(255,255,255,0.75); backdrop-filter:blur(25px); border-bottom:1px solid rgba(0,0,0,0.05); padding:12px 20px; display:flex; align-items:center; gap:4px; overflow-x:auto; box-shadow:0 2px 20px rgba(0,0,0,0.03); }
+        .nav span { font-weight:700; font-size:20px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-right:12px; white-space:nowrap; }
+        .nav button { background:none; border:none; color:#888; padding:10px 18px; border-radius:100px; font-size:13px; white-space:nowrap; cursor:pointer; }
+        .nav button.active { background:var(--accent-light); color:var(--accent); }
+        .page { display:none; }
+        .page.active { display:block; }
+        .pg-hero { height:280px; border-radius:var(--radius-xl); margin-bottom:24px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:36px; font-weight:700; position:relative; overflow:hidden; background-size:cover; background-position:center; box-shadow:var(--shadow-md); }
+        .pg-hero::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.3); }
+        .pg-hero span { position:relative; z-index:1; text-shadow:0 4px 20px rgba(0,0,0,0.4); }
+        .card { background:var(--surface); border-radius:var(--radius-xl); padding:40px; margin-bottom:24px; box-shadow:var(--shadow-sm); border:1px solid var(--border); }
+        .btn-write { background:var(--accent-gradient); color:#fff; padding:12px 28px; border:none; border-radius:12px; font-size:15px; cursor:pointer; margin-bottom:16px; display:inline-block; }
+        .editor { display:none; margin-bottom:16px; padding:20px; background:var(--bg); border-radius:16px; border:1px solid var(--border); }
+        .editor input, .editor textarea { width:100%; padding:14px; border:1.5px solid var(--border); border-radius:12px; font-size:15px; margin-bottom:12px; font-family:inherit; resize:vertical; }
+        .editor textarea { height:150px; }
+        .list { display:grid; gap:16px; }
+        .item { background:var(--bg); border-radius:16px; padding:24px; transition:0.2s; }
+        .item:hover { background:white; box-shadow:var(--shadow-md); }
+        .item h3 { font-size:20px; margin-bottom:8px; }
+        .item p { color:var(--text-secondary); }
+        .item .meta { display:flex; justify-content:space-between; margin-top:14px; font-size:12px; color:#999; }
+        .ch-search { width:100%; padding:16px; border:1.5px solid var(--border); border-radius:var(--radius-md); font-size:15px; margin-bottom:20px; }
+        .ch-grid { display:grid; gap:14px; }
+        @media(min-width:768px){ .ch-grid{grid-template-columns:repeat(2,1fr);} }
+        .ch-card { background:var(--bg); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:24px; cursor:pointer; display:flex; align-items:center; gap:16px; transition:all 0.2s; }
+        .ch-card:hover { border-color:var(--accent); background:var(--accent-light); }
+        .ch-card.hidden { display:none; }
+        .ch-em { font-size:36px; }
+        .ch-info { flex:1; }
+        .ch-name { font-size:18px; font-weight:600; }
+        .ch-desc { font-size:13px; color:var(--text-secondary); }
+        .chat-container { margin-top:20px; display:none; }
+        .chat-container.active { display:block; }
+        .messages-box { height:55vh; overflow-y:auto; background:var(--bg); border-radius:var(--radius-lg); padding:20px; margin-bottom:12px; display:flex; flex-direction:column; gap:14px; }
+        .msg { max-width:80%; padding:12px 18px; border-radius:20px; font-size:15px; line-height:1.5; position:relative; word-break:break-word; }
+        .msg.mine { align-self:flex-end; background:var(--accent-gradient); color:#fff; border-bottom-right-radius:4px; }
+        .msg.other { align-self:flex-start; background:white; border:1px solid var(--border); border-bottom-left-radius:4px; }
+        .msg .sender { font-size:11px; opacity:0.7; margin-bottom:4px; font-weight:600; }
+        .msg img { max-width:200px; border-radius:12px; margin-top:6px; cursor:pointer; }
+        .chat-input-area { display:flex; gap:10px; }
+        .chat-input-area input { flex:1; padding:14px; border:1.5px solid var(--border); border-radius:var(--radius-md); font-size:15px; }
+        .chat-input-area button { padding:14px 24px; background:var(--accent-gradient); color:#fff; border:none; border-radius:var(--radius-md); cursor:pointer; }
+        .upload-btn { background:var(--bg); color:var(--accent); border:1.5px solid var(--border); }
+        .profile-header { display:flex; align-items:center; gap:24px; margin-bottom:32px; }
+        .avatar { width:88px; height:88px; border-radius:50%; background:var(--accent-gradient); display:flex; align-items:center; justify-content:center; font-size:36px; color:#fff; }
+        .lang { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:50; display:flex; gap:4px; background:rgba(255,255,255,0.8); backdrop-filter:blur(12px); padding:6px; border-radius:100px; box-shadow:var(--shadow-md); }
+        .lang button { background:none; border:none; color:#999; padding:8px 14px; border-radius:100px; font-size:12px; cursor:pointer; }
+        .lang button.active { background:var(--accent-light); color:var(--accent); }
+        .logout-btn { margin-top:32px; width:100%; padding:16px; background:transparent; color:var(--danger); border:1.5px solid var(--danger-light); border-radius:var(--radius-md); font-size:15px; cursor:pointer; }
+        @media(max-width:600px){ .pg-hero{height:200px;font-size:28px;} .card{padding:24px;} }
     </style>
 </head>
 <body>
-    <canvas id="particles"></canvas>
-    <div class="loading" id="loading">oskwk</div>
+<canvas id="particles"></canvas>
+<div class="loading" id="loading">oskwk</div>
 
-    <section class="hero" id="hero">
-        <h1 id="heroTitle">专注于每一个细节<br>呈现极致视觉体验</h1>
-        <p id="heroSub">不仅是一个平台，更是一种对美的坚持。</p>
-        <button id="heroBtn" onclick="openModal()">加入我们 →</button>
-    </section>
+<section class="hero" id="hero">
+    <h1 id="heroTitle">专注于每一个细节<br>呈现极致视觉体验</h1>
+    <p id="heroSub">不仅是一个平台，更是一种对美的坚持。</p>
+    <button id="heroBtn" onclick="openModal()">加入我们 →</button>
+</section>
 
-    <div class="lang" id="lang">
-        <button class="active" onclick="setLang('zh')">中文</button>
-        <button onclick="setLang('en')">EN</button>
-        <button onclick="setLang('ja')">日本語</button>
-        <button onclick="setLang('ko')">한국어</button>
-        <button onclick="setLang('fr')">FR</button>
+<div class="lang" id="lang">
+    <button class="active" onclick="setLang('zh')">中文</button>
+    <button onclick="setLang('en')">EN</button>
+    <button onclick="setLang('ja')">日本語</button>
+    <button onclick="setLang('ko')">한국어</button>
+    <button onclick="setLang('fr')">FR</button>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+        <h2>加入 oskwk</h2>
+        <form onsubmit="register(event)">
+            <div class="field"><label>手机号</label><input type="tel" id="phone" required placeholder="13800138000"></div>
+            <div class="check"><input type="checkbox" id="foreigner" onchange="getEl('idcard').disabled=this.checked"><label>我是外国人（免填身份证）</label></div>
+            <div class="field"><label>身份证号码</label><input type="text" id="idcard" placeholder="110101199001011234"></div>
+            <div class="field"><label>邮箱</label><input type="email" id="email" required placeholder="hello@oskwk.com"></div>
+            <div class="field"><label>验证码</label><div class="flex"><input type="text" id="code" required placeholder="123456"><button type="button" onclick="sendCode()">获取验证码</button></div></div>
+            <div class="field"><label>网站密码</label><input type="password" id="password" required value="onlyforoskwkfriends20120302"></div>
+            <div class="field"><label>昵称</label><input type="text" id="nickname" required placeholder="oskwkFriend"></div>
+            <div class="terms">免责协议：用户需遵守当地法律法规，禁止发布违法内容。隐私保护条款：我们仅存储必要的账户信息，不会向第三方出售您的数据。注册即代表同意以上条款。</div>
+            <div class="check"><input type="checkbox" id="agree" required><label>我已阅读并同意免责协议与隐私条款</label></div>
+            <button type="submit" class="btn-submit">确认加入</button>
+        </form>
     </div>
+</div>
 
-    <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
-        <div class="modal">
-            <h2>加入 oskwk</h2>
-            <form onsubmit="register(event)">
-                <div class="field"><label>手机号</label><input type="tel" id="phone" required placeholder="13800138000"></div>
-                <div class="check"><input type="checkbox" id="foreigner" onchange="document.getElementById('idcard').disabled=this.checked"><label>我是外国人（免填身份证）</label></div>
-                <div class="field"><label>身份证号码</label><input type="text" id="idcard" placeholder="110101199001011234"></div>
-                <div class="field"><label>邮箱</label><input type="email" id="email" required placeholder="hello@oskwk.com"></div>
-                <div class="field"><label>验证码</label><div class="flex"><input type="text" id="code" required placeholder="123456"><button type="button" onclick="sendCode()">获取验证码</button></div></div>
-                <div class="field"><label>网站密码</label><input type="password" id="password" required value="onlyforoskwkfriends20120302"></div>
-                <div class="field"><label>昵称</label><input type="text" id="nickname" required placeholder="oskwkFriend"></div>
-                <div class="terms">免责协议：用户需遵守当地法律法规，禁止发布违法内容。隐私保护条款：我们仅存储必要的账户信息，不会向第三方出售您的数据。注册即代表同意以上条款。</div>
-                <div class="check"><input type="checkbox" id="agree" required><label>我已阅读并同意免责协议与隐私条款</label></div>
-                <button type="submit" class="btn-submit">确认加入</button>
-            </form>
+<div class="toast" id="toast"></div>
+
+<div class="main" id="main">
+    <nav class="nav" id="nav">
+        <span>oskwk</span>
+        <button class="active" onclick="showTab(0)">关于oskwk</button>
+        <button onclick="showTab(1)">最新发现</button>
+        <button onclick="showTab(2)">学术学习</button>
+        <button onclick="showTab(3)">交流中心</button>
+        <button onclick="showTab(4)">个人中心</button>
+    </nav>
+
+    <div class="page active" id="tab0">
+        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80')"><span>关于oskwk</span></div>
+        <div class="card">
+            <button class="btn-write" id="writeAboutBtn" onclick="showEditor('about')">✍️ 发布文章</button>
+            <div class="editor" id="aboutEditor">
+                <input type="text" id="aboutTitle" placeholder="文章标题">
+                <textarea id="aboutContent" placeholder="文章内容..."></textarea>
+                <button class="btn-submit" style="width:auto;display:inline-block;padding:12px 28px;" onclick="publish('about')">发布</button>
+                <button onclick="hideEditor('about')" style="padding:10px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-left:8px;">取消</button>
+            </div>
+            <div class="list" id="aboutList"><p style="color:var(--text-secondary);">暂无文章</p></div>
         </div>
     </div>
-
-    <div class="toast" id="toast"></div>
-
-    <div class="main" id="main">
-        <nav class="nav" id="nav">
-            <span>oskwk</span>
-            <button class="active" onclick="showTab(0)">关于oskwk</button>
-            <button onclick="showTab(1)">最新发现</button>
-            <button onclick="showTab(2)">学术学习</button>
-            <button onclick="showTab(3)">交流中心</button>
-            <button onclick="showTab(4)">个人中心</button>
-        </nav>
-
-        <!-- Tab 0: 关于oskwk -->
-        <div class="page active" id="tab0">
-            <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80')"><span>关于oskwk</span></div>
-            <div class="card">
-                <button class="btn-write" id="writeAboutBtn" onclick="showEditor('about')">✍️ 发布文章</button>
-                <div class="editor" id="aboutEditor">
-                    <input type="text" id="aboutTitle" placeholder="文章标题">
-                    <textarea id="aboutContent" placeholder="文章内容..."></textarea>
-                    <button class="btn-submit" style="width:auto;display:inline-block;padding:12px 28px;" onclick="publish('about')">发布</button>
-                    <button onclick="hideEditor('about')" style="padding:10px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-left:8px;">取消</button>
-                </div>
-                <div class="list" id="aboutList"><p style="color:var(--text-secondary);">暂无文章</p></div>
+    <div class="page" id="tab1">
+        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80')"><span>最新发现</span></div>
+        <div class="card">
+            <button class="btn-write" id="writeDiscoverBtn" onclick="showEditor('discover')">✍️ 发布文章</button>
+            <div class="editor" id="discoverEditor">
+                <input type="text" id="discoverTitle" placeholder="文章标题">
+                <textarea id="discoverContent" placeholder="文章内容..."></textarea>
+                <button class="btn-submit" style="width:auto;display:inline-block;padding:12px 28px;" onclick="publish('discover')">发布</button>
+                <button onclick="hideEditor('discover')" style="padding:10px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-left:8px;">取消</button>
             </div>
+            <div class="list" id="discoverList"><p style="color:var(--text-secondary);">暂无发现</p></div>
         </div>
-
-        <!-- Tab 1: 最新发现 -->
-        <div class="page" id="tab1">
-            <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80')"><span>最新发现</span></div>
-            <div class="card">
-                <button class="btn-write" id="writeDiscoverBtn" onclick="showEditor('discover')">✍️ 发布文章</button>
-                <div class="editor" id="discoverEditor">
-                    <input type="text" id="discoverTitle" placeholder="文章标题">
-                    <textarea id="discoverContent" placeholder="文章内容..."></textarea>
-                    <button class="btn-submit" style="width:auto;display:inline-block;padding:12px 28px;" onclick="publish('discover')">发布</button>
-                    <button onclick="hideEditor('discover')" style="padding:10px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-left:8px;">取消</button>
-                </div>
-                <div class="list" id="discoverList"><p style="color:var(--text-secondary);">暂无发现</p></div>
+    </div>
+    <div class="page" id="tab2">
+        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80')"><span>学术学习与讨论</span></div>
+        <div class="card">
+            <button class="btn-write" id="writeStudyBtn" onclick="showEditor('study')">✍️ 发布文章</button>
+            <div class="editor" id="studyEditor">
+                <input type="text" id="studyTitle" placeholder="文章标题">
+                <textarea id="studyContent" placeholder="文章内容..."></textarea>
+                <button class="btn-submit" style="width:auto;display:inline-block;padding:12px 28px;" onclick="publish('study')">发布</button>
+                <button onclick="hideEditor('study')" style="padding:10px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-left:8px;">取消</button>
             </div>
+            <div class="list" id="studyList"><p style="color:var(--text-secondary);">暂无文章</p></div>
         </div>
-
-        <!-- Tab 2: 学术学习 -->
-        <div class="page" id="tab2">
-            <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80')"><span>学术学习与讨论</span></div>
-            <div class="card">
-                <button class="btn-write" id="writeStudyBtn" onclick="showEditor('study')">✍️ 发布文章</button>
-                <div class="editor" id="studyEditor">
-                    <input type="text" id="studyTitle" placeholder="文章标题">
-                    <textarea id="studyContent" placeholder="文章内容..."></textarea>
-                    <button class="btn-submit" style="width:auto;display:inline-block;padding:12px 28px;" onclick="publish('study')">发布</button>
-                    <button onclick="hideEditor('study')" style="padding:10px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-left:8px;">取消</button>
-                </div>
-                <div class="list" id="studyList"><p style="color:var(--text-secondary);">暂无文章</p></div>
-            </div>
-        </div>
-
-        <!-- Tab 3: 交流中心 -->
-        <div class="page" id="tab3">
-            <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1200&q=80')"><span>交流中心</span></div>
-            <div class="card">
-                <input type="text" id="channelSearch" class="ch-search" placeholder="🔍 搜索频道..." oninput="filterChannels()">
-                <div id="channelSelect">
-                    <div class="ch-grid" id="channelGrid">
-                        <div class="ch-card" onclick="enterChannel('大厅')" data-kw="大厅"><div class="ch-em">🏠</div><div class="ch-info"><div class="ch-name">oskwk-大厅</div><div class="ch-desc">默认闲聊</div></div></div>
-                        <div class="ch-card" onclick="enterChannel('技术')" data-kw="技术"><div class="ch-em">💻</div><div class="ch-info"><div class="ch-name">oskwk-技术</div><div class="ch-desc">代码架构算法</div></div></div>
-                        <div class="ch-card" onclick="enterChannel('理论')" data-kw="理论"><div class="ch-em">📖</div><div class="ch-info"><div class="ch-name">oskwk-理论</div><div class="ch-desc">学术深度思考</div></div></div>
-                        <div class="ch-card" onclick="enterChannel('艺术')" data-kw="艺术"><div class="ch-em">🎨</div><div class="ch-info"><div class="ch-name">oskwk-艺术</div><div class="ch-desc">设计绘画美学</div></div></div>
-                        <div class="ch-card" onclick="enterPrivate()" data-kw="私有"><div class="ch-em">🔒</div><div class="ch-info"><div class="ch-name">私有房间</div><div class="ch-desc">自定义名字</div></div></div>
-                    </div>
-                </div>
-                <div class="chat-container" id="chatRoom">
-                    <button class="back-btn" onclick="leaveChannel()">← 返回频道列表</button>
-                    <div class="messages-box" id="messagesBox"></div>
-                    <div class="chat-input-area">
-                        <input type="text" id="messageInput" placeholder="输入消息..." onkeydown="if(event.key==='Enter')sendText()">
-                        <button class="upload-btn" onclick="document.getElementById('imageUpload').click()" title="发送图片">📷</button>
-                        <input type="file" id="imageUpload" accept="image/*" style="display:none" onchange="uploadImage()">
-                        <button onclick="sendText()">发送</button>
-                    </div>
+    </div>
+    <div class="page" id="tab3">
+        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1200&q=80')"><span>交流中心</span></div>
+        <div class="card">
+            <input type="text" id="channelSearch" class="ch-search" placeholder="🔍 搜索频道..." oninput="filterChannels()">
+            <div id="channelSelect">
+                <div class="ch-grid" id="channelGrid">
+                    <div class="ch-card" onclick="enterChannel('大厅')" data-kw="大厅"><div class="ch-em">🏠</div><div class="ch-info"><div class="ch-name">oskwk-大厅</div><div class="ch-desc">默认闲聊</div></div></div>
+                    <div class="ch-card" onclick="enterChannel('技术')" data-kw="技术"><div class="ch-em">💻</div><div class="ch-info"><div class="ch-name">oskwk-技术</div><div class="ch-desc">代码架构算法</div></div></div>
+                    <div class="ch-card" onclick="enterChannel('理论')" data-kw="理论"><div class="ch-em">📖</div><div class="ch-info"><div class="ch-name">oskwk-理论</div><div class="ch-desc">学术深度思考</div></div></div>
+                    <div class="ch-card" onclick="enterChannel('艺术')" data-kw="艺术"><div class="ch-em">🎨</div><div class="ch-info"><div class="ch-name">oskwk-艺术</div><div class="ch-desc">设计绘画美学</div></div></div>
+                    <div class="ch-card" onclick="enterPrivate()" data-kw="私有"><div class="ch-em">🔒</div><div class="ch-info"><div class="ch-name">私有房间</div><div class="ch-desc">需要密码</div></div></div>
                 </div>
             </div>
-        </div>
-
-        <!-- Tab 4: 个人中心 -->
-        <div class="page" id="tab4">
-            <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80')"><span>个人中心</span></div>
-            <div class="card">
-                <div class="profile-header">
-                    <div class="avatar" id="profileAvatar">O</div>
-                    <div>
-                        <h3 id="profileName" style="font-size:24px;">oswkUser</h3>
-                        <p id="profileEmail" style="color:#999;">user@oskwk.com</p>
-                    </div>
+            <div class="chat-container" id="chatRoom">
+                <button class="back-btn" onclick="leaveChannel()" style="margin-bottom:12px;padding:8px 20px;background:var(--bg);border:1.5px solid var(--border);border-radius:100px;cursor:pointer;">← 返回频道列表</button>
+                <div class="messages-box" id="messagesBox"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="messageInput" placeholder="输入消息..." onkeydown="if(event.key==='Enter')sendText()">
+                    <button class="upload-btn" onclick="document.getElementById('imageUpload').click()">📷</button>
+                    <input type="file" id="imageUpload" accept="image/*" style="display:none" onchange="uploadImage()">
+                    <button onclick="sendText()">发送</button>
                 </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="num" id="statJoin">1</div>
-                        <div>加入天数</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="num">VIP</div>
-                        <div>等级</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="num">∞</div>
-                        <div>潜力</div>
-                    </div>
-                </div>
-                <button class="logout-btn" onclick="logout()">退出登录</button>
             </div>
         </div>
     </div>
+    <div class="page" id="tab4">
+        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80')"><span>个人中心</span></div>
+        <div class="card">
+            <div class="profile-header">
+                <div class="avatar" id="profileAvatar">O</div>
+                <div><h3 id="profileName" style="font-size:24px;">oswkUser</h3><p id="profileEmail" style="color:#999;">user@oskwk.com</p></div>
+            </div>
+            <div class="stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;">
+                <div class="stat-item" style="background:var(--bg);padding:24px;border-radius:var(--radius-lg);text-align:center;border:1px solid var(--border);">
+                    <div class="num" id="statJoin" style="font-size:28px;font-weight:700;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">1</div>
+                    <div style="font-size:13px;color:#999;">加入天数</div>
+                </div>
+                <div class="stat-item" style="background:var(--bg);padding:24px;border-radius:var(--radius-lg);text-align:center;border:1px solid var(--border);">
+                    <div class="num" style="font-size:28px;font-weight:700;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">VIP</div>
+                    <div style="font-size:13px;color:#999;">等级</div>
+                </div>
+                <div class="stat-item" style="background:var(--bg);padding:24px;border-radius:var(--radius-lg);text-align:center;border:1px solid var(--border);">
+                    <div class="num" style="font-size:28px;font-weight:700;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">∞</div>
+                    <div style="font-size:13px;color:#999;">潜力</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">退出登录</button>
+        </div>
+    </div>
+</div>
 
-    <!-- 引入 Supabase JS SDK v2 -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-    </script>
-    <script>
-        (function() {
-            // ---------- 检查 Supabase 是否加载成功 ----------
-            if (typeof window.supabase === 'undefined') {
-                console.error('Supabase SDK 加载失败，请检查网络连接。');
-                // 创建一个模拟的 supabase 对象，防止后续代码崩溃
-                window.supabase = {
-                    createClient: function() {
-                        console.warn('使用模拟 Supabase 客户端');
-                        return {
-                            from: function() { return this; },
-                            select: function() { return this; },
-                            insert: function() { return this; },
-                            upsert: function() { return this; },
-                            eq: function() { return this; },
-                            order: function() { return this; },
-                            then: function(cb) { if (cb) cb({ data: [], error: null }); return this; },
-                            channel: function() {
-                                return {
-                                    on: function() { return this; },
-                                    subscribe: function() { return this; },
-                                    unsubscribe: function() { return this; }
-                                };
-                            },
-                            removeChannel: function() {},
-                            storage: {
-                                from: function() {
-                                    return {
-                                        upload: function() { return Promise.resolve({ data: null,
-                                            error: new Error('模拟模式') }); },
-                                        getPublicUrl: function() { return { data: { publicUrl: '' } }; }
-                                    };
-                                }
-                            }
-                        };
-                    }
-                };
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function() {
+    // ---------- Supabase 初始化 ----------
+    const supabaseClient = window.supabase.createClient(
+        'https://ouejetzclopuuafmnbjq.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im91ZWpldHpjbG9wdXVhZm1uYmpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMzM1NjksImV4cCI6MjA5MzMwOTU2OX0.fGuExq4_43l4N1YF9339c934pJmTQAcNX_oOSuF-Bzw'
+    );
+
+    let currentUser = null;
+    let currentRoom = null;
+    let messageSubscription = null;
+
+    function getEl(id) { return document.getElementById(id); }
+    function toast(msg) {
+        const t = getEl('toast');
+        if(!t) return;
+        t.textContent = msg; t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // 多语言
+    const texts = {
+        zh: {title:"专注于每一个细节<br>呈现极致视觉体验", sub:"不仅是一个平台，更是一种对美的坚持。", btn:"加入我们 →"},
+        en: {title:"Focus on every detail<br>Present ultimate visual experience", sub:"Not just a platform, but persistence in aesthetics.", btn:"Join Us →"},
+        ja: {title:"細部にこだわり<br>究極のビジュアル体験", sub:"単なるプラットフォームではなく、美学の追求。", btn:"参加する →"},
+        ko: {title:"세부 사항에 집중하여<br>궁극적인 시각 경험 제공", sub:"단순한 플랫폼이 아니라 예술에 대한 고집.", btn:"참여하기 →"},
+        fr: {title:"Se concentrer sur les détails<br>Présenter une expérience visuelle ultime", sub:"Pas seulement une plateforme, mais une persistance esthétique.", btn:"Nous Rejoindre →"}
+    };
+    window.setLang = function(l) {
+        const d = texts[l] || texts.zh;
+        getEl('heroTitle').innerHTML = d.title;
+        getEl('heroSub').textContent = d.sub;
+        getEl('heroBtn').innerHTML = d.btn;
+        document.querySelectorAll('#lang button').forEach(b => {
+            b.classList.toggle('active', b.textContent.trim().charAt(0) === (l==='zh'?'中':l==='en'?'E':l==='ja'?'日':l==='ko'?'한':'F'));
+        });
+    };
+
+    window.openModal = () => getEl('modal').classList.add('show');
+    window.closeModal = () => getEl('modal').classList.remove('show');
+    window.sendCode = () => toast('验证码 123456');
+
+    window.register = function(e) {
+        e.preventDefault();
+        if (getEl('code').value.trim() !== '123456') return toast('验证码错误');
+        const nick = getEl('nickname').value.trim();
+        if (nick.length < 2) return toast('昵称至少2字符');
+        if (!getEl('agree').checked) return toast('请同意协议');
+        currentUser = {
+            phone: getEl('phone').value.trim(),
+            email: getEl('email').value.trim(),
+            nickname: nick,
+            idcard: getEl('foreigner').checked ? '' : getEl('idcard').value.trim(),
+            password: getEl('password').value.trim(),
+            created_at: new Date().toISOString()
+        };
+        supabaseClient.from('profiles').upsert({
+            phone: currentUser.phone, email: currentUser.email, nickname: currentUser.nickname,
+            id_card: currentUser.idcard, password_hash: currentUser.password, created_at: currentUser.created_at
+        }, { onConflict: 'email' }).then(({error}) => { if(error) console.warn(error); });
+        toast('注册成功！');
+        setTimeout(() => { closeModal(); enterSite(); }, 800);
+    };
+
+    function enterSite() {
+        getEl('loading').classList.add('hidden');
+        getEl('main').classList.add('active');
+        getEl('hero').style.display = 'none';
+        getEl('lang').style.display = 'none';
+        updateProfile();
+        ['about','discover','study'].forEach(c => loadArticles(c));
+    }
+
+    window.showTab = function(i) {
+        document.querySelectorAll('.page').forEach((p,idx) => p.classList.toggle('active', idx===i));
+        document.querySelectorAll('.nav button').forEach((b,idx) => b.classList.toggle('active', idx===i));
+    };
+
+    function updateProfile() {
+        if(!currentUser) return;
+        getEl('profileAvatar').textContent = currentUser.nickname.charAt(0).toUpperCase();
+        getEl('profileName').textContent = currentUser.nickname;
+        getEl('profileEmail').textContent = currentUser.email;
+        getEl('statJoin').textContent = Math.max(1, Math.floor((Date.now() - new Date(currentUser.created_at).getTime())/86400000));
+    }
+
+    window.logout = function() {
+        if(messageSubscription) supabaseClient.removeChannel(messageSubscription);
+        currentUser = null; currentRoom = null;
+        getEl('main').classList.remove('active');
+        getEl('loading').classList.remove('hidden');
+        getEl('hero').style.display = '';
+        getEl('lang').style.display = '';
+        getEl('chatRoom').classList.remove('active');
+        getEl('channelSelect').style.display = 'block';
+        getEl('messagesBox').innerHTML = '';
+    };
+
+    window.showEditor = cat => getEl(cat+'Editor').style.display='block';
+    window.hideEditor = cat => getEl(cat+'Editor').style.display='none';
+    window.publish = function(cat) {
+        if(!currentUser) return toast('请先登录');
+        const title = getEl(cat+'Title').value.trim();
+        const content = getEl(cat+'Content').value.trim();
+        if(!title||!content) return toast('标题和内容不能为空');
+        supabaseClient.from('articles').insert({title, content, category:cat, author:currentUser.nickname}).then(({error}) => {
+            if(error) toast('发布失败: '+error.message);
+            else {
+                toast('发布成功');
+                getEl(cat+'Title').value=''; getEl(cat+'Content').value='';
+                hideEditor(cat); loadArticles(cat);
             }
+        });
+    };
+    function loadArticles(cat) {
+        supabaseClient.from('articles').select('*').eq('category',cat).order('created_at',{ascending:false}).then(({data}) => {
+            const list = getEl(cat+'List');
+            if(!data||data.length===0) list.innerHTML='<p style="color:#555;">暂无文章</p>';
+            else list.innerHTML = data.map(a => `<div class="item"><h3>${a.title}</h3><p>${a.content}</p><div class="meta"><span>👤 ${a.author}</span><span>${new Date(a.created_at).toLocaleDateString('zh-CN')}</span></div></div>`).join('');
+        });
+    }
 
-            // ---------- Supabase 初始化 ----------
-            const supabaseClient = window.supabase.createClient(
-                'https://ouejetzclopuuafmnbjq.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im91ZWpldHpjbG9wdXVhZm1uYmpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMzM1NjksImV4cCI6MjA5MzMwOTU2OX0.fGuExq4_43l4N1YF9339c934pJmTQAcNX_oOSuF-Bzw'
-            );
-
-            // ---------- 全局变量 ----------
-            let currentUser = null;
-            let currentRoom = null;
-            let messageSubscription = null;
-
-            // 便捷 DOM 获取
-            function getEl(id) {
-                return document.getElementById(id);
+    window.filterChannels = function() {
+        const kw = getEl('channelSearch').value.trim().toLowerCase();
+        document.querySelectorAll('#channelGrid .ch-card').forEach(c => {
+            const k = (c.getAttribute('data-kw')||'').toLowerCase();
+            c.classList.toggle('hidden', kw && !c.querySelector('.ch-name').textContent.toLowerCase().includes(kw) && !k.includes(kw));
+        });
+    };
+    window.enterChannel = function(roomName) {
+        if(!currentUser) return toast('请先登录');
+        currentRoom = 'oskwk-'+roomName;
+        getEl('channelSelect').style.display='none';
+        getEl('chatRoom').classList.add('active');
+        loadMessages();
+        subscribeToRoom();
+    };
+    window.enterPrivate = function() {
+        if(!currentUser) return toast('请先登录');
+        const name = prompt('请输入私有房间名称：');
+        if(!name) return;
+        const sanitized = name.trim().replace(/\s+/g,'-').replace(/[^\w\u4e00-\u9fff\-]/g,'');
+        if(!sanitized) return toast('名称无效');
+        const password = prompt('请输入房间密码：');
+        if(password !== 'oskwk2024') return toast('密码错误');
+        enterChannel('私人-'+sanitized);
+    };
+    window.leaveChannel = function() {
+        if(messageSubscription) { supabaseClient.removeChannel(messageSubscription); messageSubscription=null; }
+        getEl('chatRoom').classList.remove('active');
+        getEl('channelSelect').style.display='block';
+        currentRoom=null;
+        getEl('messagesBox').innerHTML='';
+    };
+    function loadMessages() {
+        if(!currentRoom) return;
+        supabaseClient.from('messages').select('*').eq('room',currentRoom).order('created_at',{ascending:true}).then(({data}) => {
+            const box = getEl('messagesBox');
+            box.innerHTML = '';
+            if(data) data.forEach(m => renderMessage(m));
+            box.scrollTop = box.scrollHeight;
+        });
+    }
+    function renderMessage(msg) {
+        const box = getEl('messagesBox');
+        const div = document.createElement('div');
+        div.className = `msg ${msg.nickname===currentUser.nickname?'mine':'other'}`;
+        div.innerHTML = `<div class="sender">${msg.nickname}</div>${msg.message?`<div>${msg.message}</div>`:''}${msg.image_url?`<img src="${msg.image_url}" onclick="window.open('${msg.image_url}')">`:''}`;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+    function subscribeToRoom() {
+        if(!currentRoom) return;
+        if(messageSubscription) supabaseClient.removeChannel(messageSubscription);
+        messageSubscription = supabaseClient
+            .channel('room-'+currentRoom)
+            .on('postgres_changes', {event:'INSERT', schema:'public', table:'messages', filter:`room=eq.${currentRoom}`}, payload => renderMessage(payload.new))
+            .subscribe();
+    }
+    window.sendText = function() {
+        if(!currentRoom||!currentUser) return toast('请先加入频道');
+        const text = getEl('messageInput').value.trim();
+        if(!text) return;
+        supabaseClient.from('messages').insert({
+            room: currentRoom,
+            nickname: currentUser.nickname,
+            message: text
+        }).then(({error}) => {
+            if(error) {
+                console.error('发送失败：', error);
+                toast('发送失败: ' + error.message);
             }
-
-            // Toast 提示
-            let toastTimer = null;
-
-            function toast(msg) {
-                const t = getEl('toast');
-                if (!t) return;
-                t.textContent = msg;
-                t.classList.add('show');
-                if (toastTimer) clearTimeout(toastTimer);
-                toastTimer = setTimeout(function() {
-                    t.classList.remove('show');
-                }, 2500);
-            }
-
-            // ---------- 多语言 ----------
-            const texts = {
-                zh: { title: "专注于每一个细节<br>呈现极致视觉体验", sub: "不仅是一个平台，更是一种对美的坚持。",
-                btn: "加入我们 →" },
-                en: { title: "Focus on every detail<br>Present ultimate visual experience",
-                    sub: "Not just a platform, but persistence in aesthetics.", btn: "Join Us →" },
-                ja: { title: "細部にこだわり<br>究極のビジュアル体験", sub: "単なるプラットフォームではなく、美学の追求。",
-                    btn: "参加する →" },
-                ko: { title: "세부 사항에 집중하여<br>궁극적인 시각 경험 제공", sub: "단순한 플랫폼이 아니라 예술에 대한 고집.",
-                    btn: "참여하기 →" },
-                fr: { title: "Se concentrer sur les détails<br>Présenter une expérience visuelle ultime",
-                    sub: "Pas seulement une plateforme, mais une persistance esthétique.",
-                btn: "Nous Rejoindre →" }
-            };
-            let currentLang = 'zh';
-
-            window.setLang = function(l) {
-                currentLang = l;
-                const langBtns = document.querySelectorAll('#lang button');
-                const map = { zh: '中', en: 'E', ja: '日', ko: '한', fr: 'F' };
-                langBtns.forEach(function(b) {
-                    const firstChar = b.textContent.trim().charAt(0);
-                    b.classList.toggle('active', firstChar === map[l]);
-                });
-                const d = texts[l] || texts.zh;
-                const heroTitle = getEl('heroTitle');
-                const heroSub = getEl('heroSub');
-                const heroBtn = getEl('heroBtn');
-                if (heroTitle) heroTitle.innerHTML = d.title;
-                if (heroSub) heroSub.textContent = d.sub;
-                if (heroBtn) heroBtn.innerHTML = d.btn;
-            };
-
-            // ---------- 粒子背景 ----------
-            (function initParticles() {
-                const canvas = document.getElementById('particles');
-                if (!canvas) return;
-                const ctx = canvas.getContext('2d');
-                let w, h, particles = [];
-
-                function resize() {
-                    w = canvas.width = window.innerWidth;
-                    h = canvas.height = window.innerHeight;
-                }
-                window.addEventListener('resize', resize);
-                resize();
-                for (let i = 0; i < 80; i++) {
-                    particles.push({
-                        x: Math.random() * w,
-                        y: Math.random() * h,
-                        vx: (Math.random() - 0.5) * 0.6,
-                        vy: (Math.random() - 0.5) * 0.6,
-                        size: Math.random() * 2 + 1,
-                    });
-                }
-
-                function animate() {
-                    ctx.clearRect(0, 0, w, h);
-                    particles.forEach(function(p) {
-                        p.x += p.vx;
-                        p.y += p.vy;
-                        if (p.x < 0 || p.x > w) p.vx *= -1;
-                        if (p.y < 0 || p.y > h) p.vy *= -1;
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                        ctx.fillStyle = 'rgba(79,70,229,0.15)';
-                        ctx.fill();
-                    });
-                    requestAnimationFrame(animate);
-                }
-                animate();
-            })();
-
-            // ---------- 注册 / 进入站点 ----------
-            window.openModal = function() {
-                const modal = getEl('modal');
-                if (modal) modal.classList.add('show');
-            };
-
-            window.closeModal = function() {
-                const modal = getEl('modal');
-                if (modal) modal.classList.remove('show');
-            };
-
-            window.sendCode = function() {
-                toast('验证码为 123456');
-            };
-
-            window.register = function(e) {
-                e.preventDefault();
-                const codeEl = getEl('code');
-                const nicknameEl = getEl('nickname');
-                const phoneEl = getEl('phone');
-                const emailEl = getEl('email');
-                const idcardEl = getEl('idcard');
-                const passwordEl = getEl('password');
-                const agreeEl = getEl('agree');
-                const foreignerEl = getEl('foreigner');
-
-                if (!codeEl || !nicknameEl || !phoneEl || !emailEl || !agreeEl) {
-                    toast('表单加载异常，请刷新页面');
-                    return;
-                }
-
-                if (codeEl.value.trim() !== '123456') return toast('验证码错误，请输入 123456');
-                const nick = nicknameEl.value.trim();
-                if (nick.length < 2) return toast('昵称至少需要2个字符');
-                if (!agreeEl.checked) return toast('请先阅读并同意免责协议与隐私条款');
-
-                const isForeigner = foreignerEl && foreignerEl.checked;
-                const idcardVal = isForeigner ? '' : (idcardEl ? idcardEl.value.trim() : '');
-
-                currentUser = {
-                    phone: phoneEl.value.trim(),
-                    email: emailEl.value.trim(),
-                    nickname: nick,
-                    idcard: idcardVal,
-                    password: passwordEl ? passwordEl.value.trim() : '',
-                    created_at: new Date().toISOString()
-                };
-
-                // 异步存储到 Supabase（不阻塞用户进入）
-                supabaseClient.from('profiles').upsert({
-                    phone: currentUser.phone,
-                    email: currentUser.email,
-                    nickname: currentUser.nickname,
-                    id_card: currentUser.idcard,
-                    password_hash: currentUser.password,
-                    created_at: currentUser.created_at
-                }, { onConflict: 'email' }).then(function(result) {
-                    if (result.error) {
-                        console.warn('Supabase 存储用户信息时出错:', result.error);
-                        // 不影响用户继续使用
-                    }
-                });
-
-                toast('注册成功！欢迎加入 oskwk');
-                setTimeout(function() {
-                    closeModal();
-                    enterSite();
-                }, 800);
-            };
-
-            function enterSite() {
-                const loading = getEl('loading');
-                const main = getEl('main');
-                const hero = getEl('hero');
-                const langEl = getEl('lang');
-
-                if (loading) loading.classList.add('hidden');
-                if (main) main.classList.add('active');
-                if (hero) hero.style.display = 'none';
-                if (langEl) langEl.style.display = 'none';
-
-                updateProfile();
-
-                // 确保发布按钮可见
-                ['writeAboutBtn', 'writeDiscoverBtn', 'writeStudyBtn'].forEach(function(id) {
-                    const b = getEl(id);
-                    if (b) b.style.display = 'inline-block';
-                });
-
-                // 加载各版块文章
-                ['about', 'discover', 'study'].forEach(function(cat) {
-                    loadArticles(cat);
-                });
-            }
-
-            window.showTab = function(i) {
-                const pages = document.querySelectorAll('.page');
-                const navBtns = document.querySelectorAll('.nav button');
-                pages.forEach(function(t, idx) {
-                    t.classList.toggle('active', idx === i);
-                });
-                navBtns.forEach(function(b, idx) {
-                    b.classList.toggle('active', idx === i);
-                });
-                // 切换到交流中心时重置频道列表视图
-                if (i === 3) {
-                    const chatRoom = getEl('chatRoom');
-                    const channelSelect = getEl('channelSelect');
-                    if (chatRoom && chatRoom.classList.contains('active') && channelSelect) {
-                        // 保持在聊天室中，不强制切换
-                    }
-                }
-            };
-
-            function updateProfile() {
-                if (!currentUser) return;
-                const avatar = getEl('profileAvatar');
-                const name = getEl('profileName');
-                const email = getEl('profileEmail');
-                const statJoin = getEl('statJoin');
-
-                if (avatar) avatar.textContent = currentUser.nickname.charAt(0).toUpperCase();
-                if (name) name.textContent = currentUser.nickname;
-                if (email) email.textContent = currentUser.email;
-                if (statJoin) {
-                    const days = Math.max(1, Math.floor((Date.now() - new Date(currentUser.created_at).getTime()) /
-                        86400000));
-                    statJoin.textContent = days;
-                }
-            }
-
-            window.logout = function() {
-                if (messageSubscription) {
-                    try {
-                        supabaseClient.removeChannel(messageSubscription);
-                    } catch (err) {
-                        console.warn('移除频道订阅时出错:', err);
-                    }
-                    messageSubscription = null;
-                }
-                currentUser = null;
-                currentRoom = null;
-
-                const main = getEl('main');
-                const loading = getEl('loading');
-                const hero = getEl('hero');
-                const langEl = getEl('lang');
-                const chatRoom = getEl('chatRoom');
-                const channelSelect = getEl('channelSelect');
-                const messagesBox = getEl('messagesBox');
-
-                if (main) main.classList.remove('active');
-                if (loading) loading.classList.remove('hidden');
-                if (hero) hero.style.display = '';
-                if (langEl) langEl.style.display = '';
-                if (chatRoom) chatRoom.classList.remove('active');
-                if (channelSelect) channelSelect.style.display = 'block';
-                if (messagesBox) messagesBox.innerHTML = '';
-
-                // 滚动回 hero
-                if (hero) hero.scrollIntoView({ behavior: 'smooth' });
-
-                // 重置表单
-                const modal = getEl('modal');
-                if (modal) modal.classList.remove('show');
-            };
-
-            // ---------- 文章相关 ----------
-            window.showEditor = function(cat) {
-                const editor = getEl(cat + 'Editor');
-                if (editor) editor.style.display = 'block';
-            };
-
-            window.hideEditor = function(cat) {
-                const editor = getEl(cat + 'Editor');
-                if (editor) editor.style.display = 'none';
-            };
-
-            window.publish = function(cat) {
-                if (!currentUser) return toast('请先注册登录');
-                const titleEl = getEl(cat + 'Title');
-                const contentEl = getEl(cat + 'Content');
-                if (!titleEl || !contentEl) return toast('编辑器加载异常');
-                const title = titleEl.value.trim();
-                const content = contentEl.value.trim();
-                if (!title || !content) return toast('标题和内容不能为空');
-
-                supabaseClient.from('articles').insert({
-                    title: title,
-                    content: content,
-                    category: cat,
-                    author: currentUser.nickname
-                }).then(function(result) {
-                    if (result.error) {
-                        console.error('发布文章失败:', result.error);
-                        toast('发布失败，请稍后重试');
-                        return;
-                    }
-                    toast('发布成功！');
-                    titleEl.value = '';
-                    contentEl.value = '';
-                    hideEditor(cat);
-                    loadArticles(cat);
-                });
-            };
-
-            function loadArticles(cat) {
-                supabaseClient.from('articles').select('*').eq('category', cat).order('created_at', {
-                    ascending: false
-                }).then(function(result) {
-                    const list = getEl(cat + 'List');
-                    if (!list) return;
-                    const data = result.data;
-                    if (!data || data.length === 0) {
-                        list.innerHTML = '<p style="color:#555;">暂无文章</p>';
-                        return;
-                    }
-                    list.innerHTML = data.map(function(a) {
-                        const dateStr = a.created_at ? new Date(a.created_at)
-                            .toLocaleDateString('zh-CN') : '未知日期';
-                        const safeTitle = escapeHTML(a.title || '无标题');
-                        const safeContent = escapeHTML(a.content || '');
-                        const safeAuthor = escapeHTML(a.author || '匿名');
-                        return '<div class="item"><h3>' + safeTitle + '</h3><p>' +
-                            safeContent + '</p><div class="meta"><span>👤 ' + safeAuthor +
-                            '</span><span>' + dateStr + '</span></div></div>';
-                    }).join('');
-                }).catch(function(err) {
-                    console.error('加载文章失败:', err);
-                });
-            }
-
-            function escapeHTML(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-
-            // ---------- 聊天频道 ----------
-            window.filterChannels = function() {
-                const searchEl = getEl('channelSearch');
-                const kw = searchEl ? searchEl.value.trim().toLowerCase() : '';
-                const cards = document.querySelectorAll('#channelGrid .ch-card');
-                cards.forEach(function(c) {
-                    const dataKw = (c.getAttribute('data-kw') || '').toLowerCase();
-                    const nameEl = c.querySelector('.ch-name');
-                    const nameText = nameEl ? nameEl.textContent.toLowerCase() : '';
-                    const shouldHide = kw && !nameText.includes(kw) && !dataKw.includes(kw);
-                    c.classList.toggle('hidden', shouldHide);
-                });
-            };
-
-            window.enterChannel = function(roomName) {
-                if (!currentUser) return toast('请先注册登录');
-                currentRoom = 'oskwk-' + roomName;
-                const channelSelect = getEl('channelSelect');
-                const chatRoom = getEl('chatRoom');
-                const searchEl = getEl('channelSearch');
-                if (channelSelect) channelSelect.style.display = 'none';
-                if (chatRoom) chatRoom.classList.add('active');
-                if (searchEl) searchEl.value = '';
-                // 恢复频道列表中的隐藏状态
-                document.querySelectorAll('#channelGrid .ch-card').forEach(function(c) {
-                    c.classList.remove('hidden');
-                });
-                loadMessages();
-                subscribeToRoom();
-            };
-
-            window.enterPrivate = function() {
-                if (!currentUser) return toast('请先注册登录');
-                const name = prompt('请输入私有房间名称：');
-                if (!name || !name.trim()) return;
-                const sanitized = name.trim().replace(/\s+/g, '-').replace(/[^\w\u4e00-\u9fff\-]/g, '');
-                if (!sanitized) return toast('房间名称包含无效字符');
-                enterChannel('私人-' + sanitized);
-            };
-
-            window.leaveChannel = function() {
-                if (messageSubscription) {
-                    try {
-                        supabaseClient.removeChannel(messageSubscription);
-                    } catch (err) {
-                        console.warn('移除频道订阅时出错:', err);
-                    }
-                    messageSubscription = null;
-                }
-                const chatRoom = getEl('chatRoom');
-                const channelSelect = getEl('channelSelect');
-                const messagesBox = getEl('messagesBox');
-                if (chatRoom) chatRoom.classList.remove('active');
-                if (channelSelect) channelSelect.style.display = 'block';
-                currentRoom = null;
-                if (messagesBox) messagesBox.innerHTML = '';
-            };
-
-            function loadMessages() {
-                if (!currentRoom) return;
-                supabaseClient.from('messages').select('*').eq('room', currentRoom).order('created_at', {
-                    ascending: true
-                }).then(function(result) {
-                    const box = getEl('messagesBox');
-                    if (!box) return;
-                    box.innerHTML = '';
-                    if (result.data) {
-                        result.data.forEach(function(msg) {
-                            renderMessage(msg);
-                        });
-                    }
-                    box.scrollTop = box.scrollHeight;
-                }).catch(function(err) {
-                    console.error('加载消息失败:', err);
-                });
-            }
-
-            function renderMessage(msg) {
-                const box = getEl('messagesBox');
-                if (!box) return;
-                const isMine = currentUser && msg.nickname === currentUser.nickname;
-                const div = document.createElement('div');
-                div.className = 'msg ' + (isMine ? 'mine' : 'other');
-                const safeNickname = escapeHTML(msg.nickname || '匿名');
-                let html = '<div class="sender">' + safeNickname + '</div>';
-                if (msg.message) {
-                    html += '<div>' + escapeHTML(msg.message) + '</div>';
-                }
-                if (msg.image_url) {
-                    html += '<img src="' + escapeHTML(msg.image_url) +
-                        '" onclick="window.open(\'' + escapeHTML(msg.image_url) +
-                        '\')" loading="lazy" alt="图片">';
-                }
-                div.innerHTML = html;
-                box.appendChild(div);
-                box.scrollTop = box.scrollHeight;
-            }
-
-            function subscribeToRoom() {
-                if (!currentRoom) return;
-                if (messageSubscription) {
-                    try {
-                        supabaseClient.removeChannel(messageSubscription);
-                    } catch (err) {
-                        console.warn('移除旧频道订阅时出错:', err);
-                    }
-                    messageSubscription = null;
-                }
-                try {
-                    messageSubscription = supabaseClient
-                        .channel('room-' + encodeURIComponent(currentRoom))
-                        .on('postgres_changes', {
-                            event: 'INSERT',
-                            schema: 'public',
-                            table: 'messages',
-                            filter: 'room=eq.' + currentRoom
-                        }, function(payload) {
-                            if (payload && payload.new) {
-                                renderMessage(payload.new);
-                            }
-                        })
-                        .subscribe();
-                } catch (err) {
-                    console.error('订阅频道失败:', err);
-                }
-            }
-
-            window.sendText = function() {
-                if (!currentRoom || !currentUser) return toast('请先加入频道');
-                const input = getEl('messageInput');
-                if (!input) return;
-                const text = input.value.trim();
-                if (!text) return;
-                supabaseClient.from('messages').insert({
-                    room: currentRoom,
-                    nickname: currentUser.nickname,
-                    message: text
-                }).then(function(result) {
-                    if (result.error) {
-                        console.error('发送消息失败:', result.error);
-                        toast('发送失败，请重试');
-                    }
-                });
-                input.value = '';
-                input.focus();
-            };
-
-            window.uploadImage = function() {
-                if (!currentRoom || !currentUser) {
-                    toast('请先加入频道');
-                    const fileInput = getEl('imageUpload');
-                    if (fileInput) fileInput.value = '';
-                    return;
-                }
-                const fileInput = getEl('imageUpload');
-                if (!fileInput || !fileInput.files || fileInput.files.length === 0) return;
-                const file = fileInput.files[0];
-
-                // 检查文件大小（限制5MB）
-                if (file.size > 5 * 1024 * 1024) {
-                    toast('图片大小不能超过5MB');
-                    fileInput.value = '';
-                    return;
-                }
-
-                // 检查文件类型
-                if (!file.type.startsWith('image/')) {
-                    toast('请选择图片文件');
-                    fileInput.value = '';
-                    return;
-                }
-
-                const path = currentRoom + '/' + Date.now() + '_' + file.name.replace(/[^\w.\-]/g, '_');
-                supabaseClient.storage.from('CHAT-INMAGES').upload(path, file).then(function(result) {
-                    if (result.error) {
-                        console.error('图片上传失败:', result.error);
-                        toast('图片上传失败，请检查存储桶配置');
-                        fileInput.value = '';
-                        return;
-                    }
-                    const publicUrlResult = supabaseClient.storage.from('CHAT-INMAGES').getPublicUrl(
-                    path);
-                    const publicUrl = publicUrlResult.data ? publicUrlResult.data.publicUrl : '';
-                    if (!publicUrl) {
-                        toast('获取图片链接失败');
-                        fileInput.value = '';
-                        return;
-                    }
-                    supabaseClient.from('messages').insert({
-                        room: currentRoom,
-                        nickname: currentUser.nickname,
-                        image_url: publicUrl
-                    }).then(function(insertResult) {
-                        if (insertResult.error) {
-                            console.error('发送图片消息失败:', insertResult.error);
-                            toast('图片消息发送失败');
-                        }
-                    });
-                    fileInput.value = '';
-                }).catch(function(err) {
-                    console.error('上传图片异常:', err);
-                    toast('上传失败，请稍后重试');
-                    fileInput.value = '';
-                });
-            };
-
-            // ---------- 启动 ----------
-            window.addEventListener('load', function() {
-                // 隐藏加载动画
-                setTimeout(function() {
-                    const loading = getEl('loading');
-                    if (loading && !loading.classList.contains('hidden')) {
-                        loading.classList.add('hidden');
-                    }
-                }, 1500);
-
-                // 初始化身份证输入框状态
-                const idcardEl = getEl('idcard');
-                const foreignerEl = getEl('foreigner');
-                if (idcardEl && foreignerEl) {
-                    idcardEl.disabled = foreignerEl.checked;
-                }
-
-                // 设置默认语言
-                setLang('zh');
+        });
+        getEl('messageInput').value = '';
+    };
+    window.uploadImage = function() {
+        if(!currentRoom||!currentUser) return toast('请先加入频道');
+        const file = getEl('imageUpload').files[0];
+        if(!file) return;
+        if(file.size>5*1024*1024) return toast('图片不能超过5MB');
+        const path = currentRoom+'/'+Date.now()+'_'+file.name;
+        supabaseClient.storage.from('CHAT-INMAGES').upload(path, file).then(({error}) => {
+            if(error) { toast('上传失败: '+error.message); return; }
+            const { data: { publicUrl } } = supabaseClient.storage.from('CHAT-INMAGES').getPublicUrl(path);
+            supabaseClient.from('messages').insert({room:currentRoom, nickname:currentUser.nickname, image_url:publicUrl}).then(({error}) => {
+                if(error) toast('图片消息发送失败: '+error.message);
             });
+        });
+        getEl('imageUpload').value = '';
+    };
 
-            // 暴露 getEl 到全局（方便内联 onclick 使用）
-            window.getEl = getEl;
-            window.toast = toast;
-            window.enterSite = enterSite;
-            window.loadArticles = loadArticles;
-            window.renderMessage = renderMessage;
-            window.subscribeToRoom = subscribeToRoom;
-            window.updateProfile = updateProfile;
-
-            console.log('✅ oskwk 平台初始化完成');
-            console.log('💡 提示：请在 Supabase 中创建以下数据表：profiles, articles, messages');
-            console.log('💡 提示：请在 Supabase 中创建存储桶：CHAT-INMAGES（需设置为公开）');
-        })();
-    </script>
+    window.addEventListener('load', () => {
+        setTimeout(() => getEl('loading').classList.add('hidden'), 1500);
+        getEl('idcard').disabled = false;
+        setLang('zh');
+    });
+})();
+</script>
 </body>
 </html>
