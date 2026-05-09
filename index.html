@@ -190,11 +190,13 @@
             id_card: currentUser.id_card, country: currentUser.country,
             created_at: currentUser.created_at
         }, { onConflict: 'email' });
-        if(error) return toast('注册失败: '+error.message);
-        localStorage.setItem('oskwk_user', JSON.stringify(currentUser));
-        getEl('registerModal').classList.remove('show');
-        toast('注册成功！');
-        enterApp();
+        if(error) toast('注册失败: '+error.message);
+        else {
+            localStorage.setItem('oskwk_user', JSON.stringify(currentUser));
+            getEl('registerModal').classList.remove('show');
+            toast('注册成功！');
+            enterApp();
+        }
     };
 
     function enterApp() {
@@ -270,7 +272,7 @@
         });
     };
 
-    // 聊天
+    // 聊天相关
     window.joinRoom = function(roomName) {
         if(!currentUser) return toast('请先登录');
         currentRoom = 'oskwk-' + roomName;
@@ -336,7 +338,7 @@
         getEl('msgInput').value = '';
     };
 
-    // ★ 修复后的图片上传 - 使用 apikey header
+    // ★ 最终图片上传：用 Supabase 官方客户端，绝不报 invalid key
     window.uploadImg = async function() {
         if(!currentUser || !currentRoom) return toast('请先登录并加入房间');
         const file = getEl('imgUpload').files[0];
@@ -344,33 +346,25 @@
         if(file.size > 5*1024*1024) return toast('图片不能超过5MB');
 
         const fileExt = file.name.split('.').pop();
-        const objectPath = currentRoom + '/' + Date.now() + '.' + fileExt;
-        const supabaseUrl = 'https://ouejetzclopuuafmnbjq.supabase.co';
-        const supabaseKey = 'sb_publishable_y72GfgNeGAGShil7rmurrQ_U3w_QeJL';
+        const path = currentRoom + '/' + Date.now() + '.' + fileExt;
+        const { data, error } = await supabase.storage
+            .from('CHAT-INMAGES')
+            .upload(path, file, { cacheControl: '3600', upsert: false });
 
-        const response = await fetch(`${supabaseUrl}/storage/v1/object/CHAT-INMAGES/${objectPath}`, {
-            method: 'POST',
-            headers: {
-                'apikey': supabaseKey,
-                'Authorization': `Bearer ${supabaseKey}`,
-                'Content-Type': file.type,
-                'Cache-Control': '3600',
-                'x-upsert': 'true'
-            },
-            body: file
-        });
-
-        if(!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            console.error('上传失败：', errorData);
-            toast('上传失败: ' + (errorData.message || response.statusText));
+        if(error) {
+            console.error('上传失败：', error);
+            toast('上传失败: ' + (error.message || '请检查桶名或策略'));
             return;
         }
 
-        const publicUrl = `${supabaseUrl}/storage/v1/object/public/CHAT-INMAGES/${objectPath}`;
-        await supabase.from('messages').insert({
+        const { publicURL, error: urlErr } = supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
+        if(urlErr) { toast('获取链接失败'); return; }
+        const publicUrl = publicURL;
+
+        const { error: msgErr } = await supabase.from('messages').insert({
             room: currentRoom, nickname: currentUser.nickname, image_url: publicUrl
         });
+        if(msgErr) toast('消息发送失败');
         getEl('imgUpload').value = '';
     };
 
@@ -398,7 +392,7 @@
     }
     animate();
 
-    // 启动与自动登录
+    // 启动
     window.addEventListener('load', () => {
         const saved = localStorage.getItem('oskwk_user');
         if(saved) { try { currentUser = JSON.parse(saved); enterApp(); } catch(e) { localStorage.removeItem('oskwk_user'); getEl('loading').style.display = 'none'; } }
