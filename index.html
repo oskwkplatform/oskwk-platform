@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>oskwk · 极致平台</title>
+    <title>oskwk · 极致化平台</title>
     <style>
         :root {
             --glass: rgba(255,255,255,0.45);
             --glass-border: rgba(255,255,255,0.5);
             --accent: #4f46e5;
-            --accent-light: rgba(79,70,229,0.1);
+            --accent-light: rgba(79,70,229,0.12);
             --shadow: 0 12px 40px rgba(0,0,0,0.15);
+            --radius-xl: 28px;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
@@ -23,7 +24,7 @@
         }
         .loading-screen {
             position:fixed; inset:0; background:#000; display:flex; align-items:center; justify-content:center;
-            z-index:9999; color:#fff; font-size:56px; font-weight:700; letter-spacing:4px;
+            z-index:9999; color:#fff; font-size:56px; font-weight:700; letter-spacing:6px;
             transition: opacity 0.5s;
         }
         .hero {
@@ -43,34 +44,37 @@
         .main-layout.active { display:block; }
         .nav-glass {
             position:fixed; top:0; left:0; right:0; z-index:100; background:var(--glass); backdrop-filter:blur(30px);
-            display:flex; gap:8px; padding:14px 24px; overflow-x:auto; border-bottom:1px solid var(--glass-border);
+            display:flex; gap:6px; padding:14px 20px; overflow-x:auto; border-bottom:1px solid var(--glass-border);
             box-shadow:0 4px 20px rgba(0,0,0,0.05);
         }
+        .nav-glass span {
+            font-weight:700; font-size:18px; color:var(--accent); margin-right:12px; white-space:nowrap;
+        }
         .nav-glass button {
-            background:none; border:none; padding:10px 20px; border-radius:40px; font-size:14px; color:#333; white-space:nowrap;
+            background:none; border:none; padding:10px 18px; border-radius:40px; font-size:13px; color:#333; white-space:nowrap;
         }
         .nav-glass button.active { background:var(--accent-light); color:var(--accent); font-weight:600; }
         .page { display:none; }
         .page.active { display:block; }
         .pg-hero {
-            height:240px; border-radius:28px; margin-bottom:20px; display:flex; align-items:center; justify-content:center;
+            height:240px; border-radius:var(--radius-xl); margin-bottom:24px; display:flex; align-items:center; justify-content:center;
             color:#fff; font-size:36px; font-weight:700; background-size:cover; background-position:center;
             position:relative; overflow:hidden; box-shadow:var(--shadow);
         }
         .pg-hero::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.3); backdrop-filter:blur(2px); }
         .pg-hero span { position:relative; z-index:1; text-shadow:0 2px 16px rgba(0,0,0,0.5); }
         .card {
-            background:var(--glass); backdrop-filter:blur(25px); border-radius:28px; padding:36px;
+            background:var(--glass); backdrop-filter:blur(25px); border-radius:var(--radius-xl); padding:36px;
             margin-bottom:24px; border:1px solid var(--glass-border); box-shadow:0 8px 32px rgba(0,0,0,0.08);
         }
         .article-item {
-            background:rgba(255,255,255,0.5); backdrop-filter:blur(12px); border-radius:20px; padding:24px; margin-bottom:20px;
+            background:rgba(255,255,255,0.55); backdrop-filter:blur(12px); border-radius:20px; padding:24px; margin-bottom:20px;
             border:1px solid rgba(255,255,255,0.5);
         }
-        .comment-section { margin-top:16px; padding-top:12px; border-top:1px solid rgba(0,0,0,0.05); }
+        .comment-section { margin-top:16px; padding-top:14px; border-top:1px solid rgba(0,0,0,0.05); }
         .comment-section input { padding:10px; border-radius:12px; border:1px solid #ddd; width:70%; }
-        .comment-section button { padding:10px 16px; border-radius:12px; background:var(--accent); color:#fff; border:none; }
-        .channel-grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); }
+        .comment-section button { padding:10px 16px; border-radius:12px; background:var(--accent); color:#fff; border:none; cursor:pointer; }
+        .channel-grid { display:grid; gap:14px; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); }
         .channel-card {
             background:var(--glass); backdrop-filter:blur(16px); padding:24px; border-radius:20px; cursor:pointer;
             border:1px solid var(--glass-border); transition:0.2s; text-align:center;
@@ -83,11 +87,16 @@
         .msg .time { font-size:10px; opacity:0.7; display:block; text-align:right; margin-top:4px; }
         .input-row { display:flex; gap:10px; margin-top:16px; }
         .input-row input { flex:1; padding:14px; border-radius:20px; border:1px solid #ccc; }
-        .input-row button { padding:14px 24px; border-radius:20px; background:var(--accent); color:#fff; border:none; }
+        .input-row button { padding:14px 24px; border-radius:20px; background:var(--accent); color:#fff; border:none; cursor:pointer; }
+        .profile-stat {
+            background:rgba(255,255,255,0.4); backdrop-filter:blur(12px); padding:20px; border-radius:18px;
+            text-align:center; border:1px solid var(--glass-border);
+        }
     </style>
 </head>
 <body>
 <div class="loading-screen" id="loading">oskwk</div>
+
 <section class="hero" id="hero">
     <h1>专注于每一个细节<br>呈现极致视觉体验</h1>
     <button onclick="openRegister()">加入我们 →</button>
@@ -108,33 +117,53 @@
 
 <div class="main-layout" id="mainLayout">
     <nav class="nav-glass">
-        <button class="active" onclick="switchTab(0)">文章</button>
-        <button onclick="switchTab(1)">交流中心</button>
-        <button onclick="switchTab(2)">个人</button>
+        <span>oskwk</span>
+        <button class="active" onclick="switchTab('about')">关于oskwk</button>
+        <button onclick="switchTab('discover')">最新发现</button>
+        <button onclick="switchTab('study')">学术学习</button>
+        <button onclick="switchTab('chat')">交流中心</button>
+        <button onclick="switchTab('profile')">个人中心</button>
     </nav>
 
-    <!-- 文章页 -->
-    <div class="page active" id="tab0">
-        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80')"><span>探索发现</span></div>
+    <!-- 关于oskwk -->
+    <div class="page active" id="tab-about">
+        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80')"><span>关于oskwk</span></div>
         <div class="card">
-            <button id="adminWriteBtn" style="display:none; margin-bottom:20px; padding:12px 24px; border-radius:14px; background:var(--accent); color:#fff; border:none;" onclick="adminWriteArticle()">✍️ 发布文章</button>
-            <div id="articleContainer">加载中...</div>
+            <button class="admin-btn" style="display:none; margin-bottom:20px; padding:12px 24px; border-radius:14px; background:var(--accent); color:#fff; border:none; cursor:pointer;" onclick="adminWriteArticle('about')">✍️ 发布文章</button>
+            <div id="article-about">加载中...</div>
         </div>
     </div>
-
+    <!-- 最新发现 -->
+    <div class="page" id="tab-discover">
+        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80')"><span>最新发现</span></div>
+        <div class="card">
+            <button class="admin-btn" style="display:none; margin-bottom:20px; padding:12px 24px; border-radius:14px; background:var(--accent); color:#fff; border:none; cursor:pointer;" onclick="adminWriteArticle('discover')">✍️ 发布文章</button>
+            <div id="article-discover">加载中...</div>
+        </div>
+    </div>
+    <!-- 学术学习 -->
+    <div class="page" id="tab-study">
+        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80')"><span>学术学习与讨论</span></div>
+        <div class="card">
+            <button class="admin-btn" style="display:none; margin-bottom:20px; padding:12px 24px; border-radius:14px; background:var(--accent); color:#fff; border:none; cursor:pointer;" onclick="adminWriteArticle('study')">✍️ 发布文章</button>
+            <div id="article-study">加载中...</div>
+        </div>
+    </div>
     <!-- 交流中心 -->
-    <div class="page" id="tab1">
-        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=80')"><span>交流中心</span></div>
+    <div class="page" id="tab-chat">
+        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1200&q=80')"><span>交流中心</span></div>
         <div class="card">
             <div id="channelSelector">
                 <div class="channel-grid">
                     <div class="channel-card" onclick="joinRoom('大厅')">🏠<br>大厅</div>
                     <div class="channel-card" onclick="joinRoom('技术')">💻<br>技术</div>
+                    <div class="channel-card" onclick="joinRoom('理论')">📖<br>理论</div>
+                    <div class="channel-card" onclick="joinRoom('艺术')">🎨<br>艺术</div>
                     <div class="channel-card" onclick="joinPrivate()">🔒<br>私有房间</div>
                 </div>
             </div>
             <div id="chatPanel" style="display:none;">
-                <button onclick="leaveRoom()" style="padding:8px 20px; border-radius:40px; background:var(--glass); border:1px solid var(--glass-border); margin-bottom:10px;">← 返回</button>
+                <button onclick="leaveRoom()" style="padding:8px 20px; border-radius:40px; background:var(--glass); border:1px solid var(--glass-border); margin-bottom:10px;">← 返回频道列表</button>
                 <div class="chat-box" id="chatBox"></div>
                 <div class="input-row">
                     <input id="msgInput" placeholder="输入消息..." onkeydown="if(event.key==='Enter')sendMsg()">
@@ -145,14 +174,18 @@
             </div>
         </div>
     </div>
-
     <!-- 个人中心 -->
-    <div class="page" id="tab2">
-        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1504711434969-e33886168d6c?auto=format&fit=crop&w=1200&q=80')"><span>个人中心</span></div>
+    <div class="page" id="tab-profile">
+        <div class="pg-hero" style="background-image:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80')"><span>个人中心</span></div>
         <div class="card">
-            <h2 id="profileNick"></h2>
-            <p id="profileMail" style="color:#666;"></p>
-            <button onclick="doLogout()" style="margin-top:24px; padding:14px 28px; background:#ef4444; color:#fff; border:none; border-radius:14px;">退出登录</button>
+            <h2 id="profileNick">昵称</h2>
+            <p id="profileMail" style="color:#666;">邮箱</p>
+            <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:16px; margin-top:28px;">
+                <div class="profile-stat"><div style="font-size:24px; font-weight:700; color:var(--accent);" id="joinDays">0</div><div>加入天数</div></div>
+                <div class="profile-stat"><div style="font-size:24px; font-weight:700; color:var(--accent);">VIP</div><div>等级</div></div>
+                <div class="profile-stat"><div style="font-size:24px; font-weight:700; color:var(--accent);">∞</div><div>潜力</div></div>
+            </div>
+            <button onclick="doLogout()" style="margin-top:28px; padding:14px 28px; background:#ef4444; color:#fff; border:none; border-radius:14px; width:100%;">退出登录</button>
         </div>
     </div>
 </div>
@@ -160,19 +193,18 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function() {
-    // ---------- 初始化 Supabase ----------
     const SUPABASE_URL = 'https://ouejetzclopuuafmnbjq.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_y72GfgNeGAGShil7rmurrQ_U3w_QeJL';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const ADMIN_EMAIL = 'admin@oskwk.com';  // 改成你的邮箱
+    const ADMIN_EMAIL = '279933264@qq.com';  // 管理员邮箱（只有此邮箱能看到发布按钮）
     let currentUser = null;
     let currentRoom = null;
     let realtimeChannel = null;
 
-    // ---------- 工具函数 ----------
     function toast(msg) {
         const t = document.getElementById('toast');
+        if(!t) return;
         t.textContent = msg; t.style.display = 'block';
         setTimeout(() => t.style.display = 'none', 3000);
     }
@@ -190,39 +222,59 @@
         getEl('registerModal').style.display = 'none';
         enterApp();
     };
+
     function enterApp() {
         getEl('loading').style.opacity = '0';
         setTimeout(() => getEl('loading').style.display = 'none', 500);
         getEl('mainLayout').classList.add('active');
         getEl('hero').style.display = 'none';
         updateProfile();
-        loadArticles();
+        loadArticlesByCategory('about');
+        loadArticlesByCategory('discover');
+        loadArticlesByCategory('study');
         if(currentUser.email === ADMIN_EMAIL) {
-            getEl('adminWriteBtn').style.display = 'block';
+            document.querySelectorAll('.admin-btn').forEach(b => b.style.display = 'block');
         }
     }
+
     function updateProfile() {
         if(!currentUser) return;
         getEl('profileNick').textContent = currentUser.nickname;
         getEl('profileMail').textContent = currentUser.email;
+        const diff = Math.max(1, Math.floor((Date.now() - new Date(currentUser.created_at).getTime())/86400000));
+        getEl('joinDays').textContent = diff;
     }
+
     window.doLogout = function() {
         localStorage.removeItem('oskwk_user');
         location.reload();
     };
 
     // ---------- 标签切换 ----------
-    window.switchTab = function(idx) {
-        document.querySelectorAll('.page').forEach((p,i) => p.classList.toggle('active', i===idx));
-        document.querySelectorAll('.nav-glass button').forEach((b,i) => b.classList.toggle('active', i===idx));
+    window.switchTab = function(cat) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const page = document.getElementById('tab-' + cat);
+        if(page) page.classList.add('active');
+        document.querySelectorAll('.nav-glass button').forEach(b => {
+            if(b.innerText.includes(getTabName(cat))) b.classList.add('active');
+            else b.classList.remove('active');
+        });
+        if(cat !== 'chat' && currentRoom) {
+            leaveRoom();
+        }
     };
+    function getTabName(cat) {
+        const map = { about:'关于oskwk', discover:'最新发现', study:'学术学习', chat:'交流中心', profile:'个人中心' };
+        return map[cat] || '';
+    }
 
     // ---------- 文章模块 ----------
-    async function loadArticles() {
-        const { data, error } = await supabase.from('articles').select('*').order('created_at', {ascending:false});
-        const container = getEl('articleContainer');
-        if(error) { container.innerHTML = '<p>加载失败: '+error.message+'</p>'; return; }
-        if(!data || data.length===0) { container.innerHTML = '<p>暂无文章，期待管理员首篇发布。</p>'; return; }
+    async function loadArticlesByCategory(cat) {
+        const container = getEl('article-' + cat);
+        if(!container) return;
+        const { data, error } = await supabase.from('articles').select('*').eq('category', cat).order('created_at', {ascending:false});
+        if(error) { container.innerHTML = '<p>加载失败</p>'; return; }
+        if(!data || data.length===0) { container.innerHTML = '<p>暂无文章</p>'; return; }
         container.innerHTML = data.map(a => `
             <div class="article-item">
                 <h3>${a.title}</h3>
@@ -232,42 +284,47 @@
                     <strong>留言</strong>
                     <div id="commentList-${a.id}">加载中...</div>
                     <input id="commentInput-${a.id}" placeholder="写下你的想法...">
-                    <button onclick="postComment(${a.id})">发送</button>
+                    <button onclick="postComment(${a.id}, '${cat}')">发送</button>
                 </div>
             </div>
         `).join('');
         data.forEach(a => loadComments(a.id));
     }
+
     async function loadComments(articleId) {
         const { data } = await supabase.from('comments').select('*').eq('article_id', articleId).order('created_at');
-        const box = getEl('commentList-'+articleId);
+        const box = getEl('commentList-' + articleId);
         if(!box) return;
         box.innerHTML = (data||[]).map(c => `<p><b>${c.nickname}</b>: ${c.content} <small>${new Date(c.created_at).toLocaleTimeString()}</small></p>`).join('');
     }
-    window.postComment = async function(articleId) {
+
+    window.postComment = async function(articleId, cat) {
         if(!currentUser) return toast('请先登录');
-        const input = getEl('commentInput-'+articleId);
+        const input = getEl('commentInput-' + articleId);
         const content = input.value.trim();
         if(!content) return;
-        const { error } = await supabase.from('comments').insert({ article_id: articleId, nickname: currentUser.nickname, content });
-        if(error) toast('留言失败: '+error.message);
-        else { input.value = ''; loadComments(articleId); }
+        await supabase.from('comments').insert({ article_id: articleId, nickname: currentUser.nickname, content });
+        input.value = '';
+        loadComments(articleId);
     };
-    window.adminWriteArticle = function() {
+
+    window.adminWriteArticle = function(cat) {
         const title = prompt('文章标题');
         if(!title) return;
         const content = prompt('文章内容');
         if(!content) return;
-        supabase.from('articles').insert({ title, content, author: currentUser.nickname }).then(({error}) => {
+        supabase.from('articles').insert({
+            title, content, category: cat, author: currentUser.nickname
+        }).then(({error}) => {
             if(error) toast('发布失败');
-            else { toast('发布成功'); loadArticles(); }
+            else { toast('发布成功'); loadArticlesByCategory(cat); }
         });
     };
 
     // ---------- 聊天室模块 ----------
     window.joinRoom = function(roomName) {
         if(!currentUser) return toast('请先登录');
-        currentRoom = 'oskwk-'+roomName;
+        currentRoom = 'oskwk-' + roomName;
         getEl('channelSelector').style.display = 'none';
         getEl('chatPanel').style.display = 'block';
         getEl('chatBox').innerHTML = '';
@@ -279,7 +336,7 @@
         if(!name) return;
         const pwd = prompt('输入密码（默认: oskwk2024）', 'oskwk2024');
         if(pwd !== 'oskwk2024') return toast('密码错误');
-        joinRoom('私人-'+name);
+        joinRoom('私人-' + name);
     };
     window.leaveRoom = function() {
         if(realtimeChannel) supabase.removeChannel(realtimeChannel);
@@ -309,7 +366,7 @@
         if(!currentRoom) return;
         if(realtimeChannel) supabase.removeChannel(realtimeChannel);
         realtimeChannel = supabase
-            .channel('room-'+currentRoom)
+            .channel('room-' + currentRoom)
             .on('postgres_changes', {
                 event: 'INSERT',
                 schema: 'public',
@@ -323,11 +380,9 @@
         const text = getEl('msgInput').value.trim();
         if(!text) return;
         const { error } = await supabase.from('messages').insert({
-            room: currentRoom,
-            nickname: currentUser.nickname,
-            message: text
+            room: currentRoom, nickname: currentUser.nickname, message: text
         });
-        if(error) toast('发送失败: '+error.message);
+        if(error) toast('发送失败');
         getEl('msgInput').value = '';
     };
     window.uploadImg = async function() {
@@ -335,20 +390,23 @@
         const file = getEl('imgUpload').files[0];
         if(!file) return;
         if(file.size > 5*1024*1024) return toast('图片不能超过5MB');
-        const path = currentRoom+'/'+Date.now()+'_'+file.name;
+        const path = currentRoom + '/' + Date.now() + '_' + file.name;
         const { error: uploadErr } = await supabase.storage.from('CHAT-INMAGES').upload(path, file);
         if(uploadErr) {
             if(uploadErr.message.includes('bucket') || uploadErr.message.includes('not found'))
                 toast('请先在 Supabase 创建名为 CHAT-INMAGES 的公开存储桶');
-            else toast('上传失败: '+uploadErr.message);
+            else
+                toast('上传失败，请检查存储桶权限（需执行SQL策略）');
             return;
         }
         const { data: { publicUrl } } = supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
-        await supabase.from('messages').insert({ room:currentRoom, nickname:currentUser.nickname, image_url: publicUrl });
+        await supabase.from('messages').insert({
+            room: currentRoom, nickname: currentUser.nickname, image_url: publicUrl
+        });
         getEl('imgUpload').value = '';
     };
 
-    // ---------- 启动与自动登录 ----------
+    // 启动与自动登录
     window.addEventListener('load', () => {
         const saved = localStorage.getItem('oskwk_user');
         if(saved) {
