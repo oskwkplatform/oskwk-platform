@@ -13,34 +13,41 @@
         .hero { height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative; z-index:1; }
         .hero h1 { font-size:clamp(3rem,8vw,5rem); background:linear-gradient(135deg,#fff,#c4b5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:2rem; }
         .hero button { background:rgba(255,255,255,0.12); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:1rem 3rem; border-radius:3rem; font-size:1.1rem; cursor:pointer; }
-        .toast { position:fixed; top:30px; left:50%; transform:translateX(-50%); background:rgba(20,20,30,0.9); padding:0.8rem 2rem; border-radius:3rem; z-index:999; display:none; }
+        .toast { position:fixed; top:30px; left:50%; transform:translateX(-50%); background:rgba(20,20,30,0.9); padding:0.8rem 2rem; border-radius:3rem; z-index:9999; display:none; white-space:nowrap; border:1px solid rgba(255,255,255,0.1); }
         .main-layout { display:none; padding:90px 20px 40px; max-width:1300px; margin:0 auto; position:relative; z-index:1; }
         .main-layout.active { display:block; }
-        .nav-glass { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(15,15,25,0.5); backdrop-filter:blur(30px); display:flex; gap:0.5rem; padding:0.8rem 2rem; overflow-x:auto; }
-        .nav-glass span { font-weight:700; font-size:1.3rem; color:#fff; margin-right:1.5rem; }
-        .nav-glass button { background:transparent; border:none; color:#aaa; padding:0.6rem 1.5rem; border-radius:2rem; cursor:pointer; }
-        .nav-glass button.active { background:rgba(255,255,255,0.1); color:#fff; }
+        .nav-glass { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(15,15,25,0.5); backdrop-filter:blur(30px); display:flex; gap:0.5rem; padding:0.8rem 2rem; overflow-x:auto; border-bottom:1px solid rgba(255,255,255,0.06); box-shadow:0 10px 30px rgba(0,0,0,0.3); }
+        .nav-glass span { font-weight:700; font-size:1.3rem; color:#fff; margin-right:1.5rem; white-space:nowrap; }
+        .nav-glass button { background:transparent; border:none; color:#aaa; padding:0.6rem 1.5rem; border-radius:2rem; font-size:0.9rem; white-space:nowrap; cursor:pointer; transition:all 0.2s; }
+        .nav-glass button.active { background:rgba(255,255,255,0.08); color:#fff; box-shadow:0 0 15px rgba(109,138,255,0.15); }
         .page { display:none; } .page.active { display:block; }
-        .pg-hero { height:260px; border-radius:var(--radius-2xl); margin-bottom:2rem; display:flex; align-items:center; justify-content:center; background-size:cover; color:#fff; font-size:2.5rem; font-weight:700; position:relative; overflow:hidden; }
+        .pg-hero { height:260px; border-radius:var(--radius-2xl); margin-bottom:2rem; display:flex; align-items:center; justify-content:center; background-size:cover; background-position:center; color:#fff; font-size:2.5rem; font-weight:700; position:relative; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.5); }
         .pg-hero::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.4); backdrop-filter:blur(3px); }
-        .pg-hero span { position:relative; z-index:1; }
-        .card { background:var(--glass-bg); backdrop-filter:blur(40px); border-radius:var(--radius-2xl); padding:2rem; margin-bottom:2rem; border:1px solid var(--glass-border); }
-        .article-item { background:rgba(255,255,255,0.04); backdrop-filter:blur(20px); border-radius:24px; padding:2rem; margin-bottom:1.5rem; }
-        .comment-section input { padding:0.8rem; border-radius:1rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#fff; width:70%; }
-        .comment-section button { padding:0.8rem 1.4rem; border-radius:1rem; background:var(--accent); color:#fff; border:none; cursor:pointer; }
+        .pg-hero span { position:relative; z-index:1; text-shadow:0 8px 30px rgba(0,0,0,0.6); }
+        .card { background:var(--glass-bg); backdrop-filter:blur(40px); border-radius:var(--radius-2xl); padding:2rem; margin-bottom:2rem; border:1px solid var(--glass-border); box-shadow:0 25px 50px rgba(0,0,0,0.5); }
+        .article-item { background:rgba(255,255,255,0.04); backdrop-filter:blur(20px); border-radius:24px; padding:2rem; margin-bottom:1.5rem; border:1px solid rgba(255,255,255,0.08); }
+        .comment-section { margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.06); }
+        .comment-section input { padding:0.8rem 1.2rem; border-radius:1rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#fff; width:70%; margin-right:0.5rem; }
+        .comment-section button { padding:0.8rem 1.4rem; border-radius:1rem; background:var(--accent); color:#fff; border:none; cursor:pointer; font-weight:500; }
         .channel-grid { display:grid; gap:1rem; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); }
-        .channel-card { background:rgba(255,255,255,0.04); backdrop-filter:blur(20px); padding:2rem 1rem; border-radius:24px; cursor:pointer; text-align:center; }
-        .chat-box { height:60vh; overflow-y:auto; background:rgba(0,0,0,0.2); border-radius:24px; padding:1.5rem; margin:1rem 0; }
-        .msg { max-width:75%; padding:1rem 1.4rem; border-radius:1.5rem; margin-bottom:1rem; }
-        .msg.mine { background:linear-gradient(135deg,#6d8aff,#a78bfa); color:#fff; margin-left:auto; }
-        .msg.other { background:rgba(255,255,255,0.1); }
+        .channel-card { background:rgba(255,255,255,0.04); backdrop-filter:blur(20px); padding:2rem 1rem; border-radius:24px; cursor:pointer; text-align:center; border:1px solid rgba(255,255,255,0.06); transition:all 0.2s; }
+        .channel-card:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); transform:translateY(-2px); }
+        .chat-box { height:60vh; overflow-y:auto; background:rgba(0,0,0,0.2); border-radius:24px; padding:1.5rem; margin:1rem 0; border:1px solid rgba(255,255,255,0.06); }
+        .msg { max-width:75%; padding:1rem 1.4rem; border-radius:1.5rem; margin-bottom:1rem; backdrop-filter:blur(15px); animation:fadeInUp 0.25s ease; }
+        .msg.mine { background:linear-gradient(135deg,#6d8aff,#a78bfa); color:#fff; margin-left:auto; border-bottom-right-radius:0.4rem; }
+        .msg.other { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); margin-right:auto; border-bottom-left-radius:0.4rem; }
+        .msg .time { font-size:0.7rem; opacity:0.6; display:block; text-align:right; margin-top:0.4rem; }
         .input-row { display:flex; gap:0.8rem; }
-        .input-row input { flex:1; padding:1rem; border-radius:2rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#fff; }
-        .input-row button { padding:1rem 2rem; border-radius:2rem; background:var(--accent); color:#fff; border:none; cursor:pointer; }
+        .input-row input { flex:1; padding:1rem 1.5rem; border-radius:2rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); color:#fff; }
+        .input-row button { padding:1rem 2rem; border-radius:2rem; background:var(--accent); color:#fff; border:none; cursor:pointer; font-weight:600; transition:all 0.2s; }
+        .input-row button:hover { box-shadow:0 0 20px rgba(109,138,255,0.3); }
+        .profile-stat { background:rgba(255,255,255,0.04); backdrop-filter:blur(15px); padding:1.5rem; border-radius:24px; text-align:center; border:1px solid rgba(255,255,255,0.06); }
         .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(15px); z-index:200; display:none; align-items:center; justify-content:center; }
         .modal-overlay.show { display:flex; }
-        .modal-box { background:rgba(20,20,30,0.8); backdrop-filter:blur(40px); border-radius:32px; padding:3rem; max-width:460px; width:90%; border:1px solid rgba(255,255,255,0.1); position:relative; }
+        .modal-box { background:rgba(20,20,30,0.8); backdrop-filter:blur(40px); border-radius:32px; padding:3rem; max-width:460px; width:90%; border:1px solid rgba(255,255,255,0.1); box-shadow:0 30px 60px rgba(0,0,0,0.6); position:relative; }
         .close-modal { position:absolute; top:1rem; right:1.5rem; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer; }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+        @media(max-width:600px){ .pg-hero{height:180px;font-size:2rem;} .card{padding:1.5rem;} }
     </style>
 </head>
 <body>
@@ -141,9 +148,9 @@
             <h2 id="profileNick" style="color:#fff;">昵称</h2>
             <p id="profileMail" style="color:#aaa;">邮箱</p>
             <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:1rem; margin:2rem 0;">
-                <div><div style="font-size:1.8rem; color:var(--accent);" id="joinDays">0</div>加入天数</div>
-                <div><div style="font-size:1.8rem; color:var(--accent);">VIP</div>等级</div>
-                <div><div style="font-size:1.8rem; color:var(--accent);">∞</div>潜力</div>
+                <div class="profile-stat"><div style="font-size:1.8rem; color:var(--accent);" id="joinDays">0</div>加入天数</div>
+                <div class="profile-stat"><div style="font-size:1.8rem; color:var(--accent);">VIP</div>等级</div>
+                <div class="profile-stat"><div style="font-size:1.8rem; color:var(--accent);">∞</div>潜力</div>
             </div>
             <button id="adminUserBtn" style="display:none; margin-bottom:1rem; padding:0.8rem 2rem; background:var(--accent); color:#fff; border:none; border-radius:2rem;" onclick="showAllUsers()">👥 用户管理</button>
             <button onclick="doLogout()" style="width:100%; padding:1rem; background:rgba(239,68,68,0.2); color:#f87171; border:1px solid rgba(239,68,68,0.3); border-radius:2rem;">退出登录</button>
@@ -154,16 +161,22 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function() {
-    const SUPABASE_URL = 'https://ouejetzclopuuafmnbjq.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_y72GfgNeGAGShil7rmurrQ_U3w_QeJL';
+    // 防止 GitHub Pages 转义，使用字符串拼接
+    const SUPABASE_URL = 'https://' + 'ouejetzclopuuafmnbjq.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_' + 'y72GfgNeGAGShil7rmurrQ_U3w_QeJL';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     const ADMIN_EMAIL = '279933264@qq.com';
     let currentUser = null, currentRoom = null, realtimeChannel = null;
 
-    function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
+    function toast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg; t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 3000);
+    }
     function getEl(id) { return document.getElementById(id); }
 
-    // 注册表单
+    // ---------- 注册 ----------
     window.toggleForeigner = () => getEl('idCardField').style.display = getEl('regCountry').value === 'OTHER' ? 'none' : 'block';
     window.sendVerifyCode = () => toast('验证码已发送（固定123456）');
     window.openRegister = () => getEl('registerModal').classList.add('show');
@@ -183,20 +196,19 @@
         currentUser = {
             phone: (country === 'CN' ? '+86 ' : '') + phone,
             email, nickname, id_card: idcard, country,
-            password_hash: password, created_at: new Date().toISOString()
+            password_hash: password,
+            created_at: new Date().toISOString()
         };
         const { error } = await supabase.from('profiles').upsert({
             email: currentUser.email, nickname, phone: currentUser.phone,
             id_card: currentUser.id_card, country: currentUser.country,
             created_at: currentUser.created_at
         }, { onConflict: 'email' });
-        if(error) toast('注册失败: '+error.message);
-        else {
-            localStorage.setItem('oskwk_user', JSON.stringify(currentUser));
-            getEl('registerModal').classList.remove('show');
-            toast('注册成功！');
-            enterApp();
-        }
+        if(error) return toast('注册失败: '+error.message);
+        localStorage.setItem('oskwk_user', JSON.stringify(currentUser));
+        getEl('registerModal').classList.remove('show');
+        toast('注册成功！');
+        enterApp();
     };
 
     function enterApp() {
@@ -213,10 +225,12 @@
     function updateProfile() {
         getEl('profileNick').textContent = currentUser.nickname;
         getEl('profileMail').textContent = currentUser.email;
-        getEl('joinDays').textContent = Math.max(1, Math.floor((Date.now() - new Date(currentUser.created_at).getTime())/86400000));
+        getEl('joinDays').textContent = Math.max(1, Math.floor((Date.now() - new Date(currentUser.created_at).getTime()) / 86400000));
     }
 
     window.doLogout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
+
+    // ---------- 标签切换 ----------
     window.switchTab = function(cat) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         const page = document.getElementById('tab-' + cat);
@@ -228,6 +242,7 @@
         if(cat !== 'chat' && currentRoom) leaveRoom();
     };
 
+    // ---------- 文章与留言 ----------
     async function loadArticles(cat) {
         const container = getEl('article-' + cat);
         const { data, error } = await supabase.from('articles').select('*').eq('category', cat).order('created_at', {ascending:false});
@@ -247,13 +262,11 @@
         `).join('');
         data.forEach(a => loadComments(a.id));
     }
-
     async function loadComments(articleId) {
         const { data } = await supabase.from('comments').select('*').eq('article_id', articleId).order('created_at');
         const box = getEl('commentList-' + articleId);
         box.innerHTML = (data||[]).map(c => `<p><b>${c.nickname}</b>: ${c.content} <small>${new Date(c.created_at).toLocaleTimeString()}</small></p>`).join('');
     }
-
     window.postComment = async function(articleId) {
         if(!currentUser) return toast('请先登录');
         const input = getEl('commentInput-' + articleId);
@@ -262,7 +275,6 @@
         input.value = '';
         loadComments(articleId);
     };
-
     window.publishArticle = function(cat) {
         const title = prompt('文章标题'), content = prompt('文章内容');
         if(!title || !content) return;
@@ -272,7 +284,7 @@
         });
     };
 
-    // 聊天
+    // ---------- 聊天室 ----------
     window.joinRoom = function(roomName) {
         if(!currentUser) return toast('请先登录');
         currentRoom = 'oskwk-' + roomName;
@@ -282,7 +294,6 @@
         loadChatMessages();
         subscribeToRoom();
     };
-
     window.promptCreateRoom = function() {
         const name = prompt('房间名称'), pwd = prompt('设置密码');
         if(!name || !pwd) return;
@@ -292,12 +303,10 @@
             else { addCustomRoomCard(roomId, name); toast('房间创建成功'); }
         });
     };
-
     async function loadCustomRooms() {
         const { data } = await supabase.from('custom_rooms').select('room_name');
         (data||[]).forEach(r => addCustomRoomCard(r.room_name, r.room_name.replace('oskwk-','')));
     }
-
     function addCustomRoomCard(roomId, display) {
         const grid = document.getElementById('channelGrid');
         if([...grid.children].some(c => c.textContent.includes(display))) return;
@@ -311,26 +320,30 @@
         card.innerHTML = `🔒 ${display}`;
         grid.appendChild(card);
     }
-
-    window.leaveRoom = function() { if(realtimeChannel) supabase.removeChannel(realtimeChannel); currentRoom = null; getEl('channelSelector').style.display = 'block'; getEl('chatPanel').style.display = 'none'; };
-
+    window.leaveRoom = function() {
+        if(realtimeChannel) supabase.removeChannel(realtimeChannel);
+        currentRoom = null;
+        getEl('channelSelector').style.display = 'block';
+        getEl('chatPanel').style.display = 'none';
+    };
     async function loadChatMessages() {
         const { data } = await supabase.from('messages').select('*').eq('room', currentRoom).order('created_at');
-        getEl('chatBox').innerHTML = ''; (data||[]).forEach(renderMessage);
+        getEl('chatBox').innerHTML = '';
+        (data||[]).forEach(renderMessage);
     }
-
     function renderMessage(msg) {
-        const div = document.createElement('div'); div.className = `msg ${msg.nickname===currentUser.nickname?'mine':'other'}`;
-        div.innerHTML = `<b>${msg.nickname}</b><br>${msg.message||''}${msg.image_url?`<br><img src="${msg.image_url}" style="max-width:200px; border-radius:1rem;">`:''}<span class="time" style="font-size:0.7rem; opacity:0.6;">${new Date(msg.created_at).toLocaleTimeString()}</span>`;
+        const div = document.createElement('div');
+        div.className = `msg ${msg.nickname===currentUser.nickname?'mine':'other'}`;
+        div.innerHTML = `<b>${msg.nickname}</b><br>${msg.message||''}${msg.image_url?`<br><img src="${msg.image_url}" style="max-width:200px; border-radius:1rem;">`:''}<span class="time">${new Date(msg.created_at).toLocaleTimeString()}</span>`;
         getEl('chatBox').appendChild(div);
         getEl('chatBox').scrollTop = getEl('chatBox').scrollHeight;
     }
-
     function subscribeToRoom() {
         if(realtimeChannel) supabase.removeChannel(realtimeChannel);
-        realtimeChannel = supabase.channel('room-'+currentRoom).on('postgres_changes', { event:'INSERT', schema:'public', table:'messages', filter:`room=eq.${currentRoom}` }, payload => renderMessage(payload.new)).subscribe();
+        realtimeChannel = supabase.channel('room-'+currentRoom)
+            .on('postgres_changes', { event:'INSERT', schema:'public', table:'messages', filter:`room=eq.${currentRoom}` }, payload => renderMessage(payload.new))
+            .subscribe();
     }
-
     window.sendMsg = async function() {
         const text = getEl('msgInput').value.trim();
         if(!text || !currentRoom) return;
@@ -338,7 +351,7 @@
         getEl('msgInput').value = '';
     };
 
-    // 图片上传 - 只用 apikey，不发送 Authorization 头
+    // ★★★ 图片上传 - 最终版，使用官方客户端，不上传多余头部 ★★★
     window.uploadImg = async function() {
         if(!currentUser || !currentRoom) return toast('请先登录并加入房间');
         const file = getEl('imgUpload').files[0];
@@ -347,7 +360,7 @@
 
         const fileExt = file.name.split('.').pop();
         const path = currentRoom + '/' + Date.now() + '.' + fileExt;
-        const { data, error } = await supabase.storage
+        const { error } = await supabase.storage
             .from('CHAT-INMAGES')
             .upload(path, file, { cacheControl: '3600', upsert: false });
 
@@ -365,35 +378,42 @@
         getEl('imgUpload').value = '';
     };
 
+    // 管理员查看用户
     window.showAllUsers = async function() {
         if(currentUser.email !== ADMIN_EMAIL) return;
         const { data } = await supabase.from('profiles').select('*');
         if(!data) return toast('暂无用户');
-        alert('所有用户：\n'+data.map(u => `${u.email} - ${u.nickname} - ${new Date(u.created_at).toLocaleDateString()}`).join('\n'));
+        alert('所有用户：\n' + data.map(u => `${u.email} - ${u.nickname} - ${new Date(u.created_at).toLocaleDateString()}`).join('\n'));
     };
 
     // 粒子背景
-    const canvas = document.getElementById('particles'), ctx = canvas.getContext('2d');
-    let width, height;
-    function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resize); resize();
-    const particles = Array.from({length:70}, () => ({ x:Math.random()*width, y:Math.random()*height, r:Math.random()*2, sx:(Math.random()-0.5)*0.3, sy:(Math.random()-0.5)*0.3 }));
-    function animate() {
-        ctx.clearRect(0,0,width,height);
-        particles.forEach(p => {
-            p.x += p.sx; p.y += p.sy;
-            if(p.x<0||p.x>width||p.y<0||p.y>height) { p.x=Math.random()*width; p.y=Math.random()*height; }
-            ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fill();
-        });
-        requestAnimationFrame(animate);
-    }
-    animate();
+    (function() {
+        const canvas = document.getElementById('particles'), ctx = canvas.getContext('2d');
+        let width, height;
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        const particles = Array.from({length:70}, () => ({ x:Math.random()*width, y:Math.random()*height, r:Math.random()*2, sx:(Math.random()-0.5)*0.3, sy:(Math.random()-0.5)*0.3 }));
+        function animate() {
+            ctx.clearRect(0,0,width,height);
+            particles.forEach(p => {
+                p.x += p.sx; p.y += p.sy;
+                if(p.x<0||p.x>width||p.y<0||p.y>height) { p.x=Math.random()*width; p.y=Math.random()*height; }
+                ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    })();
 
-    // 启动
+    // 启动与自动登录
     window.addEventListener('load', () => {
         const saved = localStorage.getItem('oskwk_user');
-        if(saved) { try { currentUser = JSON.parse(saved); enterApp(); } catch(e) { localStorage.removeItem('oskwk_user'); getEl('loading').style.display = 'none'; } }
-        else setTimeout(() => getEl('loading').style.display = 'none', 800);
+        if(saved) {
+            try { currentUser = JSON.parse(saved); enterApp(); }
+            catch(e) { localStorage.removeItem('oskwk_user'); getEl('loading').style.display = 'none'; }
+        } else {
+            setTimeout(() => getEl('loading').style.display = 'none', 800);
+        }
     });
 })();
 </script>
