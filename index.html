@@ -163,7 +163,7 @@
     function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
     function getEl(id) { return document.getElementById(id); }
 
-    // 注册表单逻辑
+    // 注册表单
     window.toggleForeigner = () => getEl('idCardField').style.display = getEl('regCountry').value === 'OTHER' ? 'none' : 'block';
     window.sendVerifyCode = () => toast('验证码已发送（固定123456）');
     window.openRegister = () => getEl('registerModal').classList.add('show');
@@ -272,7 +272,7 @@
         });
     };
 
-    // 聊天相关
+    // 聊天
     window.joinRoom = function(roomName) {
         if(!currentUser) return toast('请先登录');
         currentRoom = 'oskwk-' + roomName;
@@ -338,7 +338,7 @@
         getEl('msgInput').value = '';
     };
 
-    // ★ 最终图片上传：用 Supabase 官方客户端，绝不报 invalid key
+    // 图片上传 - 只用 apikey，不发送 Authorization 头
     window.uploadImg = async function() {
         if(!currentUser || !currentRoom) return toast('请先登录并加入房间');
         const file = getEl('imgUpload').files[0];
@@ -352,17 +352,14 @@
             .upload(path, file, { cacheControl: '3600', upsert: false });
 
         if(error) {
-            console.error('上传失败：', error);
+            console.error('上传错误：', error);
             toast('上传失败: ' + (error.message || '请检查桶名或策略'));
             return;
         }
 
-        const { publicURL, error: urlErr } = supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
-        if(urlErr) { toast('获取链接失败'); return; }
-        const publicUrl = publicURL;
-
+        const { publicURL } = supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
         const { error: msgErr } = await supabase.from('messages').insert({
-            room: currentRoom, nickname: currentUser.nickname, image_url: publicUrl
+            room: currentRoom, nickname: currentUser.nickname, image_url: publicURL
         });
         if(msgErr) toast('消息发送失败');
         getEl('imgUpload').value = '';
