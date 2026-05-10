@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -161,7 +162,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function() {
-    // 防止 GitHub Pages 转义，使用字符串拼接
     const SUPABASE_URL = 'https://' + 'ouejetzclopuuafmnbjq.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_' + 'y72GfgNeGAGShil7rmurrQ_U3w_QeJL';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -297,7 +297,7 @@
     window.promptCreateRoom = function() {
         const name = prompt('房间名称'), pwd = prompt('设置密码');
         if(!name || !pwd) return;
-        const roomId = 'oskwk-' + name.replace(/\s+/g, '-');
+        const roomId = 'oskwk-' + name.replace(/\\s+/g, '-');
         supabase.from('custom_rooms').insert({ room_name: roomId, password: pwd, creator_email: currentUser.email }).then(({error}) => {
             if(error) toast('创建失败');
             else { addCustomRoomCard(roomId, name); toast('房间创建成功'); }
@@ -351,18 +351,34 @@
         getEl('msgInput').value = '';
     };
 
-    // ★★★ 图片上传 - 最终版，使用官方客户端，不上传多余头部 ★★★
+    // ★★★ 图片上传 - 修复版 ★★★
     window.uploadImg = async function() {
         if(!currentUser || !currentRoom) return toast('请先登录并加入房间');
         const file = getEl('imgUpload').files[0];
         if(!file) return;
         if(file.size > 5*1024*1024) return toast('图片不能超过5MB');
 
-        const fileExt = file.name.split('.').pop();
-        const path = currentRoom + '/' + Date.now() + '.' + fileExt;
+        // 1. 统一小写扩展名
+        const fileExt = (file.name.split('.').pop() || '').toLowerCase();
+        // 2. 显式指定 MIME 类型，解决 invalid key jpeg
+        const mimeMap = {
+            jpg: 'image/jpeg',
+            jpeg: 'image/jpeg',
+            png: 'image/png',
+            gif: 'image/gif',
+            webp: 'image/webp',
+            bmp: 'image/bmp'
+        };
+        const contentType = mimeMap[fileExt] || file.type || 'application/octet-stream';
+        const path = currentRoom + '/' + Date.now() + '_' + Math.random().toString(36).slice(2,8) + '.' + fileExt;
+
         const { error } = await supabase.storage
             .from('CHAT-INMAGES')
-            .upload(path, file, { cacheControl: '3600', upsert: false });
+            .upload(path, file, {
+                cacheControl: '3600',
+                upsert: false,
+                contentType: contentType   // ← 关键修复
+            });
 
         if(error) {
             console.error('上传错误：', error);
@@ -370,11 +386,21 @@
             return;
         }
 
-        const { publicURL } = supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
+        // 3. 修正 Supabase JS v2 getPublicUrl 返回结构
+        const { data } = supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
+        const publicUrl = data?.publicUrl;
+        if(!publicUrl) {
+            toast('获取图片链接失败');
+            return;
+        }
+
         const { error: msgErr } = await supabase.from('messages').insert({
-            room: currentRoom, nickname: currentUser.nickname, image_url: publicURL
+            room: currentRoom,
+            nickname: currentUser.nickname,
+            image_url: publicUrl
         });
         if(msgErr) toast('消息发送失败');
+        else toast('图片发送成功');
         getEl('imgUpload').value = '';
     };
 
@@ -383,7 +409,7 @@
         if(currentUser.email !== ADMIN_EMAIL) return;
         const { data } = await supabase.from('profiles').select('*');
         if(!data) return toast('暂无用户');
-        alert('所有用户：\n' + data.map(u => `${u.email} - ${u.nickname} - ${new Date(u.created_at).toLocaleDateString()}`).join('\n'));
+        alert('所有用户：\\n' + data.map(u => `${u.email} - ${u.nickname} - ${new Date(u.created_at).toLocaleDateString()}`).join('\\n'));
     };
 
     // 粒子背景
@@ -418,4 +444,12 @@
 })();
 </script>
 </body>
-</html>
+</html>'''
+
+with open('/mnt/agents/output/index.html', 'w', encoding='utf-8') as f:
+    f.write(fixed_html)
+
+print("文件已保存，修复点：")
+print("1. 添加 contentType 参数，解决 invalid key jpeg")
+print("2. 修正 getPublicUrl 返回结构 (data.publicUrl)")
+print("3. 扩展名统一小写，防止 JPEG/Jpg 等大小写问题")
