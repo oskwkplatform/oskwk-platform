@@ -1,5 +1,5 @@
 
-<!DOCTYPE html>
+fixed_html = '''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -162,8 +162,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function() {
-    const SUPABASE_URL = 'https://' + 'ouejetzclopuuafmnbjq.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_' + 'y72GfgNeGAGShil7rmurrQ_U3w_QeJL';
+    const SUPABASE_URL = 'https://ouejetzclopuuafmnbjq.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im91ZWpldHpjbG9wdXVhZm1uYmpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzM1NjksImV4cCI6MjA5MzMwOTU2OX0.fGuExq4_43l4N1YF9339c934pJmTQAcNX_oOSuF-Bzw';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const ADMIN_EMAIL = '279933264@qq.com';
@@ -351,56 +351,68 @@
         getEl('msgInput').value = '';
     };
 
-    // ★★★ 图片上传 - 修复版 ★★★
+    // ★★★ 图片上传 ★★★
     window.uploadImg = async function() {
         if(!currentUser || !currentRoom) return toast('请先登录并加入房间');
         const file = getEl('imgUpload').files[0];
         if(!file) return;
         if(file.size > 5*1024*1024) return toast('图片不能超过5MB');
 
-        // 1. 统一小写扩展名
         const fileExt = (file.name.split('.').pop() || '').toLowerCase();
-        // 2. 显式指定 MIME 类型，解决 invalid key jpeg
         const mimeMap = {
-            jpg: 'image/jpeg',
-            jpeg: 'image/jpeg',
-            png: 'image/png',
-            gif: 'image/gif',
-            webp: 'image/webp',
-            bmp: 'image/bmp'
+            jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png',
+            gif: 'image/gif', webp: 'image/webp', bmp: 'image/bmp', svg: 'image/svg+xml'
         };
         const contentType = mimeMap[fileExt] || file.type || 'application/octet-stream';
-        const path = currentRoom + '/' + Date.now() + '_' + Math.random().toString(36).slice(2,8) + '.' + fileExt;
+        const filename = Date.now() + '_' + Math.random().toString(36).slice(2,10) + (fileExt ? '.' + fileExt : '');
+        const path = 'uploads/' + filename;
 
-        const { error } = await supabase.storage
-            .from('CHAT-INMAGES')
-            .upload(path, file, {
-                cacheControl: '3600',
-                upsert: false,
-                contentType: contentType   // ← 关键修复
+        console.log('[Upload] path:', path, 'size:', file.size, 'type:', contentType);
+
+        try {
+            const { data: upData, error: upErr } = await supabase.storage
+                .from('CHAT-INMAGES')
+                .upload(path, file, {
+                    cacheControl: '3600',
+                    upsert: false,
+                    contentType: contentType
+                });
+
+            if(upErr) {
+                console.error('[Upload] error object:', upErr);
+                const details = upErr.message || upErr.error_description || JSON.stringify(upErr);
+                toast('上传失败: ' + details);
+                getEl('imgUpload').value = '';
+                return;
+            }
+
+            console.log('[Upload] success data:', upData);
+
+            const { data } = supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
+            const publicUrl = data?.publicUrl;
+            console.log('[Upload] publicUrl:', publicUrl);
+
+            if(!publicUrl) {
+                toast('获取图片链接失败');
+                getEl('imgUpload').value = '';
+                return;
+            }
+
+            const { error: msgErr } = await supabase.from('messages').insert({
+                room: currentRoom,
+                nickname: currentUser.nickname,
+                image_url: publicUrl
             });
-
-        if(error) {
-            console.error('上传错误：', error);
-            toast('上传失败: ' + (error.message || '请检查桶名或策略'));
-            return;
+            if(msgErr) {
+                console.error('[Upload] message insert error:', msgErr);
+                toast('图片已上传但消息发送失败');
+            } else {
+                toast('图片发送成功');
+            }
+        } catch(e) {
+            console.error('[Upload] exception:', e);
+            toast('上传异常: ' + e.message);
         }
-
-        // 3. 修正 Supabase JS v2 getPublicUrl 返回结构
-        const { data } = supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
-        const publicUrl = data?.publicUrl;
-        if(!publicUrl) {
-            toast('获取图片链接失败');
-            return;
-        }
-
-        const { error: msgErr } = await supabase.from('messages').insert({
-            room: currentRoom,
-            nickname: currentUser.nickname,
-            image_url: publicUrl
-        });
-        if(msgErr) toast('消息发送失败');
-        else toast('图片发送成功');
         getEl('imgUpload').value = '';
     };
 
@@ -449,7 +461,7 @@
 with open('/mnt/agents/output/index.html', 'w', encoding='utf-8') as f:
     f.write(fixed_html)
 
-print("文件已保存，修复点：")
-print("1. 添加 contentType 参数，解决 invalid key jpeg")
-print("2. 修正 getPublicUrl 返回结构 (data.publicUrl)")
-print("3. 扩展名统一小写，防止 JPEG/Jpg 等大小写问题")
+print("已保存。变更：")
+print("- SUPABASE_URL 直接写完整")
+print("- SUPABASE_KEY 换成 Legacy anon public key")
+print("- 保留纯 ASCII 上传路径、contentType、try-catch 等修复")
