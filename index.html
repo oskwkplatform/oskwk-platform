@@ -1,5 +1,5 @@
 
-fixed_html = '''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -334,7 +334,11 @@ fixed_html = '''<!DOCTYPE html>
     function renderMessage(msg) {
         const div = document.createElement('div');
         div.className = `msg ${msg.nickname===currentUser.nickname?'mine':'other'}`;
-        div.innerHTML = `<b>${msg.nickname}</b><br>${msg.message||''}${msg.image_url?`<br><img src="${msg.image_url}" style="max-width:200px; border-radius:1rem;">`:''}<span class="time">${new Date(msg.created_at).toLocaleTimeString()}</span>`;
+        
+        // 图片加载失败处理
+        const imgHtml = msg.image_url ? `<br><img src="${msg.image_url}" style="max-width:200px; border-radius:1rem; cursor:pointer;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" onclick="window.open('${msg.image_url}','_blank')"><div style="display:none; color:#f87171; font-size:0.8rem; margin-top:0.3rem;">⚠️ 图片加载失败，请检查 Storage 权限</div>` : '';
+        
+        div.innerHTML = `<b>${msg.nickname}</b><br>${msg.message||''}${imgHtml}<span class="time">${new Date(msg.created_at).toLocaleTimeString()}</span>`;
         getEl('chatBox').appendChild(div);
         getEl('chatBox').scrollTop = getEl('chatBox').scrollHeight;
     }
@@ -461,7 +465,6 @@ fixed_html = '''<!DOCTYPE html>
 with open('/mnt/agents/output/index.html', 'w', encoding='utf-8') as f:
     f.write(fixed_html)
 
-print("已保存。变更：")
-print("- SUPABASE_URL 直接写完整")
-print("- SUPABASE_KEY 换成 Legacy anon public key")
-print("- 保留纯 ASCII 上传路径、contentType、try-catch 等修复")
+print("已保存。修改点：")
+print("1. renderMessage 中给 img 加了 onerror 处理，加载失败会显示提示")
+print("2. 点击图片可新标签页打开，方便调试 URL")
