@@ -26,14 +26,13 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .ld-sub{margin-top:1.2rem;font-size:0.7rem;color:rgba(255,255,255,0.25);letter-spacing:1em;text-transform:lowercase;}
 @keyframes breathe{0%,100%{opacity:0.25;transform:scale(0.96);}50%{opacity:1;transform:scale(1.02);}}
 
-/* ========== AUTH OVERLAY (Welcome + Login/Register) ========== */
+/* ========== AUTH OVERLAY ========== */
 #authOverlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s ease,visibility 0.6s;}
 #authOverlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
 .auth-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0c0c0c 0%,#1a2e25 50%,#0f3d2e 100%);overflow:hidden;}
 .auth-bg::before{content:'';position:absolute;inset:-50%;background:radial-gradient(circle at 30% 30%,rgba(26,92,71,0.4) 0%,transparent 50%),radial-gradient(circle at 70% 70%,rgba(15,61,46,0.3) 0%,transparent 50%);animation:bgMove 20s ease-in-out infinite;}
 @keyframes bgMove{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-5%,-5%) scale(1.1);}}
 .auth-bg::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");opacity:0.4;}
-
 .auth-card{position:relative;z-index:2;width:90%;max-width:440px;padding:3rem 2.5rem;border-radius:var(--radius-xl);background:rgba(255,255,255,0.03);backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);border:1px solid rgba(255,255,255,0.1);box-shadow:0 24px 80px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.08);animation:cardFloat 6s ease-in-out infinite;text-align:center;}
 @keyframes cardFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 .auth-logo{font-size:clamp(2.5rem,6vw,4rem);font-weight:200;color:#fff;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:0.5rem;text-shadow:0 8px 32px rgba(0,0,0,0.5);}
@@ -235,7 +234,7 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width
   <div class="ld-sub">platform</div>
 </div>
 
-<!-- Auth Overlay (Login / Welcome) -->
+<!-- Auth Overlay -->
 <div id="authOverlay">
   <div class="auth-bg"></div>
   <div class="auth-lang" id="authLang"></div>
@@ -244,24 +243,20 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width
   <div class="auth-card" id="loginCard">
     <div class="auth-logo">Oskwk</div>
     <div class="auth-sub">platform</div>
-    
     <input type="email" id="loginEmail" class="auth-input" placeholder="邮箱 / Email">
     <input type="password" id="loginPassword" class="auth-input" placeholder="密码 / Password">
-    <button class="auth-btn" onclick="doLogin()" id="loginBtn">登录</button>
-    
+    <button class="auth-btn" onclick="doLogin()">登录</button>
     <div class="auth-hint" id="loginHint"></div>
-    
     <div class="auth-switch">
       <span data-i18n="no_account">还没有账户？</span>
       <a onclick="showRegister()" data-i18n="go_register">去注册 →</a>
     </div>
   </div>
   
-  <!-- Register Card (Hidden by default) -->
+  <!-- Register Card -->
   <div class="auth-card" id="registerCard" style="display:none;">
     <div class="auth-logo">Oskwk</div>
     <div class="auth-sub" data-i18n="reg_sub">全人类共同体 · 测试版 v1.0</div>
-    
     <div style="display:flex;gap:0.6rem;margin-bottom:0;">
       <select id="regCountry" onchange="toggleForeigner()" class="auth-input" style="width:34%;margin-bottom:1rem;">
         <option value="CN">🇨🇳 +86</option>
@@ -282,7 +277,6 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width
       <span data-i18n="reg_agree">同意《用户协议》</span>
     </label>
     <button class="auth-btn" onclick="doRegister()" data-i18n="btn_create">确认创建账户</button>
-    
     <div class="auth-switch">
       <span data-i18n="has_account">已有账户？</span>
       <a onclick="showLogin()" data-i18n="go_login">去登录 →</a>
@@ -406,12 +400,12 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width
 <div class="toast" id="toast"></div>
 
 <script>
-// ==================== Supabase ====================
+// ==================== Config ====================
 const SUPABASE_URL='https://ouejetzclopuuafmnbjq.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im91ZWpldHpjbG9wdXVhZm1uYmpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzM1NjksImV4cCI6MjA5MzMwOTU2OX0.fGuExq4_43l4N1YF9339c934pJmTQAcNX_oOSuF-Bzw';
-const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const ADMIN_EMAIL='279933264@qq.com';
 
+let supabase=null;
 let currentUser=null,currentRoom=null,realtimeChannel=null,pubCategory=null;
 
 // ==================== i18n ====================
@@ -420,7 +414,6 @@ const LANGUAGES=[{code:'zh',label:'中文'},{code:'en',label:'En'},{code:'ja',la
 const i18n={
 zh:{
   no_account:'还没有账户？',go_register:'去注册 →',has_account:'已有账户？',go_login:'去登录 →',
-  gate_placeholder:'请输入网站密码',gate_btn:'进入平台',gate_error:'密码错误',gate_hint:'此平台仅限受邀用户访问',
   nav_about:'关于',nav_discover:'发现',nav_study:'学术',nav_chat:'交流',nav_profile:'我的',
   hero_tag:'全人类共同体',hero_title:'专注于每一个细节<br>呈现极致视觉体验',hero_desc:'Oskwk 是连接全球创作者与探索者的开放平台。风景是思想的延伸，文字是灵魂的投影。',
   sec_about:'关于 Oskwk',sec_discover:'最新发现',sec_study:'学术学习',sec_chat:'交流中心',sec_profile:'个人中心',
@@ -428,15 +421,13 @@ zh:{
   btn_code:'获取',btn_create:'确认创建账户',btn_save:'保存',
   room_lobby:'大厅',room_tech:'技术',room_theory:'理论',room_art:'艺术',room_create:'创建房间',
   stat_days:'加入天数',stat_level:'等级',stat_potential:'潜力',
-  reg_title:'创建 Oskwk 账户',reg_sub:'全人类共同体 · 测试版 v1.0',reg_other:'其他',reg_agree:'同意《用户协议》',
+  reg_sub:'全人类共同体 · 测试版 v1.0',reg_agree:'同意《用户协议》',
   footer:'© 2026 Oskwk. All rights reserved. 全人类共同体。',
-  edit_profile:'编辑资料',upload_avatar:'上传头像',change_nickname:'修改昵称',current_pwd:'当前密码',new_pwd:'新密码',confirm_pwd:'确认密码',
-  banned:'您已被管理员限制访问',ban_user:'拉黑用户',unban_user:'解除拉黑',
+  edit_profile:'编辑资料',banned:'您已被管理员限制访问',
   login_fail:'登录失败，请检查邮箱和密码',login_success:'登录成功',register_success:'注册成功！'
 },
 en:{
   no_account:'No account?',go_register:'Register →',has_account:'Have account?',go_login:'Login →',
-  gate_placeholder:'Enter site password',gate_btn:'Enter',gate_error:'Incorrect password',gate_hint:'Invitation-only access',
   nav_about:'About',nav_discover:'Discover',nav_study:'Study',nav_chat:'Chat',nav_profile:'Profile',
   hero_tag:'GLOBAL COMMUNITY',hero_title:'Every Detail Matters<br>Ultimate Visual Experience',hero_desc:'Oskwk connects creators and explorers worldwide.',
   sec_about:'About Oskwk',sec_discover:'Discoveries',sec_study:'Academia',sec_chat:'Community',sec_profile:'Profile',
@@ -444,59 +435,10 @@ en:{
   btn_code:'Code',btn_create:'Create Account',btn_save:'Save',
   room_lobby:'Lobby',room_tech:'Tech',room_theory:'Theory',room_art:'Art',room_create:'New Room',
   stat_days:'Days',stat_level:'Level',stat_potential:'Potential',
-  reg_title:'Create Oskwk Account',reg_sub:'Global Community · Beta v1.0',reg_other:'Other',reg_agree:'I agree to the Terms',
+  reg_sub:'Global Community · Beta v1.0',reg_agree:'I agree to the Terms',
   footer:'© 2026 Oskwk. All rights reserved. Global Community.',
-  edit_profile:'Edit Profile',upload_avatar:'Upload Avatar',change_nickname:'Change Nickname',current_pwd:'Current Password',new_pwd:'New Password',confirm_pwd:'Confirm Password',
-  banned:'Access restricted by admin',ban_user:'Ban User',unban_user:'Unban User',
+  edit_profile:'Edit Profile',banned:'Access restricted by admin',
   login_fail:'Login failed. Check your credentials.',login_success:'Welcome back',register_success:'Account created!'
-},
-ja:{
-  no_account:'アカウントをお持ちでない？',go_register:'登録する →',has_account:'アカウントをお持ち？',go_login:'ログイン →',
-  gate_placeholder:'サイトパスワードを入力',gate_btn:'入場',gate_error:'パスワードが違います',gate_hint:'招待制プラットフォーム',
-  nav_about:'について',nav_discover:'発見',nav_study:'学術',nav_chat:'交流',nav_profile:'プロフィール',
-  hero_tag:'世界共同体',hero_title:'ディテールに集中<br>極上の視覚体験',hero_desc:'Oskwkは世界のクリエイターと探検家を繋ぐオープンプラットフォームです。',
-  sec_about:'Oskwkについて',sec_discover:'最新発見',sec_study:'学術',sec_chat:'交流',sec_profile:'プロフィール',
-  admin_panel:'管理者パネル',btn_publish:'投稿',btn_back:'戻る',btn_send:'送信',btn_usermgr:'ユーザー管理',btn_logout:'ログアウト',
-  btn_code:'取得',btn_create:'アカウント作成',btn_save:'保存',
-  room_lobby:'ロビー',room_tech:'技術',room_theory:'理論',room_art:'アート',room_create:'部屋作成',
-  stat_days:'参加日数',stat_level:'レベル',stat_potential:'可能性',
-  reg_title:'アカウント作成',reg_sub:'世界共同体 · ベータ v1.0',reg_other:'その他',reg_agree:'利用規約に同意',
-  footer:'© 2026 Oskwk. All rights reserved. 世界共同体。',
-  edit_profile:'プロフィール編集',upload_avatar:'アバターアップロード',change_nickname:'ニックネーム変更',current_pwd:'現在のパスワード',new_pwd:'新パスワード',confirm_pwd:'確認',
-  banned:'管理者によるアクセス制限',ban_user:'ユーザーを禁止',unban_user:'禁止解除',
-  login_fail:'ログインに失敗しました',login_success:'お帰りなさい',register_success:'登録完了！'
-},
-ko:{
-  no_account:'계정이 없으신가요?',go_register:'가입하기 →',has_account:'계정이 있으신가요?',go_login:'로그인 →',
-  gate_placeholder:'사이트 비밀번호 입력',gate_btn:'입장',gate_error:'비밀번호 오류',gate_hint:'초대 전용',
-  nav_about:'소개',nav_discover:'발견',nav_study:'학술',nav_chat:'소통',nav_profile:'내 정보',
-  hero_tag:'인류공동체',hero_title:'디테일에 집중<br>극상의 시각 경험',hero_desc:'Oskwk는 전 세계 창작자와 탐험가를 연결하는 오픈 플랫폼입니다。',
-  sec_about:'Oskwk 소개',sec_discover:'최신 발견',sec_study:'학술',sec_chat:'소통',sec_profile:'내 정보',
-  admin_panel:'관리자 패널',btn_publish:'게시',btn_back:'뒤로',btn_send:'전송',btn_usermgr:'사용자 관리',btn_logout:'로그아웃',
-  btn_code:'받기',btn_create:'계정 생성',btn_save:'저장',
-  room_lobby:'로비',room_tech:'기술',room_theory:'이론',room_art:'예술',room_create:'방 만들기',
-  stat_days:'가입 일수',stat_level:'등급',stat_potential:'잠재력',
-  reg_title:'계정 생성',reg_sub:'인류공동체 · 베타 v1.0',reg_other:'기타',reg_agree:'이용약관 동의',
-  footer:'© 2026 Oskwk. All rights reserved. 인류공동체。',
-  edit_profile:'프로필 수정',upload_avatar:'아바타 업로드',change_nickname:'닉네임 변경',current_pwd:'현재 비밀번호',new_pwd:'새 비밀번호',confirm_pwd:'확인',
-  banned:'관리자에 의한 접근 제한',ban_user:'사용자 차단',unban_user:'차단 해제',
-  login_fail:'로그인 실패',login_success:'환영합니다',register_success:'가입 성공!'
-},
-fr:{
-  no_account:'Pas de compte?',go_register:"S'inscrire →",has_account:'Déjà un compte?',go_login:'Connexion →',
-  gate_placeholder:'Mot de passe',gate_btn:'Entrer',gate_error:'Mot de passe incorrect',gate_hint:'Accès sur invitation',
-  nav_about:'À propos',nav_discover:'Découvrir',nav_study:'Académique',nav_chat:'Discuter',nav_profile:'Profil',
-  hero_tag:'COMMUNAUTÉ GLOBALE',hero_title:'Chaque détail compte<br>Expérience visuelle ultime',hero_desc:'Oskwk connecte créateurs et explorateurs du monde entier.',
-  sec_about:'À propos',sec_discover:'Découvertes',sec_study:'Académique',sec_chat:'Communauté',sec_profile:'Profil',
-  admin_panel:'Panneau Admin',btn_publish:'Publier',btn_back:'Retour',btn_send:'Envoyer',btn_usermgr:'Utilisateurs',btn_logout:'Déconnexion',
-  btn_code:'Code',btn_create:'Créer',btn_save:'Enregistrer',
-  room_lobby:'Hall',room_tech:'Tech',room_theory:'Théorie',room_art:'Art',room_create:'Nouveau salon',
-  stat_days:'Jours',stat_level:'Niveau',stat_potential:'Potentiel',
-  reg_title:'Créer un compte',reg_sub:'Communauté Globale · Bêta v1.0',reg_other:'Autre',reg_agree:"J'accepte les conditions",
-  footer:'© 2026 Oskwk. Tous droits réservés. Communauté Globale.',
-  edit_profile:'Modifier le profil',upload_avatar:"Télécharger l'avatar",change_nickname:'Changer le pseudo',current_pwd:'Mot de passe actuel',new_pwd:'Nouveau mot de passe',confirm_pwd:'Confirmer',
-  banned:'Accès restreint par admin',ban_user:'Bannir',unban_user:'Débannir',
-  login_fail:'Échec de connexion',login_success:'Bon retour',register_success:'Compte créé !'
 }
 };
 
@@ -535,8 +477,8 @@ function applyText(){
 function showLogin(){
   document.getElementById('loginCard').style.display='block';
   document.getElementById('registerCard').style.display='none';
-  document.getElementById('loginHint').textContent='';
-  document.getElementById('loginHint').className='auth-hint';
+  var hint=document.getElementById('loginHint');
+  if(hint){hint.textContent='';hint.className='auth-hint';}
 }
 
 function showRegister(){
@@ -550,26 +492,27 @@ window.doLogin=async function(){
   var hint=document.getElementById('loginHint');
   
   if(!email||!password){
-    hint.textContent='请输入邮箱和密码';
-    hint.className='auth-hint err';
+    if(hint){hint.textContent='请输入邮箱和密码';hint.className='auth-hint err';}
+    return;
+  }
+  
+  if(!supabase){
+    if(hint){hint.textContent='服务初始化失败，请刷新页面';hint.className='auth-hint err';}
     return;
   }
   
   try{
     var{data,error}=await supabase.from('profiles').select('*').eq('email',email).single();
     if(error||!data){
-      hint.textContent=i18n[currentLang].login_fail;
-      hint.className='auth-hint err';
+      if(hint){hint.textContent=i18n[currentLang].login_fail;hint.className='auth-hint err';}
       return;
     }
     if(data.password_hash!==password){
-      hint.textContent=i18n[currentLang].login_fail;
-      hint.className='auth-hint err';
+      if(hint){hint.textContent=i18n[currentLang].login_fail;hint.className='auth-hint err';}
       return;
     }
     if(data.is_banned){
-      hint.textContent=i18n[currentLang].banned;
-      hint.className='auth-hint err';
+      if(hint){hint.textContent=i18n[currentLang].banned;hint.className='auth-hint err';}
       return;
     }
     
@@ -578,8 +521,7 @@ window.doLogin=async function(){
     toast(i18n[currentLang].login_success);
     enterApp();
   }catch(e){
-    hint.textContent='登录异常，请重试';
-    hint.className='auth-hint err';
+    if(hint){hint.textContent='登录异常，请重试';hint.className='auth-hint err';}
   }
 };
 
@@ -591,6 +533,8 @@ window.toggleForeigner=function(){
 window.sendVerifyCode=function(){toast('验证码已发送（固定123456）');};
 
 window.doRegister=async function(){
+  if(!supabase)return toast('服务初始化失败，请刷新页面');
+  
   var phone=document.getElementById('regPhone').value.trim();
   var email=document.getElementById('regEmail').value.trim();
   var code=document.getElementById('regCode').value.trim();
@@ -604,9 +548,11 @@ window.doRegister=async function(){
   
   var country=document.getElementById('regCountry').value;
   var idcard=country==='OTHER'?'':document.getElementById('regIdcard').value.trim();
-  var location=await fetchLocation();
+  var location='Earth';
   
-  currentUser={
+  try{location=await fetchLocation();}catch(e){}
+  
+  var userObj={
     phone:(country==='CN'?'+86 ':'')+phone,
     email, nickname, id_card:idcard, country,
     password_hash:password,
@@ -617,12 +563,12 @@ window.doRegister=async function(){
   };
   
   var{error}=await supabase.from('profiles').upsert({
-    email:currentUser.email,
+    email:userObj.email,
     nickname,
-    phone:currentUser.phone,
-    id_card:currentUser.id_card,
-    country:currentUser.country,
-    created_at:currentUser.created_at,
+    phone:userObj.phone,
+    id_card:userObj.id_card,
+    country:userObj.country,
+    created_at:userObj.created_at,
     location,
     avatar_url:null,
     is_banned:false
@@ -630,15 +576,17 @@ window.doRegister=async function(){
   
   if(error)return toast('注册失败: '+error.message);
   
+  currentUser=userObj;
   localStorage.setItem('oskwk_user',JSON.stringify(currentUser));
   toast(i18n[currentLang].register_success);
   enterApp();
 };
 
 function enterApp(){
-  document.getElementById('authOverlay').classList.add('hidden');
-  document.getElementById('app').style.display='block';
-  setTimeout(function(){document.getElementById('app').classList.add('on');},50);
+  var overlay=document.getElementById('authOverlay');
+  var app=document.getElementById('app');
+  if(overlay)overlay.classList.add('hidden');
+  if(app){app.style.display='block';setTimeout(function(){app.classList.add('on');},50);}
   
   updateProfile();
   loadArticles('about');
@@ -652,6 +600,7 @@ function enterApp(){
   }
   
   loadCustomRooms();
+  fetchLocation();
 }
 
 function updateProfile(){
@@ -661,14 +610,14 @@ function updateProfile(){
   var loc=document.getElementById('profileLoc');
   var days=document.getElementById('joinDays');
   
-  if(nick)nick.textContent=currentUser.nickname;
-  if(mail)mail.textContent=currentUser.email;
+  if(nick)nick.textContent=currentUser.nickname||'--';
+  if(mail)mail.textContent=currentUser.email||'--';
   if(loc)loc.textContent=currentUser.location||'Earth';
   if(days)days.textContent=Math.max(1,Math.floor((Date.now()-new Date(currentUser.created_at).getTime())/86400000));
   
   var av=document.getElementById('userAvatar');
   var pav=document.getElementById('profileAvatar');
-  var initial=currentUser.nickname?currentUser.nickname.charAt(0).toUpperCase():'?';
+  var initial=(currentUser.nickname?currentUser.nickname.charAt(0).toUpperCase():'?');
   
   if(currentUser.avatar_url){
     if(av)av.innerHTML='<img src="'+currentUser.avatar_url+'">';
@@ -678,9 +627,7 @@ function updateProfile(){
     if(pav)pav.innerHTML='<span id="profileAvatarText">'+initial+'</span>';
   }
   
-  if(av)av.onclick=function(){
-    if(currentUser)switchTab('profile');
-  };
+  if(av)av.onclick=function(){if(currentUser)switchTab('profile');};
 }
 
 window.doLogout=function(){
@@ -695,6 +642,7 @@ function handleAvatarClick(){
 // ==================== Avatar Upload ====================
 window.uploadAvatar=async function(){
   if(!currentUser)return toast('请先登录');
+  if(!supabase)return toast('服务未就绪');
   var input=document.createElement('input');
   input.type='file';
   input.accept='image/*';
@@ -739,6 +687,7 @@ window.setMobNav=function(idx){
 
 // ==================== Articles ====================
 async function loadArticles(cat){
+  if(!supabase)return;
   var container=document.getElementById('article-'+cat);
   if(!container)return;
   try{
@@ -749,7 +698,7 @@ async function loadArticles(cat){
       return'<div class="article-item"><h3>'+a.title+'</h3>'+
       (currentUser&&currentUser.email===ADMIN_EMAIL?'<button class="art-del show" onclick="deleteArticle('+a.id+',\''+cat+'\')">删除</button>':'')+
       '<div class="art-content">'+(a.content?a.content.replace(/\n/g,'<br>'):'')+(a.image_url?'<br><img src="'+a.image_url+'" onclick="openLightbox(\''+a.image_url+'\')">':'')+
-      '</div><small>'+a.author+' · '+new Date(a.created_at).toLocaleString()+'</small>'+
+      '</div><small>'+(a.author||'匿名')+' · '+new Date(a.created_at).toLocaleString()+'</small>'+
       '<div class="comment-sec"><strong>留言</strong><div class="comment-box" id="commentList-'+a.id+'"></div>'+
       '<div class="comment-input-row"><input id="commentInput-'+a.id+'" placeholder="写下想法..."><button onclick="postComment('+a.id+')">发送</button></div></div></div>';
     }).join('');
@@ -758,6 +707,7 @@ async function loadArticles(cat){
 }
 
 async function loadComments(articleId){
+  if(!supabase)return;
   try{
     var{data}=await supabase.from('comments').select('*').eq('article_id',articleId).order('created_at');
     var box=document.getElementById('commentList-'+articleId);
@@ -771,6 +721,7 @@ async function loadComments(articleId){
 window.postComment=async function(articleId){
   if(!currentUser)return toast('请先登录');
   if(currentUser.is_banned)return toast(i18n[currentLang].banned);
+  if(!supabase)return;
   var input=document.getElementById('commentInput-'+articleId);
   if(!input||!input.value.trim())return;
   try{
@@ -792,6 +743,7 @@ window.openPublishModal=function(cat){
 window.closePublishModal=function(){document.getElementById('publishModal').classList.remove('show');};
 
 window.uploadArticleImg=async function(){
+  if(!supabase)return;
   var file=document.getElementById('pubImgFile').files[0];
   if(!file)return;
   if(file.size>5*1024*1024)return toast('图片不能超过5MB');
@@ -806,6 +758,7 @@ window.uploadArticleImg=async function(){
 };
 
 window.submitArticle=async function(){
+  if(!supabase)return;
   var title=document.getElementById('pubTitle').value.trim();
   var content=document.getElementById('pubContent').value.trim();
   var img=document.getElementById('pubImgUrl').value.trim();
@@ -817,6 +770,7 @@ window.submitArticle=async function(){
 };
 
 window.deleteArticle=async function(id,cat){
+  if(!supabase)return;
   if(!confirm('确认删除此文章？'))return;
   try{await supabase.from('articles').delete().eq('id',id);toast('已删除');loadArticles(cat);}catch(e){toast('删除失败');}
 };
@@ -825,6 +779,7 @@ window.deleteArticle=async function(id,cat){
 window.joinRoom=function(roomName){
   if(!currentUser)return toast('请先登录');
   if(currentUser.is_banned)return toast(i18n[currentLang].banned);
+  if(!supabase)return toast('服务未就绪');
   currentRoom='oskwk-'+roomName;
   document.getElementById('channelSelector').style.display='none';
   document.getElementById('chatPanel').style.display='block';
@@ -836,6 +791,7 @@ window.joinRoom=function(roomName){
 window.promptCreateRoom=function(){
   if(!currentUser)return toast('请先登录');
   if(currentUser.is_banned)return toast(i18n[currentLang].banned);
+  if(!supabase)return;
   var name=prompt('房间名称'),pwd=prompt('设置密码');
   if(!name||!pwd)return;
   var roomId='oskwk-'+name.replace(/\s+/g,'-');
@@ -845,6 +801,7 @@ window.promptCreateRoom=function(){
 };
 
 async function loadCustomRooms(){
+  if(!supabase)return;
   try{
     var{data}=await supabase.from('custom_rooms').select('room_name');
     (data||[]).forEach(function(r){addCustomRoomCard(r.room_name,r.room_name.replace('oskwk-',''));});
@@ -858,6 +815,7 @@ function addCustomRoomCard(roomId,display){
   var card=document.createElement('div');
   card.className='channel-card';
   card.onclick=async function(){
+    if(!supabase)return;
     try{
       var{data}=await supabase.from('custom_rooms').select('password').eq('room_name',roomId).single();
       var pwd=prompt('请输入房间密码');
@@ -877,7 +835,7 @@ window.leaveRoom=function(){
 };
 
 async function loadChatMessages(){
-  if(!currentRoom)return;
+  if(!supabase||!currentRoom)return;
   try{
     var{data}=await supabase.from('messages').select('*').eq('room',currentRoom).order('created_at');
     var cb=document.getElementById('chatBox');
@@ -899,6 +857,7 @@ function renderMessage(msg){
 }
 
 function subscribeToRoom(){
+  if(!supabase)return;
   if(realtimeChannel){try{supabase.removeChannel(realtimeChannel);}catch(e){}}
   if(!currentRoom)return;
   realtimeChannel=supabase.channel('room-'+currentRoom).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'room=eq.'+currentRoom},function(payload){
@@ -909,8 +868,9 @@ function subscribeToRoom(){
 window.sendMsg=async function(){
   if(!currentUser)return toast('请先登录');
   if(currentUser.is_banned)return toast(i18n[currentLang].banned);
+  if(!supabase||!currentRoom)return;
   var text=document.getElementById('msgInput').value.trim();
-  if(!text||!currentRoom)return;
+  if(!text)return;
   try{
     await supabase.from('messages').insert({room:currentRoom,nickname:currentUser.nickname,message:text});
     document.getElementById('msgInput').value='';
@@ -921,6 +881,7 @@ window.sendMsg=async function(){
 window.uploadImg=async function(){
   if(!currentUser||!currentRoom)return toast('请先登录并加入房间');
   if(currentUser.is_banned)return toast(i18n[currentLang].banned);
+  if(!supabase)return;
   var file=document.getElementById('imgUpload').files[0];
   if(!file)return;
   if(file.size>5*1024*1024)return toast('图片不能超过5MB');
@@ -931,7 +892,7 @@ window.uploadImg=async function(){
   var path='uploads/'+filename;
   try{
     var{error:upErr}=await supabase.storage.from('CHAT-INMAGES').upload(path,file,{cacheControl:'3600',upsert:false,contentType});
-    if(upErr){toast('上传失败: '+(upErr.message||JSON.stringify(upErr)));document.getElementById('imgUpload').value='';return;}
+    if(upErr){toast('上传失败: '+(upErr.message||'未知错误'));document.getElementById('imgUpload').value='';return;}
     var{data}=supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
     var publicUrl=data?.publicUrl;
     if(!publicUrl){toast('获取图片链接失败');document.getElementById('imgUpload').value='';return;}
@@ -944,6 +905,7 @@ window.uploadImg=async function(){
 // ==================== Admin ====================
 window.showAllUsers=async function(){
   if(!currentUser||currentUser.email!==ADMIN_EMAIL)return;
+  if(!supabase)return;
   try{
     var{data}=await supabase.from('profiles').select('*').order('created_at',{ascending:false});
     if(!data||!data.length)return toast('暂无用户');
@@ -959,6 +921,7 @@ window.showAllUsers=async function(){
 
 window.toggleBan=async function(email,banStatus){
   if(!currentUser||currentUser.email!==ADMIN_EMAIL)return;
+  if(!supabase)return;
   try{
     await supabase.from('profiles').update({is_banned:banStatus}).eq('email',email);
     toast(banStatus?'已拉黑':'已解除拉黑');
@@ -980,7 +943,7 @@ window.openEditProfile=function(){
 window.closeEditModal=function(){document.getElementById('editModal').classList.remove('show');};
 
 window.saveProfile=async function(){
-  if(!currentUser)return;
+  if(!currentUser||!supabase)return;
   var nick=document.getElementById('editNickname').value.trim();
   var oldPwd=document.getElementById('editOldPwd').value.trim();
   var newPwd=document.getElementById('editNewPwd').value.trim();
@@ -1022,7 +985,6 @@ function toast(msg){
   setTimeout(function(){t.style.display='none';},3000);
 }
 
-// ==================== IP Location ====================
 async function fetchLocation(){
   try{
     var res=await fetch('https://ipapi.co/json/');
@@ -1032,7 +994,7 @@ async function fetchLocation(){
     var text=flag?flag+' '+city:city;
     var locEl=document.getElementById('locText');
     if(locEl)locEl.textContent=text;
-    if(currentUser){
+    if(currentUser&&supabase){
       currentUser.location=text;
       await supabase.from('profiles').update({location:text}).eq('email',currentUser.email);
       localStorage.setItem('oskwk_user',JSON.stringify(currentUser));
@@ -1046,10 +1008,26 @@ async function fetchLocation(){
 }
 
 // ==================== Init ====================
+function initSupabase(){
+  if(!window.supabase||!window.supabase.createClient){
+    console.error('Supabase SDK not loaded');
+    return false;
+  }
+  try{
+    supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+    return true;
+  }catch(e){
+    console.error('Supabase init failed:',e);
+    return false;
+  }
+}
+
 async function initApp(){
+  var hasSDK=initSupabase();
+  
   try{
     var saved=localStorage.getItem('oskwk_user');
-    if(saved){
+    if(saved&&hasSDK){
       currentUser=JSON.parse(saved);
       var{data}=await supabase.from('profiles').select('*').eq('email',currentUser.email).single();
       if(data){
@@ -1065,8 +1043,11 @@ async function initApp(){
       enterApp();
     }else{
       showLogin();
+      if(!hasSDK){
+        var hint=document.getElementById('loginHint');
+        if(hint){hint.textContent='资源加载中，若长时间未响应请刷新';hint.className='auth-hint err';}
+      }
     }
-    fetchLocation();
   }catch(e){
     console.error('Init error:',e);
     showLogin();
@@ -1078,6 +1059,13 @@ window.onload=function(){
   buildLangButtons('authLang');
   buildLangButtons('navLang');
   applyText();
+  
+  // 绑定回车键
+  var le=document.getElementById('loginEmail'),lp=document.getElementById('loginPassword');
+  if(le)le.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  if(lp)lp.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  
+  // Loader 必定消失：1.5秒后开始淡出，再0.8秒彻底移除，然后初始化App
   setTimeout(function(){
     var loader=document.getElementById('loader');
     if(loader){
