@@ -19,15 +19,17 @@
 html{scroll-behavior:smooth;}
 body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 
-/* Loader */
-#loader{position:fixed;inset:0;z-index:99999;background:#0c0c0c;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s cubic-bezier(0.4,0,0.2,1),visibility 0.8s;}
+/* Loader - 3秒强制兜底消失 */
+#loader{position:fixed;inset:0;z-index:99999;background:#0c0c0c;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s cubic-bezier(0.4,0,0.2,1),visibility 0.8s;animation:loaderForceHide 0.8s 3s cubic-bezier(0.4,0,0.2,1) forwards;}
 #loader.done{opacity:0;visibility:hidden;pointer-events:none;}
+@keyframes loaderForceHide{to{opacity:0;visibility:hidden;pointer-events:none;}}
 .ld-logo{font-size:clamp(3rem,7vw,5rem);font-weight:200;color:#fff;letter-spacing:0.5em;text-transform:uppercase;animation:breathe 3.5s ease-in-out infinite;}
 .ld-sub{margin-top:1.2rem;font-size:0.7rem;color:rgba(255,255,255,0.25);letter-spacing:1em;text-transform:lowercase;}
 @keyframes breathe{0%,100%{opacity:0.25;transform:scale(0.96);}50%{opacity:1;transform:scale(1.02);}}
 
 /* Auth Overlay */
-#authOverlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s ease,visibility 0.6s;}
+#authOverlay{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;transition:opacity 0.6s ease,visibility 0.6s;}
+#authOverlay.show{display:flex;}
 #authOverlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
 .auth-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0c0c0c 0%,#1a2e25 50%,#0f3d2e 100%);overflow:hidden;}
 .auth-bg::before{content:'';position:absolute;inset:-50%;background:radial-gradient(circle at 30% 30%,rgba(26,92,71,0.4) 0%,transparent 50%),radial-gradient(circle at 70% 70%,rgba(15,61,46,0.3) 0%,transparent 50%);animation:bgMove 20s ease-in-out infinite;}
@@ -78,9 +80,9 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .nav-avatar:hover{transform:scale(1.08);box-shadow:0 6px 20px var(--accent-glow);}
 .nav-avatar img{width:100%;height:100%;object-fit:cover;}
 
-/* Hero */
+/* Hero - 纯CSS渐变，零外部图片 */
 .hero{position:relative;height:78vh;min-height:560px;max-height:880px;display:flex;align-items:flex-end;padding-bottom:5rem;margin-top:72px;overflow:hidden;}
-.hero-bg{position:absolute;inset:0;background:#1a1a1a center/cover no-repeat;transform:scale(1.06);transition:transform 12s ease;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0f3d2e 0%,#1a5c47 30%,#1a2e25 70%,#0c0c0c 100%);transform:scale(1.06);transition:transform 12s ease;}
 .hero:hover .hero-bg{transform:scale(1);}
 .hero-mask{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.3) 50%,var(--render-dark) 100%);}
 .hero-inner{position:relative;z-index:2;max-width:1400px;width:100%;margin:0 auto;padding:0 2.5rem;}
@@ -248,15 +250,15 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width
     <button class="auth-btn" onclick="doLogin()">登录</button>
     <div class="auth-hint" id="loginHint"></div>
     <div class="auth-switch">
-      <span data-i18n="no_account">还没有账户？</span>
-      <a onclick="showRegister()" data-i18n="go_register">去注册 →</a>
+      <span>还没有账户？</span>
+      <a onclick="showRegister()">去注册 →</a>
     </div>
   </div>
   
   <!-- Register Card -->
   <div class="auth-card" id="registerCard" style="display:none;">
     <div class="auth-logo">Oskwk</div>
-    <div class="auth-sub" data-i18n="reg_sub">全人类共同体 · 测试版 v1.0</div>
+    <div class="auth-sub">全人类共同体 · 测试版 v1.0</div>
     <div style="display:flex;gap:0.6rem;margin-bottom:0;">
       <select id="regCountry" onchange="toggleForeigner()" class="auth-input" style="width:34%;margin-bottom:1rem;">
         <option value="CN">🇨🇳 +86</option>
@@ -274,12 +276,12 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width
     <input id="regNickname" class="auth-input" placeholder="昵称">
     <label class="check-row" style="justify-content:center;color:rgba(255,255,255,0.5);margin:0.5rem 0 1.2rem;">
       <input type="checkbox" id="regAgree" style="accent-color:var(--accent);"> 
-      <span data-i18n="reg_agree">同意《用户协议》</span>
+      <span>同意《用户协议》</span>
     </label>
-    <button class="auth-btn" onclick="doRegister()" data-i18n="btn_create">确认创建账户</button>
+    <button class="auth-btn" onclick="doRegister()">确认创建账户</button>
     <div class="auth-switch">
-      <span data-i18n="has_account">已有账户？</span>
-      <a onclick="showLogin()" data-i18n="go_login">去登录 →</a>
+      <span>已有账户？</span>
+      <a onclick="showLogin()">去登录 →</a>
     </div>
   </div>
 </div>
@@ -302,7 +304,7 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width
 </div>
 </div></nav>
 
-<section class="hero"><div class="hero-bg" id="heroBg"></div><div class="hero-mask"></div><div class="hero-inner">
+<section class="hero"><div class="hero-bg"></div><div class="hero-mask"></div><div class="hero-inner">
 <div class="hero-tag" data-i18n="hero_tag">全人类共同体</div>
 <h1 data-i18n="hero_title">专注于每一个细节<br>呈现极致视觉体验</h1>
 <p data-i18n="hero_desc">Oskwk 是连接全球创作者与探索者的开放平台。风景是思想的延伸，文字是灵魂的投影。</p>
@@ -408,6 +410,11 @@ const ADMIN_EMAIL='279933264@qq.com';
 let supabase=null;
 let currentUser=null,currentRoom=null,realtimeChannel=null,pubCategory=null;
 
+// ==================== Safe Storage (Safari Private Mode) ====================
+function safeGetItem(key){try{return localStorage.getItem(key);}catch(e){return null;}}
+function safeSetItem(key,val){try{localStorage.setItem(key,val);}catch(e){}}
+function safeRemoveItem(key){try{localStorage.removeItem(key);}catch(e){}}
+
 // ==================== i18n ====================
 const LANGUAGES=[{code:'zh',label:'中文'},{code:'en',label:'En'},{code:'ja',label:'日'},{code:'ko',label:'한'},{code:'fr',label:'Fr'}];
 
@@ -442,7 +449,7 @@ en:{
 }
 };
 
-let currentLang=localStorage.getItem('oskwk_lang')||'zh';
+let currentLang=safeGetItem('oskwk_lang')||'zh';
 
 function buildLangButtons(containerId){
   var container=document.getElementById(containerId);
@@ -459,7 +466,7 @@ function buildLangButtons(containerId){
 
 function setLang(code){
   currentLang=code;
-  localStorage.setItem('oskwk_lang',code);
+  safeSetItem('oskwk_lang',code);
   buildLangButtons('authLang');
   buildLangButtons('navLang');
   applyText();
@@ -490,43 +497,31 @@ function showRegister(){
   if(rc)rc.style.display='block';
 }
 
+function showHint(msg, isErr){
+  var hint=document.getElementById('loginHint');
+  if(!hint)return;
+  hint.textContent=msg||'';
+  hint.className='auth-hint'+(isErr?' err':'');
+}
+
 window.doLogin=async function(){
   var email=document.getElementById('loginEmail').value.trim();
   var password=document.getElementById('loginPassword').value.trim();
-  var hint=document.getElementById('loginHint');
   
-  if(!email||!password){
-    if(hint){hint.textContent='请输入邮箱和密码';hint.className='auth-hint err';}
-    return;
-  }
-  
-  if(!supabase){
-    if(hint){hint.textContent='服务初始化失败，请刷新页面';hint.className='auth-hint err';}
-    return;
-  }
+  if(!email||!password){showHint('请输入邮箱和密码',true);return;}
+  if(!supabase){showHint('服务初始化中，请稍后重试',true);return;}
   
   try{
     var{data,error}=await supabase.from('profiles').select('*').eq('email',email).single();
-    if(error||!data){
-      if(hint){hint.textContent=i18n[currentLang].login_fail;hint.className='auth-hint err';}
-      return;
-    }
-    if(data.password_hash!==password){
-      if(hint){hint.textContent=i18n[currentLang].login_fail;hint.className='auth-hint err';}
-      return;
-    }
-    if(data.is_banned){
-      if(hint){hint.textContent=i18n[currentLang].banned;hint.className='auth-hint err';}
-      return;
-    }
+    if(error||!data){showHint(i18n[currentLang].login_fail,true);return;}
+    if(data.password_hash!==password){showHint(i18n[currentLang].login_fail,true);return;}
+    if(data.is_banned){showHint(i18n[currentLang].banned,true);return;}
     
     currentUser=data;
-    localStorage.setItem('oskwk_user',JSON.stringify(currentUser));
+    safeSetItem('oskwk_user',JSON.stringify(currentUser));
     toast(i18n[currentLang].login_success);
     enterApp();
-  }catch(e){
-    if(hint){hint.textContent='登录异常，请重试';hint.className='auth-hint err';}
-  }
+  }catch(e){showHint('登录异常，请重试',true);}
 };
 
 window.toggleForeigner=function(){
@@ -537,7 +532,7 @@ window.toggleForeigner=function(){
 window.sendVerifyCode=function(){toast('验证码已发送（固定123456）');};
 
 window.doRegister=async function(){
-  if(!supabase)return toast('服务初始化失败，请刷新页面');
+  if(!supabase)return toast('服务初始化中，请稍后重试');
   
   var phone=document.getElementById('regPhone').value.trim();
   var email=document.getElementById('regEmail').value.trim();
@@ -553,7 +548,6 @@ window.doRegister=async function(){
   var country=document.getElementById('regCountry').value;
   var idcard=country==='OTHER'?'':document.getElementById('regIdcard').value.trim();
   var location='Earth';
-  
   try{location=await fetchLocation();}catch(e){}
   
   var userObj={
@@ -567,21 +561,16 @@ window.doRegister=async function(){
   };
   
   var{error}=await supabase.from('profiles').upsert({
-    email:userObj.email,
-    nickname,
-    phone:userObj.phone,
-    id_card:userObj.id_card,
-    country:userObj.country,
-    created_at:userObj.created_at,
-    location,
-    avatar_url:null,
-    is_banned:false
+    email:userObj.email,nickname,phone:userObj.phone,
+    id_card:userObj.id_card,country:userObj.country,
+    created_at:userObj.created_at,location,
+    avatar_url:null,is_banned:false
   },{onConflict:'email'});
   
   if(error)return toast('注册失败: '+error.message);
   
   currentUser=userObj;
-  localStorage.setItem('oskwk_user',JSON.stringify(currentUser));
+  safeSetItem('oskwk_user',JSON.stringify(currentUser));
   toast(i18n[currentLang].register_success);
   enterApp();
 };
@@ -635,7 +624,7 @@ function updateProfile(){
 }
 
 window.doLogout=function(){
-  localStorage.removeItem('oskwk_user');
+  safeRemoveItem('oskwk_user');
   location.reload();
 };
 
@@ -664,7 +653,7 @@ window.uploadAvatar=async function(){
       if(!url)return toast('获取链接失败');
       await supabase.from('profiles').update({avatar_url:url}).eq('email',currentUser.email);
       currentUser.avatar_url=url;
-      localStorage.setItem('oskwk_user',JSON.stringify(currentUser));
+      safeSetItem('oskwk_user',JSON.stringify(currentUser));
       updateProfile();
       toast('头像更新成功');
     }catch(e){toast('上传异常: '+e.message);}
@@ -963,7 +952,7 @@ window.saveProfile=async function(){
       await supabase.from('profiles').update({password_hash:newPwd}).eq('email',currentUser.email);
       currentUser.password_hash=newPwd;
     }
-    localStorage.setItem('oskwk_user',JSON.stringify(currentUser));
+    safeSetItem('oskwk_user',JSON.stringify(currentUser));
     updateProfile();
     closeEditModal();
     toast('资料已更新');
@@ -1001,7 +990,7 @@ async function fetchLocation(){
     if(currentUser&&supabase){
       currentUser.location=text;
       await supabase.from('profiles').update({location:text}).eq('email',currentUser.email);
-      localStorage.setItem('oskwk_user',JSON.stringify(currentUser));
+      safeSetItem('oskwk_user',JSON.stringify(currentUser));
     }
     return text;
   }catch(e){
@@ -1013,7 +1002,7 @@ async function fetchLocation(){
 
 // ==================== Init ====================
 function initSupabase(){
-  if(!window.supabase||!window.supabase.createClient){
+  if(typeof window.supabase==='undefined'||!window.supabase.createClient){
     console.error('Supabase SDK not loaded');
     return false;
   }
@@ -1026,70 +1015,70 @@ function initSupabase(){
   }
 }
 
-async function initApp(){
-  var hasSDK=initSupabase();
-  
+async function tryAutoLogin(){
   try{
-    var saved=localStorage.getItem('oskwk_user');
-    if(saved&&hasSDK){
-      currentUser=JSON.parse(saved);
-      var{data}=await supabase.from('profiles').select('*').eq('email',currentUser.email).single();
-      if(data){
-        if(data.is_banned){
-          toast(i18n[currentLang].banned);
-          localStorage.removeItem('oskwk_user');
-          showLogin();
-          return;
-        }
-        currentUser={...currentUser,...data};
-        localStorage.setItem('oskwk_user',JSON.stringify(currentUser));
+    var saved=safeGetItem('oskwk_user');
+    if(!saved){showLogin();return;}
+    currentUser=JSON.parse(saved);
+    if(!supabase){showLogin();return;}
+    var{data}=await supabase.from('profiles').select('*').eq('email',currentUser.email).single();
+    if(data){
+      if(data.is_banned){
+        toast(i18n[currentLang].banned);
+        safeRemoveItem('oskwk_user');
+        showLogin();
+        return;
       }
-      enterApp();
-    }else{
-      showLogin();
-      if(!hasSDK){
-        var hint=document.getElementById('loginHint');
-        if(hint){hint.textContent='资源加载中，若长时间未响应请刷新';hint.className='auth-hint err';}
-      }
+      currentUser={...currentUser,...data};
+      safeSetItem('oskwk_user',JSON.stringify(currentUser));
     }
+    enterApp();
   }catch(e){
-    console.error('Init error:',e);
+    console.error('Auto login error:',e);
     showLogin();
   }
 }
 
-// ==================== Hero Lazy Load ====================
-function loadHeroBg(){
-  var bg=document.getElementById('heroBg');
-  if(bg){
-    bg.style.backgroundImage="url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=85')";
+function initApp(){
+  var hasSDK=initSupabase();
+  if(!hasSDK){
+    showLogin();
+    showHint('网络加载中，若3秒后仍卡住请刷新',true);
+    // 3秒后重试
+    setTimeout(function(){
+      if(!supabase&&initSupabase()){
+        showHint('');
+        tryAutoLogin();
+      }
+    },3000);
+    return;
   }
+  tryAutoLogin();
 }
 
 // ==================== Start ====================
-document.addEventListener('DOMContentLoaded',function(){
+(function(){
   buildLangButtons('authLang');
   buildLangButtons('navLang');
   applyText();
   
-  // 绑定回车键
+  // 绑定回车
   var le=document.getElementById('loginEmail'),lp=document.getElementById('loginPassword');
   if(le)le.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
   if(lp)lp.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
   
-  // 1.5秒后必定关闭loader，不受任何网络资源影响
+  // 1.5秒关闭loader + 显示登录层
   setTimeout(function(){
     var loader=document.getElementById('loader');
     if(loader){
       loader.classList.add('done');
       setTimeout(function(){loader.style.display='none';},800);
     }
+    var auth=document.getElementById('authOverlay');
+    if(auth)auth.classList.add('show');
     initApp();
   },1500);
-  
-  // 延迟加载背景图，不阻塞页面
-  setTimeout(loadHeroBg,100);
-});
+})();
 </script>
 </body>
 </html>
