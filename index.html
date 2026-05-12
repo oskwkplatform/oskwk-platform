@@ -19,7 +19,7 @@
 html{scroll-behavior:smooth;}
 body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 
-/* Loader - 3秒强制兜底消失 */
+/* Loader - 双重保险：JS 1.5秒关闭 + CSS 3秒强制隐藏 */
 #loader{position:fixed;inset:0;z-index:99999;background:#0c0c0c;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s cubic-bezier(0.4,0,0.2,1),visibility 0.8s;animation:loaderForceHide 0.8s 3s cubic-bezier(0.4,0,0.2,1) forwards;}
 #loader.done{opacity:0;visibility:hidden;pointer-events:none;}
 @keyframes loaderForceHide{to{opacity:0;visibility:hidden;pointer-events:none;}}
@@ -250,15 +250,15 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width
     <button class="auth-btn" onclick="doLogin()">登录</button>
     <div class="auth-hint" id="loginHint"></div>
     <div class="auth-switch">
-      <span>还没有账户？</span>
-      <a onclick="showRegister()">去注册 →</a>
+      <span data-i18n="no_account">还没有账户？</span>
+      <a onclick="showRegister()" data-i18n="go_register">去注册 →</a>
     </div>
   </div>
   
   <!-- Register Card -->
   <div class="auth-card" id="registerCard" style="display:none;">
     <div class="auth-logo">Oskwk</div>
-    <div class="auth-sub">全人类共同体 · 测试版 v1.0</div>
+    <div class="auth-sub" data-i18n="reg_sub">全人类共同体 · 测试版 v1.0</div>
     <div style="display:flex;gap:0.6rem;margin-bottom:0;">
       <select id="regCountry" onchange="toggleForeigner()" class="auth-input" style="width:34%;margin-bottom:1rem;">
         <option value="CN">🇨🇳 +86</option>
@@ -270,18 +270,18 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width
     <input id="regEmail" class="auth-input" placeholder="Email" type="email">
     <div style="display:flex;gap:0.6rem;margin-bottom:0;">
       <input id="regCode" class="auth-input" placeholder="验证码" style="flex:1;margin-bottom:1rem;">
-      <button onclick="sendVerifyCode()" style="padding:0 1.4rem;border-radius:var(--radius-xl);background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.15);cursor:pointer;font-weight:600;white-space:nowrap;font-family:inherit;font-size:0.9rem;transition:all 0.3s;">获取</button>
+      <button onclick="sendVerifyCode()" style="padding:0 1.4rem;border-radius:var(--radius-xl);background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.15);cursor:pointer;font-weight:600;white-space:nowrap;font-family:inherit;font-size:0.9rem;transition:all 0.3s;" data-i18n="btn_code">获取</button>
     </div>
     <input id="regPassword" type="password" class="auth-input" placeholder="设置密码">
     <input id="regNickname" class="auth-input" placeholder="昵称">
     <label class="check-row" style="justify-content:center;color:rgba(255,255,255,0.5);margin:0.5rem 0 1.2rem;">
       <input type="checkbox" id="regAgree" style="accent-color:var(--accent);"> 
-      <span>同意《用户协议》</span>
+      <span data-i18n="reg_agree">同意《用户协议》</span>
     </label>
-    <button class="auth-btn" onclick="doRegister()">确认创建账户</button>
+    <button class="auth-btn" onclick="doRegister()" data-i18n="btn_create">确认创建账户</button>
     <div class="auth-switch">
-      <span>已有账户？</span>
-      <a onclick="showLogin()">去登录 →</a>
+      <span data-i18n="has_account">已有账户？</span>
+      <a onclick="showLogin()" data-i18n="go_login">去登录 →</a>
     </div>
   </div>
 </div>
@@ -1044,7 +1044,6 @@ function initApp(){
   if(!hasSDK){
     showLogin();
     showHint('网络加载中，若3秒后仍卡住请刷新',true);
-    // 3秒后重试
     setTimeout(function(){
       if(!supabase&&initSupabase()){
         showHint('');
@@ -1062,12 +1061,10 @@ function initApp(){
   buildLangButtons('navLang');
   applyText();
   
-  // 绑定回车
   var le=document.getElementById('loginEmail'),lp=document.getElementById('loginPassword');
   if(le)le.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
   if(lp)lp.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
   
-  // 1.5秒关闭loader + 显示登录层
   setTimeout(function(){
     var loader=document.getElementById('loader');
     if(loader){
