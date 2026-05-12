@@ -19,14 +19,14 @@
 html{scroll-behavior:smooth;}
 body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 
-/* ========== LOADER ========== */
+/* Loader */
 #loader{position:fixed;inset:0;z-index:99999;background:#0c0c0c;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s cubic-bezier(0.4,0,0.2,1),visibility 0.8s;}
 #loader.done{opacity:0;visibility:hidden;pointer-events:none;}
 .ld-logo{font-size:clamp(3rem,7vw,5rem);font-weight:200;color:#fff;letter-spacing:0.5em;text-transform:uppercase;animation:breathe 3.5s ease-in-out infinite;}
 .ld-sub{margin-top:1.2rem;font-size:0.7rem;color:rgba(255,255,255,0.25);letter-spacing:1em;text-transform:lowercase;}
 @keyframes breathe{0%,100%{opacity:0.25;transform:scale(0.96);}50%{opacity:1;transform:scale(1.02);}}
 
-/* ========== AUTH OVERLAY ========== */
+/* Auth Overlay */
 #authOverlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s ease,visibility 0.6s;}
 #authOverlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
 .auth-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0c0c0c 0%,#1a2e25 50%,#0f3d2e 100%);overflow:hidden;}
@@ -55,7 +55,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .auth-lang button:hover{color:rgba(255,255,255,0.9);}
 .auth-lang button.on{background:rgba(255,255,255,0.1);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
 
-/* ========== APP ========== */
+/* App */
 #app{display:none;opacity:0;transition:opacity 0.8s ease;}
 #app.on{display:block;opacity:1;}
 
@@ -80,7 +80,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 
 /* Hero */
 .hero{position:relative;height:78vh;min-height:560px;max-height:880px;display:flex;align-items:flex-end;padding-bottom:5rem;margin-top:72px;overflow:hidden;}
-.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=85') center/cover no-repeat;transform:scale(1.06);transition:transform 12s ease;}
+.hero-bg{position:absolute;inset:0;background:#1a1a1a center/cover no-repeat;transform:scale(1.06);transition:transform 12s ease;}
 .hero:hover .hero-bg{transform:scale(1);}
 .hero-mask{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.3) 50%,var(--render-dark) 100%);}
 .hero-inner{position:relative;z-index:2;max-width:1400px;width:100%;margin:0 auto;padding:0 2.5rem;}
@@ -302,7 +302,7 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width
 </div>
 </div></nav>
 
-<section class="hero"><div class="hero-bg"></div><div class="hero-mask"></div><div class="hero-inner">
+<section class="hero"><div class="hero-bg" id="heroBg"></div><div class="hero-mask"></div><div class="hero-inner">
 <div class="hero-tag" data-i18n="hero_tag">全人类共同体</div>
 <h1 data-i18n="hero_title">专注于每一个细节<br>呈现极致视觉体验</h1>
 <p data-i18n="hero_desc">Oskwk 是连接全球创作者与探索者的开放平台。风景是思想的延伸，文字是灵魂的投影。</p>
@@ -475,15 +475,19 @@ function applyText(){
 
 // ==================== Auth Flow ====================
 function showLogin(){
-  document.getElementById('loginCard').style.display='block';
-  document.getElementById('registerCard').style.display='none';
+  var lc=document.getElementById('loginCard');
+  var rc=document.getElementById('registerCard');
   var hint=document.getElementById('loginHint');
+  if(lc)lc.style.display='block';
+  if(rc)rc.style.display='none';
   if(hint){hint.textContent='';hint.className='auth-hint';}
 }
 
 function showRegister(){
-  document.getElementById('loginCard').style.display='none';
-  document.getElementById('registerCard').style.display='block';
+  var lc=document.getElementById('loginCard');
+  var rc=document.getElementById('registerCard');
+  if(lc)lc.style.display='none';
+  if(rc)rc.style.display='block';
 }
 
 window.doLogin=async function(){
@@ -1054,8 +1058,16 @@ async function initApp(){
   }
 }
 
+// ==================== Hero Lazy Load ====================
+function loadHeroBg(){
+  var bg=document.getElementById('heroBg');
+  if(bg){
+    bg.style.backgroundImage="url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=85')";
+  }
+}
+
 // ==================== Start ====================
-window.onload=function(){
+document.addEventListener('DOMContentLoaded',function(){
   buildLangButtons('authLang');
   buildLangButtons('navLang');
   applyText();
@@ -1065,7 +1077,7 @@ window.onload=function(){
   if(le)le.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
   if(lp)lp.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
   
-  // Loader 必定消失：1.5秒后开始淡出，再0.8秒彻底移除，然后初始化App
+  // 1.5秒后必定关闭loader，不受任何网络资源影响
   setTimeout(function(){
     var loader=document.getElementById('loader');
     if(loader){
@@ -1074,7 +1086,10 @@ window.onload=function(){
     }
     initApp();
   },1500);
-};
+  
+  // 延迟加载背景图，不阻塞页面
+  setTimeout(loadHeroBg,100);
+});
 </script>
 </body>
 </html>
