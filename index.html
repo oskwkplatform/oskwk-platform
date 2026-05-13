@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+'''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -23,22 +23,23 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 #authOverlay{position:fixed;inset:0;z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:1rem;background:#0c0c0c}
 #authOverlay.show{display:flex}
 #authOverlay.hidden{display:none}
-.auth-card{width:92%;max-width:400px;padding:2rem;border-radius:var(--radius-lg);background:#1a1a1a;border:1px solid rgba(255,255,255,.1);text-align:center}
+.auth-card{width:92%;max-width:400px;padding:2rem;border-radius:20px;background:#1a1a1a;border:1px solid rgba(255,255,255,.1);text-align:center}
 .auth-logo{font-size:clamp(2rem,5vw,3rem);font-weight:200;color:#fff;letter-spacing:.3em;text-transform:uppercase;margin-bottom:.3rem}
 .auth-sub{font-size:.75rem;color:rgba(255,255,255,.35);letter-spacing:.4em;text-transform:lowercase;margin-bottom:2rem}
-.auth-input{width:100%;padding:.9rem 1.1rem;border-radius:var(--radius);background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:1rem;outline:none;margin-bottom:.6rem;font-family:inherit;-webkit-appearance:none}
+.auth-input{width:100%;padding:.9rem 1.1rem;border-radius:12px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:1rem;outline:none;margin-bottom:.6rem;font-family:inherit;-webkit-appearance:none}
 .auth-input::placeholder{color:rgba(255,255,255,.3)}
 .auth-input:focus{border-color:rgba(255,255,255,.25)}
-.auth-btn{width:100%;padding:.9rem;border-radius:var(--radius);background:#fff;color:var(--accent);border:none;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.4rem;font-family:inherit}
-.auth-btn:active{transform:scale(.97)}
-.auth-btn:disabled{background:rgba(255,255,255,.2);color:rgba(0,0,0,.4);cursor:not-allowed}
+.auth-btn{width:100%;padding:.9rem;border-radius:12px;background:#fff;color:#0f3d2e;border:none;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.4rem;font-family:inherit;-webkit-appearance:none}
+.auth-btn:active{background:#e0e0e0;transform:scale(.98)}
+.auth-btn:disabled{background:rgba(255,255,255,.2);color:rgba(0,0,0,.4);cursor:not-allowed;transform:none}
 .auth-hint{margin-top:.6rem;font-size:.8rem;color:rgba(255,255,255,.4);min-height:1.2em}
 .auth-hint.err{color:#ff6b6b}
 .auth-switch{margin-top:1rem;font-size:.85rem;color:rgba(255,255,255,.4)}
 .auth-switch a{color:#fff;text-decoration:underline;cursor:pointer}
-.status-pill{position:absolute;top:1rem;left:50%;transform:translateX(-50%);padding:.35rem 1rem;border-radius:100px;font-size:.7rem;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);white-space:nowrap}
+.status-pill{position:absolute;top:1rem;left:50%;transform:translateX(-50%);padding:.4rem 1rem;border-radius:100px;font-size:.7rem;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);white-space:nowrap}
 .status-pill.ok{background:rgba(34,197,94,.15);color:#4ade80;border-color:rgba(74,222,128,.2)}
 .status-pill.err{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(248,113,113,.2)}
+.status-pill.loading{background:rgba(59,130,246,.15);color:#60a5fa;border-color:rgba(96,165,250,.2)}
 
 /* App */
 #app{display:none}
@@ -64,7 +65,6 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .main{padding:1.5rem 1.2rem 5rem}
 .sec-title{font-size:1rem;font-weight:600;margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem}
 .sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent)}
-
 .page{display:none}
 .page.active{display:block;animation:fadeIn .3s ease}
 
@@ -160,7 +160,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
     <input id="regEmail" class="auth-input" placeholder="邮箱" type="email" autocomplete="email">
     <div style="display:flex;gap:.4rem">
       <input id="regCode" class="auth-input" placeholder="验证码" style="flex:1">
-      <button onclick="sendCode()" style="padding:0 .8rem;border-radius:var(--radius);background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);font-size:.8rem;white-space:nowrap">获取</button>
+      <button onclick="sendCode()" style="padding:0 .8rem;border-radius:12px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);font-size:.8rem;white-space:nowrap">获取</button>
     </div>
     <input id="regPassword" type="password" class="auth-input" placeholder="密码（至少6位）">
     <input id="regNickname" class="auth-input" placeholder="昵称">
@@ -287,6 +287,9 @@ var currentUser=null;
 var currentRoom=null;
 var realtimeChannel=null;
 var pubCategory=null;
+var supabaseReady=false;
+var supabaseRetryCount=0;
+var MAX_SUPABASE_RETRIES=3;
 
 // ==================== Safe Storage ====================
 function safeGet(k){
@@ -327,11 +330,12 @@ function toast(msg){
   setTimeout(function(){t.style.display='none'},2500);
 }
 
-// ==================== Supabase ====================
+// ==================== Supabase 初始化（终极修复） ====================
 function initSupabase(){
   if(typeof window.supabase!=='undefined'&&window.supabase.createClient){
     try{
       supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+      supabaseReady=true;
       return true;
     }catch(e){
       console.error('Supabase init error:',e);
@@ -347,16 +351,57 @@ function waitForSupabase(callback,timeout){
   
   function check(){
     if(initSupabase()){
+      setStatus('服务就绪','ok');
       callback(true);
       return;
     }
     if(Date.now()-start<maxWait){
+      setStatus('正在连接...','loading');
       setTimeout(check,400);
     }else{
+      setStatus('连接失败，请刷新重试','err');
       callback(false);
     }
   }
   check();
+}
+
+// 带重试的 Supabase 执行器
+function withSupabaseRetry(action,onSuccess,onFail){
+  var attempts=0;
+  function tryAction(){
+    if(supabaseReady&&supabase){
+      action(function(err,res){
+        if(err){
+          attempts++;
+          if(attempts<MAX_SUPABASE_RETRIES){
+            setStatus('重试中 ('+attempts+'/'+MAX_SUPABASE_RETRIES+')...','loading');
+            setTimeout(tryAction,1000);
+          }else{
+            setStatus('服务异常，请刷新','err');
+            if(onFail)onFail(err);
+          }
+        }else{
+          setStatus('服务就绪','ok');
+          if(onSuccess)onSuccess(res);
+        }
+      });
+    }else{
+      attempts++;
+      if(attempts<MAX_SUPABASE_RETRIES){
+        setStatus('等待服务 ('+attempts+'/'+MAX_SUPABASE_RETRIES+')...','loading');
+        setTimeout(function(){
+          initSupabase();
+          tryAction();
+        },1000);
+      }else{
+        setStatus('CDN加载失败，请刷新页面','err');
+        hint('网络异常，请检查设置中"阻止跨站跟踪"是否已关闭，然后刷新',true);
+        if(onFail)onFail(new Error('Supabase not loaded'));
+      }
+    }
+  }
+  tryAction();
 }
 
 // ==================== Boot ====================
@@ -366,20 +411,16 @@ setTimeout(function(){
   
   if(loader){
     loader.classList.add('done');
-    setTimeout(function(){loader.style.display='none'},600);
+    setTimeout(function(){loader.style.display='none';},600);
   }
   if(auth){
     auth.classList.add('show');
     showLogin();
   }
   
-  // 后台初始化
   waitForSupabase(function(ok){
     if(ok){
-      setStatus('服务就绪','ok');
       tryAutoLogin();
-    }else{
-      setStatus('CDN加载失败，点击重试','err');
     }
   });
 },1000);
@@ -393,7 +434,7 @@ function tryAutoLogin(){
     if(!user||!user.email)return;
     
     if(!supabase){
-      setStatus('等待服务...');
+      setStatus('等待服务...','loading');
       return;
     }
     
@@ -424,48 +465,34 @@ window.doLogin=function(){
     return;
   }
   
-  if(!supabase){
-    hint('服务加载中...',true);
-    waitForSupabase(function(ok){
-      if(ok){
-        setStatus('服务就绪','ok');
-        doLogin();
-      }else{
-        hint('无法连接服务，请刷新',true);
-      }
-    },3000);
-    return;
-  }
-  
   var btn=document.getElementById('loginBtn');
   btn.disabled=true;
   btn.textContent='登录中...';
   
-  supabase.from('profiles').select('*').eq('email',email).single().then(function(res){
-    btn.disabled=false;
-    btn.textContent='登录';
-    
-    if(res.error||!res.data){
-      hint('邮箱或密码错误',true);
-      return;
-    }
-    if(res.data.password_hash!==pwd){
-      hint('密码错误',true);
-      return;
-    }
-    if(res.data.is_banned){
-      hint('账号已被限制',true);
-      return;
-    }
-    
-    currentUser=res.data;
+  withSupabaseRetry(function(done){
+    supabase.from('profiles').select('*').eq('email',email).single().then(function(res){
+      if(res.error||!res.data){
+        done(new Error('邮箱不存在'),null);
+        return;
+      }
+      if(res.data.password_hash!==pwd){
+        done(new Error('密码错误'),null);
+        return;
+      }
+      if(res.data.is_banned){
+        done(new Error('账号已被限制'),null);
+        return;
+      }
+      done(null,res.data);
+    }).catch(function(err){done(err,null);});
+  },function(data){
+    currentUser=data;
     safeSet('oskwk_user',JSON.stringify(currentUser));
     enterApp();
-  }).catch(function(err){
-    console.error('Login error:',err);
+  },function(err){
     btn.disabled=false;
     btn.textContent='登录';
-    hint('网络错误，请重试',true);
+    hint(err.message||'登录失败',true);
   });
 };
 
@@ -497,19 +524,6 @@ window.doRegister=function(){
     return;
   }
   
-  if(!supabase){
-    hint('服务加载中...',true);
-    waitForSupabase(function(ok){
-      if(ok){
-        setStatus('服务就绪','ok');
-        doRegister();
-      }else{
-        hint('无法连接服务',true);
-      }
-    },3000);
-    return;
-  }
-  
   var btn=document.getElementById('regBtn');
   btn.disabled=true;
   btn.textContent='创建中...';
@@ -524,25 +538,19 @@ window.doRegister=function(){
     is_banned:false
   };
   
-  // 修复：不用 onConflict 参数，直接 upsert
-  supabase.from('profiles').upsert(obj).then(function(res){
-    btn.disabled=false;
-    btn.textContent='创建账户';
-    
-    if(res.error){
-      console.error('Register error:',res.error);
-      hint('注册失败: '+(res.error.message||'邮箱可能已注册'),true);
-      return;
-    }
-    
-    currentUser=obj;
+  withSupabaseRetry(function(done){
+    supabase.from('profiles').upsert(obj).then(function(res){
+      if(res.error){done(res.error,null);return;}
+      done(null,obj);
+    }).catch(function(err){done(err,null);});
+  },function(data){
+    currentUser=data;
     safeSet('oskwk_user',JSON.stringify(currentUser));
     enterApp();
-  }).catch(function(err){
-    console.error('Register catch:',err);
+  },function(err){
     btn.disabled=false;
     btn.textContent='创建账户';
-    hint('注册超时，请重试',true);
+    hint('注册失败: '+(err.message||'邮箱可能已注册'),true);
   });
 };
 
@@ -554,7 +562,7 @@ function enterApp(){
   if(auth)auth.classList.add('hidden');
   if(app){
     app.style.display='block';
-    setTimeout(function(){app.classList.add('on')},50);
+    setTimeout(function(){app.classList.add('on');},50);
   }
   
   updateProfile();
@@ -588,7 +596,7 @@ function updateProfile(){
   }
   
   var initial=(currentUser.nickname?currentUser.nickname.charAt(0).toUpperCase():'?');
-  var avaHtml=currentUser.avatar_url?'<img src="'+escapeHtml(currentUser.avatar_url)+'">':'<span>'+initial+'</span>';
+  var avaHtml=currentUser.avatar_url?'<img src="'+escapeHtml(currentUser.avatar_url)+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':'<span>'+initial+'</span>';
   
   var userAvatar=document.getElementById('userAvatar');
   var profileAvatar=document.getElementById('profileAvatar');
@@ -629,20 +637,14 @@ function loadArticles(cat){
   var container=document.getElementById('article-'+cat);
   if(!container)return;
   
-  if(!supabase){
-    container.innerHTML='<p style="color:var(--text-muted)">服务未连接</p>';
-    return;
-  }
+  container.innerHTML='<p style="color:var(--text-muted)">加载中...</p>';
   
-  supabase.from('articles').select('*').eq('category',cat).order('created_at',{ascending:false}).then(function(res){
-    if(res.error){
-      console.error('Load articles error:',res.error);
-      container.innerHTML='<p style="color:var(--text-muted)">加载失败</p>';
-      return;
-    }
-    
-    var data=res.data||[];
-    if(data.length===0){
+  withSupabaseRetry(function(done){
+    supabase.from('articles').select('*').eq('category',cat).order('created_at',{ascending:false}).then(function(res){
+      done(res.error,res.data);
+    }).catch(function(err){done(err,null);});
+  },function(data){
+    if(!data||data.length===0){
       container.innerHTML='<p style="color:var(--text-muted)">暂无文章</p>';
       return;
     }
@@ -650,7 +652,7 @@ function loadArticles(cat){
     var html='';
     for(var i=0;i<data.length;i++){
       var a=data[i];
-      var content=(a.content||'').replace(/\n/g,'<br>');
+      var content=(a.content||'').replace(/\\n/g,'<br>');
       var imgHtml=a.image_url?'<br><img src="'+escapeHtml(a.image_url)+'" onclick="openLightbox(\''+escapeHtml(a.image_url)+'\')">':'';
       var delBtn=(currentUser&&currentUser.email===ADMIN_EMAIL)?'<button class="art-del show" onclick="deleteArticle('+a.id+',\''+cat+'\')">删除</button>':'';
       
@@ -666,65 +668,53 @@ function loadArticles(cat){
     for(var j=0;j<data.length;j++){
       loadComments(data[j].id);
     }
-  }).catch(function(err){
-    console.error('Load articles catch:',err);
-    container.innerHTML='<p style="color:var(--text-muted)">加载超时</p>';
+  },function(){
+    container.innerHTML='<p style="color:var(--text-muted)">加载失败，请下拉刷新</p>';
   });
 }
 
 function loadComments(id){
-  if(!supabase)return;
-  
-  supabase.from('comments').select('*').eq('article_id',id).order('created_at').then(function(res){
+  withSupabaseRetry(function(done){
+    supabase.from('comments').select('*').eq('article_id',id).order('created_at').then(function(res){
+      done(res.error,res.data);
+    }).catch(function(err){done(err,null);});
+  },function(data){
     var box=document.getElementById('commentList-'+id);
     if(!box)return;
     
-    var data=res.data||[];
     var html='';
-    for(var i=0;i<data.length;i++){
-      var c=data[i];
-      html+='<p style="font-size:.85rem;color:var(--text-sec);margin-bottom:.3rem"><b>'+escapeHtml(c.nickname)+'</b>: '+escapeHtml(c.content)+' <small style="color:var(--text-muted)">'+new Date(c.created_at).toLocaleTimeString()+'</small></p>';
+    if(data&&data.length){
+      for(var i=0;i<data.length;i++){
+        var c=data[i];
+        html+='<p style="font-size:.85rem;color:var(--text-sec);margin-bottom:.3rem"><b>'+escapeHtml(c.nickname)+'</b>: '+escapeHtml(c.content)+' <small style="color:var(--text-muted)">'+new Date(c.created_at).toLocaleTimeString()+'</small></p>';
+      }
     }
     box.innerHTML=html;
-  }).catch(function(err){
-    console.error('Load comments error:',err);
   });
 }
 
 window.postComment=function(id){
-  if(!currentUser){
-    toast('请先登录');
-    return;
-  }
-  if(!supabase){
-    toast('服务未就绪');
-    return;
-  }
+  if(!currentUser){toast('请先登录');return;}
   
   var input=document.getElementById('commentInput-'+id);
   if(!input||!input.value.trim())return;
   
-  supabase.from('comments').insert({
-    article_id:id,
-    nickname:currentUser.nickname,
-    content:input.value.trim()
-  }).then(function(res){
-    if(res.error){
-      toast('发送失败');
-      return;
-    }
+  withSupabaseRetry(function(done){
+    supabase.from('comments').insert({
+      article_id:id,
+      nickname:currentUser.nickname,
+      content:input.value.trim()
+    }).then(function(res){done(res.error,null);}).catch(function(err){done(err,null);});
+  },function(){
     input.value='';
     loadComments(id);
-  }).catch(function(){
+  },function(){
     toast('发送失败');
   });
 };
 
 window.openPublish=function(cat){
-  if(!currentUser||currentUser.email!==ADMIN_EMAIL){
-    toast('无权操作');
-    return;
-  }
+  if(!currentUser||currentUser.email!==ADMIN_EMAIL){toast('无权操作');return;}
   pubCategory=cat;
   document.getElementById('publishModal').classList.add('show');
 };
@@ -734,84 +724,64 @@ window.closePublish=function(){
 };
 
 window.submitArticle=function(){
-  if(!supabase){
-    toast('服务未就绪');
-    return;
-  }
-  
   var title=document.getElementById('pubTitle').value.trim();
   var content=document.getElementById('pubContent').value.trim();
   var img=document.getElementById('pubImgUrl').value.trim();
   
-  if(!title||!content){
-    toast('请填写标题和内容');
-    return;
-  }
+  if(!title||!content){toast('请填写标题和内容');return;}
   
-  supabase.from('articles').insert({
-    title:title,
-    content:content,
-    category:pubCategory,
-    author:currentUser.nickname,
-    image_url:img||null
-  }).then(function(res){
-    if(res.error){
-      toast('发布失败');
-      return;
-    }
+  withSupabaseRetry(function(done){
+    supabase.from('articles').insert({
+      title:title,
+      content:content,
+      category:pubCategory,
+      author:currentUser.nickname,
+      image_url:img||null
+    }).then(function(res){done(res.error,null);}).catch(function(err){done(err,null);});
+  },function(){
     toast('发布成功');
     closePublish();
     loadArticles(pubCategory);
-  }).catch(function(){
-    toast('发布超时');
+  },function(){
+    toast('发布失败');
   });
 };
 
 window.deleteArticle=function(id,cat){
-  if(!supabase){
-    toast('服务未就绪');
-    return;
-  }
   if(!confirm('确认删除？'))return;
   
-  supabase.from('articles').delete().eq('id',id).then(function(){
+  withSupabaseRetry(function(done){
+    supabase.from('articles').delete().eq('id',id).then(function(res){done(res.error,null);}).catch(function(err){done(err,null);});
+  },function(){
     toast('已删除');
     loadArticles(cat);
-  }).catch(function(){
+  },function(){
     toast('删除失败');
   });
 };
 
 // ==================== Chat ====================
 window.joinRoom=function(roomName){
-  if(!currentUser){
-    toast('请先登录');
-    return;
-  }
-  if(!supabase){
-    toast('服务未就绪');
-    waitForSupabase(function(ok){
-      if(ok)joinRoom(roomName);
-    },3000);
-    return;
-  }
+  if(!currentUser){toast('请先登录');return;}
   
-  currentRoom='oskwk-'+roomName;
-  document.getElementById('channelSelector').style.display='none';
-  document.getElementById('chatPanel').style.display='block';
-  document.getElementById('chatBox').innerHTML='';
-  
-  loadChat();
-  subscribeRoom();
+  withSupabaseRetry(function(done){
+    done(supabase?null:new Error('no supabase'),null);
+  },function(){
+    currentRoom='oskwk-'+roomName;
+    document.getElementById('channelSelector').style.display='none';
+    document.getElementById('chatPanel').style.display='block';
+    document.getElementById('chatBox').innerHTML='';
+    
+    loadChat();
+    subscribeRoom();
+  },function(){
+    toast('服务未就绪，请稍后再试');
+  });
 };
 
 window.leaveRoom=function(){
   if(realtimeChannel){
-    try{
-      supabase.removeChannel(realtimeChannel);
-    }catch(e){
-      console.error(e);
-    }
+    try{supabase.removeChannel(realtimeChannel);}catch(e){console.error(e);}
     realtimeChannel=null;
   }
   currentRoom=null;
@@ -820,19 +790,19 @@ window.leaveRoom=function(){
 };
 
 function loadChat(){
-  if(!supabase||!currentRoom)return;
+  if(!currentRoom)return;
   
-  supabase.from('messages').select('*').eq('room',currentRoom).order('created_at').then(function(res){
+  withSupabaseRetry(function(done){
+    supabase.from('messages').select('*').eq('room',currentRoom).order('created_at').then(function(res){
+      done(res.error,res.data);
+    }).catch(function(err){done(err,null);});
+  },function(data){
     var cb=document.getElementById('chatBox');
     if(!cb)return;
     cb.innerHTML='';
-    
-    var data=res.data||[];
-    for(var i=0;i<data.length;i++){
-      renderMsg(data[i]);
+    if(data&&data.length){
+      for(var i=0;i<data.length;i++)renderMsg(data[i]);
     }
-  }).catch(function(err){
-    console.error('Load chat error:',err);
   });
 }
 
@@ -858,11 +828,7 @@ function subscribeRoom(){
   if(!supabase||!currentRoom)return;
   
   if(realtimeChannel){
-    try{
-      supabase.removeChannel(realtimeChannel);
-    }catch(e){
-      console.error(e);
-    }
+    try{supabase.removeChannel(realtimeChannel);}catch(e){console.error(e);}
   }
   
   realtimeChannel=supabase.channel('room-'+currentRoom).on('postgres_changes',{
@@ -876,110 +842,81 @@ function subscribeRoom(){
 }
 
 window.sendMsg=function(){
-  if(!currentUser){
-    toast('请先登录');
-    return;
-  }
-  if(!supabase||!currentRoom){
-    toast('服务未就绪');
-    return;
-  }
+  if(!currentUser){toast('请先登录');return;}
+  if(!currentRoom){toast('未加入房间');return;}
   
   var text=document.getElementById('msgInput').value.trim();
   if(!text)return;
   
-  supabase.from('messages').insert({
-    room:currentRoom,
-    nickname:currentUser.nickname,
-    message:text
-  }).then(function(){
+  withSupabaseRetry(function(done){
+    supabase.from('messages').insert({
+      room:currentRoom,
+      nickname:currentUser.nickname,
+      message:text
+    }).then(function(res){done(res.error,null);}).catch(function(err){done(err,null);});
+  },function(){
     document.getElementById('msgInput').value='';
-  }).catch(function(){
+  },function(){
     toast('发送失败');
   });
 };
 
 window.uploadImg=function(){
-  if(!currentUser||!currentRoom){
-    toast('请先登录并加入房间');
-    return;
-  }
-  if(!supabase){
-    toast('服务未就绪');
-    return;
-  }
+  if(!currentUser||!currentRoom){toast('请先登录并加入房间');return;}
   
   var fileInput=document.getElementById('imgUp');
   var file=fileInput.files[0];
   if(!file)return;
   
-  if(file.size>5*1024*1024){
-    toast('图片不能超过5MB');
-    fileInput.value='';
-    return;
-  }
+  if(file.size>5*1024*1024){toast('图片不能超过5MB');fileInput.value='';return;}
   
   var ext=(file.name.split('.').pop()||'').toLowerCase();
   var fn=Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
   var path='uploads/'+fn;
   
-  supabase.storage.from('CHAT-INMAGES').upload(path,file,{
-    cacheControl:'3600',
-    upsert:false
-  }).then(function(res){
-    if(res.error){
-      toast('上传失败');
-      fileInput.value='';
-      return;
-    }
-    
-    var urlData=supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
-    var url=urlData.data?urlData.data.publicUrl:null;
-    
-    if(!url){
-      toast('获取链接失败');
-      fileInput.value='';
-      return;
-    }
-    
-    supabase.from('messages').insert({
-      room:currentRoom,
-      nickname:currentUser.nickname,
-      image_url:url
-    }).then(function(){
-      toast('图片已发送');
-    });
-    
+  withSupabaseRetry(function(done){
+    supabase.storage.from('CHAT-INMAGES').upload(path,file,{
+      cacheControl:'3600',
+      upsert:false
+    }).then(function(res){
+      if(res.error){done(res.error,null);return;}
+      
+      var urlData=supabase.storage.from('CHAT-INMAGES').getPublicUrl(path);
+      var url=urlData.data?urlData.data.publicUrl:null;
+      
+      if(!url){done(new Error('no url'),null);return;}
+      
+      supabase.from('messages').insert({
+        room:currentRoom,
+        nickname:currentUser.nickname,
+        image_url:url
+      }).then(function(){done(null,null);}).catch(function(err){done(err,null);});
+    }).catch(function(err){done(err,null);});
+  },function(){
+    toast('图片已发送');
     fileInput.value='';
-  }).catch(function(err){
-    console.error('Upload error:',err);
-    toast('上传异常');
+  },function(){
+    toast('上传失败');
     fileInput.value='';
   });
 };
 
 // ==================== Admin ====================
 window.showUsers=function(){
-  if(!currentUser||currentUser.email!==ADMIN_EMAIL){
-    toast('无权操作');
-    return;
-  }
-  if(!supabase){
-    toast('服务未就绪');
-    return;
-  }
+  if(!currentUser||currentUser.email!==ADMIN_EMAIL){toast('无权操作');return;}
   
-  supabase.from('profiles').select('*').order('created_at',{ascending:false}).then(function(res){
-    if(!res.data||!res.data.length){
-      toast('暂无用户');
-      return;
-    }
+  withSupabaseRetry(function(done){
+    supabase.from('profiles').select('*').order('created_at',{ascending:false}).then(function(res){
+      done(res.error,res.data);
+    }).catch(function(err){done(err,null);});
+  },function(data){
+    if(!data||!data.length){toast('暂无用户');return;}
     
     var list=document.getElementById('adminUserList');
     var html='';
     
-    for(var i=0;i<res.data.length;i++){
-      var u=res.data[i];
+    for(var i=0;i<data.length;i++){
+      var u=data[i];
       var tag=u.is_banned?'<span style="color:#dc2626;font-size:.7rem">[已拉黑]</span>':'';
       html+='<div onclick="toggleBan(\''+u.email+'\','+(!u.is_banned)+')" style="padding:.7rem;border:1px solid var(--border);border-radius:10px;margin-bottom:.4rem;cursor:pointer">'+
       '<div style="display:flex;justify-content:space-between"><b>'+escapeHtml(u.nickname)+'</b>'+tag+'</div>'+
@@ -988,18 +925,18 @@ window.showUsers=function(){
     
     list.innerHTML=html;
     document.getElementById('adminModal').classList.add('show');
-  }).catch(function(){
+  },function(){
     toast('加载失败');
   });
 };
 
 window.toggleBan=function(email,ban){
-  if(!supabase)return;
-  
-  supabase.from('profiles').update({is_banned:ban}).eq('email',email).then(function(){
+  withSupabaseRetry(function(done){
+    supabase.from('profiles').update({is_banned:ban}).eq('email',email).then(function(res){done(res.error,null);}).catch(function(err){done(err,null);});
+  },function(){
     toast(ban?'已拉黑':'已解除');
     showUsers();
-  }).catch(function(){
+  },function(){
     toast('操作失败');
   });
 };
@@ -1010,10 +947,7 @@ window.closeAdmin=function(){
 
 // ==================== Profile ====================
 window.openEdit=function(){
-  if(!currentUser){
-    toast('请先登录');
-    return;
-  }
+  if(!currentUser){toast('请先登录');return;}
   document.getElementById('editNickname').value=currentUser.nickname||'';
   document.getElementById('editModal').classList.add('show');
 };
@@ -1023,10 +957,7 @@ window.closeEdit=function(){
 };
 
 window.saveProfile=function(){
-  if(!currentUser||!supabase){
-    toast('服务未就绪');
-    return;
-  }
+  if(!currentUser){toast('请先登录');return;}
   
   var nick=document.getElementById('editNickname').value.trim();
   var oldPwd=document.getElementById('editOldPwd').value.trim();
@@ -1040,46 +971,29 @@ window.saveProfile=function(){
   }
   
   if(newPwd){
-    if(!oldPwd){
-      toast('请输入当前密码');
-      return;
-    }
-    if(oldPwd!==currentUser.password_hash){
-      toast('当前密码错误');
-      return;
-    }
-    if(newPwd.length<6){
-      toast('新密码至少6位');
-      return;
-    }
+    if(!oldPwd){toast('请输入当前密码');return;}
+    if(oldPwd!==currentUser.password_hash){toast('当前密码错误');return;}
+    if(newPwd.length<6){toast('新密码至少6位');return;}
     updates.password_hash=newPwd;
     currentUser.password_hash=newPwd;
   }
   
-  if(Object.keys(updates).length===0){
-    closeEdit();
-    return;
-  }
+  if(Object.keys(updates).length===0){closeEdit();return;}
   
-  supabase.from('profiles').update(updates).eq('email',currentUser.email).then(function(){
+  withSupabaseRetry(function(done){
+    supabase.from('profiles').update(updates).eq('email',currentUser.email).then(function(res){done(res.error,null);}).catch(function(err){done(err,null);});
+  },function(){
     safeSet('oskwk_user',JSON.stringify(currentUser));
     updateProfile();
     closeEdit();
     toast('已更新');
-  }).catch(function(){
+  },function(){
     toast('保存失败');
   });
 };
 
 window.uploadAvatar=function(){
-  if(!currentUser){
-    toast('请先登录');
-    return;
-  }
-  if(!supabase){
-    toast('服务未就绪');
-    return;
-  }
+  if(!currentUser){toast('请先登录');return;}
   
   var input=document.createElement('input');
   input.type='file';
@@ -1089,38 +1003,31 @@ window.uploadAvatar=function(){
     var file=input.files[0];
     if(!file)return;
     
-    if(file.size>2*1024*1024){
-      toast('头像不能超过2MB');
-      return;
-    }
+    if(file.size>2*1024*1024){toast('头像不能超过2MB');return;}
     
     var ext=(file.name.split('.').pop()||'').toLowerCase();
     var fn='avatars/'+currentUser.email.replace(/[^a-zA-Z0-9]/g,'_')+'_'+Date.now()+'.'+ext;
     
-    supabase.storage.from('CHAT-INMAGES').upload(fn,file,{
-      cacheControl:'3600',
-      upsert:true
-    }).then(function(res){
-      if(res.error){
-        toast('上传失败');
-        return;
-      }
-      
-      var urlData=supabase.storage.from('CHAT-INMAGES').getPublicUrl(fn);
-      var url=urlData.data?urlData.data.publicUrl:null;
-      
-      if(!url){
-        toast('获取链接失败');
-        return;
-      }
-      
-      supabase.from('profiles').update({avatar_url:url}).eq('email',currentUser.email).then(function(){
-        currentUser.avatar_url=url;
-        safeSet('oskwk_user',JSON.stringify(currentUser));
-        updateProfile();
-        toast('头像已更新');
-      });
-    }).catch(function(){
+    withSupabaseRetry(function(done){
+      supabase.storage.from('CHAT-INMAGES').upload(fn,file,{
+        cacheControl:'3600',
+        upsert:true
+      }).then(function(res){
+        if(res.error){done(res.error,null);return;}
+        
+        var urlData=supabase.storage.from('CHAT-INMAGES').getPublicUrl(fn);
+        var url=urlData.data?urlData.data.publicUrl:null;
+        
+        if(!url){done(new Error('no url'),null);return;}
+        
+        supabase.from('profiles').update({avatar_url:url}).eq('email',currentUser.email).then(function(){done(null,url);}).catch(function(err){done(err,null);});
+      }).catch(function(err){done(err,null);});
+    },function(url){
+      currentUser.avatar_url=url;
+      safeSet('oskwk_user',JSON.stringify(currentUser));
+      updateProfile();
+      toast('头像已更新');
+    },function(){
       toast('上传异常');
     });
   };
@@ -1139,4 +1046,4 @@ window.closeLightbox=function(){
 };
 </script>
 </body>
-</html>
+</html>'''
