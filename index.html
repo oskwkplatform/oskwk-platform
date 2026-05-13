@@ -3,119 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Oskwk</title>
+<title>Oskwk Platform</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+:root{--bg:#f8f7f4;--surface:#fff;--text:#1a1a1a;--text-sec:#525252;--text-muted:#a3a3a3;--border:rgba(0,0,0,.05);--accent:#0f3d2e;--accent-light:#1a5c47;--accent-glow:rgba(15,61,46,.15);--radius:16px;--radius-lg:24px}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
+/* Loader */
 #loader{position:fixed;inset:0;z-index:99999;background:#0c0c0c;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #loader.done{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .6s,visibility .6s}
 .ld-logo{font-size:clamp(3rem,7vw,5rem);font-weight:200;color:#fff;letter-spacing:.5em;text-transform:uppercase;animation:breathe 3s ease-in-out infinite}
 .ld-sub{margin-top:1.2rem;font-size:.7rem;color:rgba(255,255,255,.25);letter-spacing:1em;text-transform:lowercase}
 @keyframes breathe{0%,100%{opacity:.25;transform:scale(.96)}50%{opacity:1;transform:scale(1.02)}}
 
+/* Auth */
 #authOverlay{position:fixed;inset:0;z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:1rem;background:#0c0c0c}
 #authOverlay.show{display:flex}
 #authOverlay.hidden{display:none}
-.auth-card{width:90%;max-width:420px;padding:2.5rem 2rem;border-radius:24px;background:#1a1a1a;border:1px solid rgba(255,255,255,.08);text-align:center}
-.auth-logo{font-size:clamp(2.2rem,6vw,3.5rem);font-weight:200;color:#fff;letter-spacing:.3em;text-transform:uppercase;margin-bottom:.5rem}
-.auth-sub{font-size:.75rem;color:rgba(255,255,255,.35);letter-spacing:.5em;text-transform:lowercase;margin-bottom:2.5rem}
-.auth-input{width:100%;padding:1rem 1.2rem;border-radius:16px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:1rem;outline:none;margin-bottom:.8rem;font-family:inherit;-webkit-appearance:none}
+.auth-card{width:92%;max-width:400px;padding:2rem;border-radius:var(--radius-lg);background:#1a1a1a;border:1px solid rgba(255,255,255,.1);text-align:center}
+.auth-logo{font-size:clamp(2rem,5vw,3rem);font-weight:200;color:#fff;letter-spacing:.3em;text-transform:uppercase;margin-bottom:.3rem}
+.auth-sub{font-size:.75rem;color:rgba(255,255,255,.35);letter-spacing:.4em;text-transform:lowercase;margin-bottom:2rem}
+.auth-input{width:100%;padding:.9rem 1.1rem;border-radius:var(--radius);background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:1rem;outline:none;margin-bottom:.6rem;font-family:inherit;-webkit-appearance:none}
 .auth-input::placeholder{color:rgba(255,255,255,.3)}
-.auth-input:focus{border-color:rgba(255,255,255,.3)}
-.auth-btn{width:100%;padding:1rem;border-radius:16px;background:#fff;color:#0f3d2e;border:none;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.5rem;font-family:inherit}
-.auth-btn:active{transform:scale(.98)}
-.auth-btn:disabled{background:rgba(255,255,255,.3);color:rgba(0,0,0,.4);cursor:not-allowed}
-.auth-hint{margin-top:.8rem;font-size:.8rem;color:rgba(255,255,255,.4);min-height:1.2em}
+.auth-input:focus{border-color:rgba(255,255,255,.25)}
+.auth-btn{width:100%;padding:.9rem;border-radius:var(--radius);background:#fff;color:var(--accent);border:none;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.4rem;font-family:inherit}
+.auth-btn:active{transform:scale(.97)}
+.auth-btn:disabled{background:rgba(255,255,255,.2);color:rgba(0,0,0,.4);cursor:not-allowed}
+.auth-hint{margin-top:.6rem;font-size:.8rem;color:rgba(255,255,255,.4);min-height:1.2em}
 .auth-hint.err{color:#ff6b6b}
-.auth-switch{margin-top:1.2rem;font-size:.85rem;color:rgba(255,255,255,.4)}
+.auth-switch{margin-top:1rem;font-size:.85rem;color:rgba(255,255,255,.4)}
 .auth-switch a{color:#fff;text-decoration:underline;cursor:pointer}
-.status-pill{position:absolute;top:1rem;left:50%;transform:translateX(-50%);padding:.4rem 1rem;border-radius:100px;font-size:.7rem;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);white-space:nowrap}
+.status-pill{position:absolute;top:1rem;left:50%;transform:translateX(-50%);padding:.35rem 1rem;border-radius:100px;font-size:.7rem;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);white-space:nowrap}
 .status-pill.ok{background:rgba(34,197,94,.15);color:#4ade80;border-color:rgba(74,222,128,.2)}
 .status-pill.err{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(248,113,113,.2)}
 
+/* App */
 #app{display:none}
 #app.on{display:block;animation:fadeIn .5s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-.nav{position:fixed;top:0;left:0;right:0;z-index:90;height:64px;background:rgba(250,249,246,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.05)}
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:90;height:60px;background:rgba(250,249,246,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:1400px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 1.2rem}
-.nav-brand{font-size:1.2rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
-.nav-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0f3d2e,#1a5c47);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;font-weight:600}
+.nav-brand{font-size:1.1rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.nav-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:600}
 
-.hero{position:relative;height:60vh;min-height:400px;display:flex;align-items:flex-end;padding-bottom:3rem;padding-top:64px;overflow:hidden}
+/* Hero */
+.hero{position:relative;height:55vh;min-height:350px;display:flex;align-items:flex-end;padding-bottom:2.5rem;padding-top:60px;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0f3d2e 0%,#1a5c47 40%,#0c0c0c 100%)}
-.hero-mask{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.4) 100%)}
+.hero-mask{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.5) 100%)}
 .hero-inner{position:relative;z-index:2;padding:0 1.2rem}
-.hero-tag{display:inline-block;padding:.5rem 1rem;border-radius:100px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5rem}
-.hero h1{font-size:clamp(2rem,8vw,3.5rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:1rem}
-.hero p{font-size:1rem;color:rgba(255,255,255,.75);line-height:1.7;max-width:400px}
+.hero-tag{display:inline-block;padding:.4rem 1rem;border-radius:100px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero h1{font-size:clamp(1.8rem,7vw,3rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:.8rem}
+.hero p{font-size:.95rem;color:rgba(255,255,255,.75);line-height:1.6;max-width:380px}
 
-.main{padding:2rem 1.2rem 5rem}
-.sec-title{font-size:1.05rem;font-weight:600;margin-bottom:1.5rem;display:flex;align-items:center;gap:.8rem}
-.sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(0,0,0,.05),transparent)}
+/* Main */
+.main{padding:1.5rem 1.2rem 5rem}
+.sec-title{font-size:1rem;font-weight:600;margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem}
+.sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent)}
 
 .page{display:none}
 .page.active{display:block;animation:fadeIn .3s ease}
 
-.admin-bar{display:none;align-items:center;gap:1rem;margin-bottom:1.5rem;padding:1rem;background:rgba(15,61,46,.03);border:1px dashed rgba(15,61,46,.15);border-radius:12px}
+/* Admin */
+.admin-bar{display:none;align-items:center;gap:.8rem;margin-bottom:1.2rem;padding:.8rem;background:rgba(15,61,46,.03);border:1px dashed rgba(15,61,46,.15);border-radius:12px;font-size:.85rem}
 .admin-bar.vis{display:flex}
-.admin-bar button{padding:.5rem 1.2rem;border-radius:12px;background:#0f3d2e;color:#fff;border:none;font-size:.85rem;font-weight:500}
+.admin-bar button{padding:.4rem 1rem;border-radius:10px;background:var(--accent);color:#fff;border:none;font-size:.8rem;font-weight:500}
 
-.article-item{background:#fff;border-radius:16px;padding:1.5rem;margin-bottom:1rem;border:1px solid rgba(0,0,0,.05);box-shadow:0 2px 12px rgba(0,0,0,.03);position:relative}
-.article-item h3{font-size:1.1rem;font-weight:600;margin-bottom:.5rem;padding-right:4rem}
-.article-item .art-content{color:#525252;line-height:1.8;font-size:.95rem;margin:.8rem 0}
-.article-item .art-content img{max-width:100%;border-radius:12px;margin:.5rem 0;display:block}
-.article-item small{color:#a3a3a3;font-size:.8rem}
-.comment-sec{margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(0,0,0,.05)}
-.comment-input-row{display:flex;gap:.5rem;margin-top:.8rem}
-.comment-input-row input{flex:1;padding:.7rem 1rem;border-radius:12px;background:#f8f7f4;border:1px solid rgba(0,0,0,.08);font-size:.9rem;outline:none;font-family:inherit}
-.comment-input-row button{padding:.7rem 1.2rem;border-radius:12px;background:#0f3d2e;color:#fff;border:none;font-size:.85rem}
+/* Articles */
+.article-item{background:var(--surface);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem;border:1px solid var(--border);box-shadow:0 1px 8px rgba(0,0,0,.03);position:relative}
+.article-item h3{font-size:1.05rem;font-weight:600;margin-bottom:.4rem;padding-right:3.5rem}
+.article-item .art-content{color:var(--text-sec);line-height:1.7;font-size:.9rem;margin:.6rem 0}
+.article-item .art-content img{max-width:100%;border-radius:12px;margin:.4rem 0;display:block}
+.article-item small{color:var(--text-muted);font-size:.75rem}
+.art-del{position:absolute;top:1rem;right:1rem;background:rgba(220,38,38,.06);color:#dc2626;border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:.25rem .7rem;font-size:.75rem;cursor:pointer;display:none}
+.art-del.show{display:block}
+.comment-sec{margin-top:.8rem;padding-top:.8rem;border-top:1px solid var(--border)}
+.comment-input-row{display:flex;gap:.4rem;margin-top:.6rem}
+.comment-input-row input{flex:1;padding:.6rem .9rem;border-radius:10px;background:var(--bg);border:1px solid var(--border);font-size:.85rem;outline:none;font-family:inherit}
+.comment-input-row button{padding:.6rem 1rem;border-radius:10px;background:var(--accent);color:#fff;border:none;font-size:.8rem}
 
-.channel-grid{display:grid;gap:1rem;grid-template-columns:repeat(2,1fr)}
-.channel-card{background:#fff;padding:1.5rem 1rem;border-radius:16px;text-align:center;border:1px solid rgba(0,0,0,.05);font-size:.95rem;font-weight:500}
-.chat-box{height:50vh;overflow-y:auto;background:#faf9f6;border-radius:16px;padding:1rem;margin:1rem 0;border:1px solid rgba(0,0,0,.05);-webkit-overflow-scrolling:touch}
-.msg{max-width:85%;padding:.8rem 1rem;border-radius:1.2rem;margin-bottom:.8rem;font-size:.95rem;line-height:1.5;word-break:break-word}
-.msg.mine{background:#0f3d2e;color:#fff;margin-left:auto;border-bottom-right-radius:.3rem}
-.msg.other{background:#fff;border:1px solid rgba(0,0,0,.08);margin-right:auto;border-bottom-left-radius:.3rem}
-.msg .time{font-size:.7rem;opacity:.5;display:block;text-align:right;margin-top:.3rem}
-.msg img{max-width:150px;border-radius:.8rem;margin-top:.3rem;display:block}
-.chat-input{display:flex;gap:.5rem}
-.chat-input input{flex:1;padding:.8rem 1.2rem;border-radius:100px;background:#fff;border:1px solid rgba(0,0,0,.1);font-size:.95rem;outline:none;font-family:inherit}
-.chat-input button{padding:.8rem 1.4rem;border-radius:100px;background:#0f3d2e;color:#fff;border:none;font-weight:600;font-size:.9rem}
+/* Chat */
+.channel-grid{display:grid;gap:.8rem;grid-template-columns:repeat(2,1fr)}
+.channel-card{background:var(--surface);padding:1.2rem 1rem;border-radius:var(--radius);text-align:center;border:1px solid var(--border);font-size:.9rem;font-weight:500}
+.chat-box{height:45vh;overflow-y:auto;background:#faf9f6;border-radius:var(--radius);padding:1rem;margin:.8rem 0;border:1px solid var(--border);-webkit-overflow-scrolling:touch}
+.msg{max-width:88%;padding:.7rem 1rem;border-radius:1rem;margin-bottom:.6rem;font-size:.9rem;line-height:1.5;word-break:break-word}
+.msg.mine{background:var(--accent);color:#fff;margin-left:auto;border-bottom-right-radius:.3rem}
+.msg.other{background:var(--surface);border:1px solid var(--border);margin-right:auto;border-bottom-left-radius:.3rem}
+.msg .time{font-size:.65rem;opacity:.5;display:block;text-align:right;margin-top:.2rem}
+.msg img{max-width:140px;border-radius:.6rem;margin-top:.2rem;display:block}
+.chat-input{display:flex;gap:.4rem}
+.chat-input input{flex:1;padding:.7rem 1rem;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:.9rem;outline:none;font-family:inherit}
+.chat-input button{padding:.7rem 1.2rem;border-radius:100px;background:var(--accent);color:#fff;border:none;font-weight:600;font-size:.85rem}
 
-.profile-card{background:#fff;border-radius:16px;padding:1.5rem;border:1px solid rgba(0,0,0,.05)}
-.profile-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
-.profile-avatar-lg{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#0f3d2e,#1a5c47);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.4rem;font-weight:600}
-.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0}
-.profile-stat{background:#faf9f6;padding:1rem;border-radius:12px;text-align:center}
-.profile-stat .num{font-size:1.5rem;font-weight:700;color:#0f3d2e}
-.profile-stat .lab{font-size:.75rem;color:#a3a3a3;margin-top:.2rem}
-.btn-row{width:100%;padding:.9rem;border-radius:12px;border:none;font-size:.95rem;font-weight:600;font-family:inherit;margin-top:.6rem;cursor:pointer}
-.btn-primary{background:#0f3d2e;color:#fff}
-.btn-secondary{background:#f8f7f4;color:#525252;border:1px solid rgba(0,0,0,.08)}
+/* Profile */
+.profile-card{background:var(--surface);border-radius:var(--radius);padding:1.2rem;border:1px solid var(--border)}
+.profile-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem}
+.profile-avatar-lg{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;font-weight:600}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:1.2rem 0}
+.profile-stat{background:#faf9f6;padding:.8rem;border-radius:10px;text-align:center}
+.profile-stat .num{font-size:1.3rem;font-weight:700;color:var(--accent)}
+.profile-stat .lab{font-size:.7rem;color:var(--text-muted);margin-top:.1rem}
+.btn-row{width:100%;padding:.8rem;border-radius:10px;border:none;font-size:.9rem;font-weight:600;font-family:inherit;margin-top:.5rem;cursor:pointer}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:#f8f7f4;color:var(--text-sec);border:1px solid var(--border)}
 .btn-danger{background:rgba(220,38,38,.05);color:#dc2626;border:1px solid rgba(220,38,38,.15)}
 
+/* Modals */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.show{display:flex}
-.modal-box{background:#fff;border-radius:20px;padding:2rem;max-width:420px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
-.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;color:#a3a3a3;cursor:pointer;width:36px;height:36px}
-.inp{width:100%;padding:.9rem 1.1rem;border-radius:12px;background:#f8f7f4;border:1px solid rgba(0,0,0,.08);font-size:1rem;margin-bottom:.8rem;outline:none;font-family:inherit}
+.modal-box{background:var(--surface);border-radius:var(--radius-lg);padding:1.5rem;max-width:400px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:.8rem;right:.8rem;background:none;border:none;font-size:1.5rem;color:var(--text-muted);cursor:pointer;width:32px;height:32px}
+.inp{width:100%;padding:.8rem 1rem;border-radius:10px;background:#f8f7f4;border:1px solid var(--border);font-size:.95rem;margin-bottom:.6rem;outline:none;font-family:inherit}
 
-.footer{text-align:center;color:#a3a3a3;font-size:.85rem;padding:2rem 1rem;background:#faf9f6;margin-top:2rem}
+/* Footer */
+.footer{text-align:center;color:var(--text-muted);font-size:.8rem;padding:1.5rem 1rem;background:#faf9f6;margin-top:1.5rem}
 
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:.8rem 1.5rem;border-radius:100px;z-index:9999;display:none;font-size:.9rem;font-weight:500;white-space:nowrap}
+/* Toast */
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:.7rem 1.2rem;border-radius:100px;z-index:9999;display:none;font-size:.85rem;font-weight:500;white-space:nowrap}
 
+/* Lightbox */
 .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:1rem;z-index:300}
 .lightbox.show{display:flex}
-.lightbox img{max-width:95vw;max-height:85vh;border-radius:12px}
+.lightbox img{max-width:95vw;max-height:80vh;border-radius:12px}
 
-.mob-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(250,249,246,.95);backdrop-filter:blur(20px);border-top:1px solid rgba(0,0,0,.05);display:flex;justify-content:space-around;padding:.4rem 0;z-index:80}
-.mob-nav button{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:.2rem;font-size:.6rem;color:#a3a3a3;padding:.3rem .6rem;font-family:inherit}
-.mob-nav button.on{color:#0f3d2e;font-weight:600}
+/* Mobile nav */
+.mob-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(250,249,246,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:.3rem 0;z-index:80}
+.mob-nav button{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:.15rem;font-size:.55rem;color:var(--text-muted);padding:.25rem .5rem;font-family:inherit}
+.mob-nav button.on{color:var(--accent);font-weight:600}
 </style>
 </head>
 <body>
@@ -124,6 +142,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:#f8f
 
 <div id="authOverlay">
   <div class="status-pill" id="statusPill">等待操作...</div>
+  
   <div class="auth-card" id="loginCard">
     <div class="auth-logo">Oskwk</div>
     <div class="auth-sub">platform</div>
@@ -133,18 +152,19 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:#f8f
     <div class="auth-hint" id="loginHint"></div>
     <div class="auth-switch"><span>还没有账户？</span><a onclick="showRegister()">去注册</a></div>
   </div>
+  
   <div class="auth-card" id="registerCard" style="display:none">
     <div class="auth-logo">Oskwk</div>
     <div class="auth-sub">全人类共同体</div>
     <input id="regPhone" class="auth-input" placeholder="手机号" type="tel">
     <input id="regEmail" class="auth-input" placeholder="邮箱" type="email" autocomplete="email">
-    <div style="display:flex;gap:.5rem">
+    <div style="display:flex;gap:.4rem">
       <input id="regCode" class="auth-input" placeholder="验证码" style="flex:1">
-      <button onclick="sendCode()" style="padding:0 1rem;border-radius:12px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);font-size:.85rem;white-space:nowrap">获取</button>
+      <button onclick="sendCode()" style="padding:0 .8rem;border-radius:var(--radius);background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);font-size:.8rem;white-space:nowrap">获取</button>
     </div>
-    <input id="regPassword" type="password" class="auth-input" placeholder="设置密码（至少6位）">
+    <input id="regPassword" type="password" class="auth-input" placeholder="密码（至少6位）">
     <input id="regNickname" class="auth-input" placeholder="昵称">
-    <label style="display:flex;align-items:center;gap:.5rem;color:rgba(255,255,255,.5);font-size:.85rem;margin:.5rem 0 1rem">
+    <label style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.5);font-size:.8rem;margin:.4rem 0 .8rem">
       <input type="checkbox" id="regAgree"> 同意用户协议
     </label>
     <button class="auth-btn" id="regBtn" onclick="doRegister()">创建账户</button>
@@ -167,15 +187,15 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:#f8f
 <div class="main">
 <div class="page active" id="tab-about">
 <div class="admin-bar" id="admin-about"><span>👑 管理员</span><button onclick="openPublish('about')">发布</button></div>
-<div class="sec-title">关于 Oskwk</div><div id="article-about"><p style="color:#a3a3a3">加载中...</p></div>
+<div class="sec-title">关于 Oskwk</div><div id="article-about"><p style="color:var(--text-muted)">加载中...</p></div>
 </div>
 <div class="page" id="tab-discover">
 <div class="admin-bar" id="admin-discover"><span>👑 管理员</span><button onclick="openPublish('discover')">发布</button></div>
-<div class="sec-title">最新发现</div><div id="article-discover"><p style="color:#a3a3a3">加载中...</p></div>
+<div class="sec-title">最新发现</div><div id="article-discover"><p style="color:var(--text-muted)">加载中...</p></div>
 </div>
 <div class="page" id="tab-study">
 <div class="admin-bar" id="admin-study"><span>👑 管理员</span><button onclick="openPublish('study')">发布</button></div>
-<div class="sec-title">学术学习</div><div id="article-study"><p style="color:#a3a3a3">加载中...</p></div>
+<div class="sec-title">学术学习</div><div id="article-study"><p style="color:var(--text-muted)">加载中...</p></div>
 </div>
 <div class="page" id="tab-chat">
 <div class="sec-title">交流中心</div>
@@ -186,7 +206,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:#f8f
 <div class="channel-card" onclick="joinRoom('艺术')">🎨 艺术</div>
 </div></div>
 <div id="chatPanel" style="display:none">
-<button onclick="leaveRoom()" style="margin-bottom:1rem;padding:.5rem 1rem;border-radius:100px;background:#f8f7f4;border:1px solid rgba(0,0,0,.08);font-size:.9rem">← 返回</button>
+<button onclick="leaveRoom()" style="margin-bottom:.8rem;padding:.4rem .8rem;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:.85rem">← 返回</button>
 <div class="chat-box" id="chatBox"></div>
 <div class="chat-input"><input id="msgInput" placeholder="输入消息..." onkeydown="if(event.key==='Enter')sendMsg()"><button onclick="document.getElementById('imgUp').click()">📷</button><input type="file" id="imgUp" accept="image/*" style="display:none" onchange="uploadImg()"><button onclick="sendMsg()">发送</button></div>
 </div>
@@ -196,7 +216,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:#f8f
 <div class="profile-card">
 <div class="profile-header">
 <div class="profile-avatar-lg" id="profileAvatar" onclick="uploadAvatar()"><span id="profileAvatarText">?</span></div>
-<div><h2 id="profileNick" style="font-size:1.2rem">--</h2><p id="profileMail" style="color:#a3a3a3;font-size:.85rem">--</p></div>
+<div><h2 id="profileNick" style="font-size:1.1rem">--</h2><p id="profileMail" style="color:var(--text-muted);font-size:.8rem">--</p></div>
 </div>
 <div class="profile-stats">
 <div class="profile-stat"><div class="num" id="joinDays">0</div><div class="lab">天数</div></div>
@@ -204,7 +224,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:#f8f
 <div class="profile-stat"><div class="num">∞</div><div class="lab">潜力</div></div>
 </div>
 <button class="btn-row btn-secondary" onclick="openEdit()">编辑资料</button>
-<div id="adminProfile" style="display:none;margin-top:.5rem"><button class="btn-row btn-primary" onclick="showUsers()">👥 用户管理</button></div>
+<div id="adminProfile" style="display:none;margin-top:.4rem"><button class="btn-row btn-primary" onclick="showUsers()">👥 用户管理</button></div>
 <button class="btn-row btn-danger" onclick="doLogout()">退出登录</button>
 </div>
 </div>
@@ -222,7 +242,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:#f8f
 
 <div class="modal-overlay" id="publishModal" onclick="if(event.target===this)closePublish()"><div class="modal-box">
 <button class="modal-close" onclick="closePublish()">×</button>
-<h3 style="margin-bottom:1rem">发布文章</h3>
+<h3 style="margin-bottom:.8rem">发布文章</h3>
 <input id="pubTitle" class="inp" placeholder="标题">
 <textarea id="pubContent" class="inp" placeholder="内容" rows="4" style="resize:vertical"></textarea>
 <input id="pubImgUrl" class="inp" placeholder="图片URL（可选）">
@@ -231,16 +251,16 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:#f8f
 
 <div class="modal-overlay" id="editModal" onclick="if(event.target===this)closeEdit()"><div class="modal-box">
 <button class="modal-close" onclick="closeEdit()">×</button>
-<h3 style="margin-bottom:1rem">编辑资料</h3>
+<h3 style="margin-bottom:.8rem">编辑资料</h3>
 <input id="editNickname" class="inp" placeholder="新昵称">
 <input id="editOldPwd" type="password" class="inp" placeholder="当前密码">
 <input id="editNewPwd" type="password" class="inp" placeholder="新密码（不修改留空）">
 <button class="btn-row btn-primary" onclick="saveProfile()">保存</button>
 </div></div>
 
-<div class="modal-overlay" id="adminModal" onclick="if(event.target===this)closeAdmin()"><div class="modal-box" style="max-width:500px">
+<div class="modal-overlay" id="adminModal" onclick="if(event.target===this)closeAdmin()"><div class="modal-box" style="max-width:480px">
 <button class="modal-close" onclick="closeAdmin()">×</button>
-<h3 style="margin-bottom:1rem">用户管理</h3>
+<h3 style="margin-bottom:.8rem">用户管理</h3>
 <div id="adminUserList" style="max-height:60vh;overflow-y:auto"></div>
 </div></div>
 
@@ -248,18 +268,13 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:#f8f
 <div class="toast" id="toast"></div>
 
 <script>
-// ==================== 全局错误捕获（iPhone 必备）====================
+// ==================== 全局错误捕获 ====================
 window.onerror=function(msg,url,line){
   console.error('JS Error:',msg,'Line:',line);
-  // 如果启动阶段报错，强制显示登录界面
-  var auth=document.getElementById('authOverlay');
-  var loader=document.getElementById('loader');
-  if(auth)auth.style.display='flex';
-  if(loader)loader.style.display='none';
   return true;
 };
 window.onunhandledrejection=function(e){
-  console.error('Unhandled Promise:',e.reason);
+  console.error('Promise rejection:',e.reason);
 };
 
 // ==================== Config ====================
@@ -312,7 +327,7 @@ function toast(msg){
   setTimeout(function(){t.style.display='none'},2500);
 }
 
-// ==================== Supabase Init ====================
+// ==================== Supabase ====================
 function initSupabase(){
   if(typeof window.supabase!=='undefined'&&window.supabase.createClient){
     try{
@@ -323,14 +338,32 @@ function initSupabase(){
       return false;
     }
   }
-  console.error('Supabase SDK not found');
   return false;
+}
+
+function waitForSupabase(callback,timeout){
+  var start=Date.now();
+  var maxWait=timeout||8000;
+  
+  function check(){
+    if(initSupabase()){
+      callback(true);
+      return;
+    }
+    if(Date.now()-start<maxWait){
+      setTimeout(check,400);
+    }else{
+      callback(false);
+    }
+  }
+  check();
 }
 
 // ==================== Boot ====================
 setTimeout(function(){
   var loader=document.getElementById('loader');
   var auth=document.getElementById('authOverlay');
+  
   if(loader){
     loader.classList.add('done');
     setTimeout(function(){loader.style.display='none'},600);
@@ -339,7 +372,47 @@ setTimeout(function(){
     auth.classList.add('show');
     showLogin();
   }
-},1200);
+  
+  // 后台初始化
+  waitForSupabase(function(ok){
+    if(ok){
+      setStatus('服务就绪','ok');
+      tryAutoLogin();
+    }else{
+      setStatus('CDN加载失败，点击重试','err');
+    }
+  });
+},1000);
+
+function tryAutoLogin(){
+  var saved=safeGet('oskwk_user');
+  if(!saved)return;
+  
+  try{
+    var user=JSON.parse(saved);
+    if(!user||!user.email)return;
+    
+    if(!supabase){
+      setStatus('等待服务...');
+      return;
+    }
+    
+    supabase.from('profiles').select('*').eq('email',user.email).single().then(function(res){
+      if(res.error||!res.data||res.data.is_banned){
+        safeRemove('oskwk_user');
+        return;
+      }
+      currentUser=res.data;
+      safeSet('oskwk_user',JSON.stringify(currentUser));
+      enterApp();
+    }).catch(function(err){
+      console.error('Auto login failed:',err);
+      safeRemove('oskwk_user');
+    });
+  }catch(e){
+    safeRemove('oskwk_user');
+  }
+}
 
 // ==================== Auth ====================
 window.doLogin=function(){
@@ -351,15 +424,22 @@ window.doLogin=function(){
     return;
   }
   
-  if(!supabase&&!initSupabase()){
-    hint('服务加载中，请稍后重试',true);
+  if(!supabase){
+    hint('服务加载中...',true);
+    waitForSupabase(function(ok){
+      if(ok){
+        setStatus('服务就绪','ok');
+        doLogin();
+      }else{
+        hint('无法连接服务，请刷新',true);
+      }
+    },3000);
     return;
   }
   
   var btn=document.getElementById('loginBtn');
   btn.disabled=true;
   btn.textContent='登录中...';
-  setStatus('正在登录...');
   
   supabase.from('profiles').select('*').eq('email',email).single().then(function(res){
     btn.disabled=false;
@@ -367,32 +447,25 @@ window.doLogin=function(){
     
     if(res.error||!res.data){
       hint('邮箱或密码错误',true);
-      setStatus('登录失败','err');
       return;
     }
-    
     if(res.data.password_hash!==pwd){
       hint('密码错误',true);
-      setStatus('密码错误','err');
       return;
     }
-    
     if(res.data.is_banned){
       hint('账号已被限制',true);
-      setStatus('账号受限','err');
       return;
     }
     
     currentUser=res.data;
     safeSet('oskwk_user',JSON.stringify(currentUser));
-    setStatus('登录成功','ok');
     enterApp();
   }).catch(function(err){
     console.error('Login error:',err);
     btn.disabled=false;
     btn.textContent='登录';
-    hint('网络超时，请重试',true);
-    setStatus('连接超时','err');
+    hint('网络错误，请重试',true);
   });
 };
 
@@ -401,11 +474,6 @@ window.sendCode=function(){
 };
 
 window.doRegister=function(){
-  if(!supabase&&!initSupabase()){
-    hint('服务加载中',true);
-    return;
-  }
-  
   var phone=document.getElementById('regPhone').value.trim();
   var email=document.getElementById('regEmail').value.trim();
   var code=document.getElementById('regCode').value.trim();
@@ -429,6 +497,19 @@ window.doRegister=function(){
     return;
   }
   
+  if(!supabase){
+    hint('服务加载中...',true);
+    waitForSupabase(function(ok){
+      if(ok){
+        setStatus('服务就绪','ok');
+        doRegister();
+      }else{
+        hint('无法连接服务',true);
+      }
+    },3000);
+    return;
+  }
+  
   var btn=document.getElementById('regBtn');
   btn.disabled=true;
   btn.textContent='创建中...';
@@ -443,12 +524,14 @@ window.doRegister=function(){
     is_banned:false
   };
   
-  supabase.from('profiles').upsert(obj,{onConflict:'email'}).then(function(res){
+  // 修复：不用 onConflict 参数，直接 upsert
+  supabase.from('profiles').upsert(obj).then(function(res){
     btn.disabled=false;
     btn.textContent='创建账户';
     
     if(res.error){
-      hint('注册失败: '+(res.error.message||'未知错误'),true);
+      console.error('Register error:',res.error);
+      hint('注册失败: '+(res.error.message||'邮箱可能已注册'),true);
       return;
     }
     
@@ -456,7 +539,7 @@ window.doRegister=function(){
     safeSet('oskwk_user',JSON.stringify(currentUser));
     enterApp();
   }).catch(function(err){
-    console.error('Register error:',err);
+    console.error('Register catch:',err);
     btn.disabled=false;
     btn.textContent='创建账户';
     hint('注册超时，请重试',true);
@@ -475,9 +558,12 @@ function enterApp(){
   }
   
   updateProfile();
-  loadArticles('about');
-  loadArticles('discover');
-  loadArticles('study');
+  
+  setTimeout(function(){
+    loadArticles('about');
+    loadArticles('discover');
+    loadArticles('study');
+  },100);
   
   if(currentUser&&currentUser.email===ADMIN_EMAIL){
     var bars=document.querySelectorAll('.admin-bar');
@@ -511,7 +597,6 @@ function updateProfile(){
   if(profileAvatar)profileAvatar.innerHTML=avaHtml;
 }
 
-// 防止 XSS
 function escapeHtml(text){
   if(!text)return '';
   return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
@@ -545,38 +630,45 @@ function loadArticles(cat){
   if(!container)return;
   
   if(!supabase){
-    container.innerHTML='<p style="color:#a3a3a3;padding:2rem 0">服务未连接</p>';
+    container.innerHTML='<p style="color:var(--text-muted)">服务未连接</p>';
     return;
   }
   
   supabase.from('articles').select('*').eq('category',cat).order('created_at',{ascending:false}).then(function(res){
-    if(res.error||!res.data||!res.data.length){
-      container.innerHTML='<p style="color:#a3a3a3;padding:2rem 0">'+(res.error?'加载失败':'暂无文章')+'</p>';
+    if(res.error){
+      console.error('Load articles error:',res.error);
+      container.innerHTML='<p style="color:var(--text-muted)">加载失败</p>';
+      return;
+    }
+    
+    var data=res.data||[];
+    if(data.length===0){
+      container.innerHTML='<p style="color:var(--text-muted)">暂无文章</p>';
       return;
     }
     
     var html='';
-    for(var i=0;i<res.data.length;i++){
-      var a=res.data[i];
+    for(var i=0;i<data.length;i++){
+      var a=data[i];
       var content=(a.content||'').replace(/\n/g,'<br>');
       var imgHtml=a.image_url?'<br><img src="'+escapeHtml(a.image_url)+'" onclick="openLightbox(\''+escapeHtml(a.image_url)+'\')">':'';
-      var delBtn=(currentUser&&currentUser.email===ADMIN_EMAIL)?'<button onclick="deleteArticle('+a.id+',\''+cat+'\')" style="position:absolute;top:1rem;right:1rem;background:rgba(220,38,38,.06);color:#dc2626;border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:.3rem .8rem;font-size:.75rem">删除</button>':'';
+      var delBtn=(currentUser&&currentUser.email===ADMIN_EMAIL)?'<button class="art-del show" onclick="deleteArticle('+a.id+',\''+cat+'\')">删除</button>':'';
       
-      html+='<div class="article-item"><h3>'+escapeHtml(a.title)+'</h3>'+delBtn+
+      html+='<div class="article-item">'+delBtn+'<h3>'+escapeHtml(a.title)+'</h3>'+
       '<div class="art-content">'+content+imgHtml+'</div>'+
       '<small>'+escapeHtml(a.author||'匿名')+' · '+new Date(a.created_at).toLocaleString()+'</small>'+
-      '<div class="comment-sec"><strong style="display:block;margin-bottom:.5rem;font-size:.9rem">留言</strong><div id="commentList-'+a.id+'"></div>'+
+      '<div class="comment-sec"><strong>留言</strong><div id="commentList-'+a.id+'"></div>'+
       '<div class="comment-input-row"><input id="commentInput-'+a.id+'" placeholder="写下想法..."><button onclick="postComment('+a.id+')">发送</button></div></div></div>';
     }
     
     container.innerHTML=html;
     
-    for(var j=0;j<res.data.length;j++){
-      loadComments(res.data[j].id);
+    for(var j=0;j<data.length;j++){
+      loadComments(data[j].id);
     }
   }).catch(function(err){
-    console.error('Load articles error:',err);
-    container.innerHTML='<p style="color:#a3a3a3;padding:2rem 0">加载超时</p>';
+    console.error('Load articles catch:',err);
+    container.innerHTML='<p style="color:var(--text-muted)">加载超时</p>';
   });
 }
 
@@ -587,11 +679,11 @@ function loadComments(id){
     var box=document.getElementById('commentList-'+id);
     if(!box)return;
     
-    var html='';
     var data=res.data||[];
+    var html='';
     for(var i=0;i<data.length;i++){
       var c=data[i];
-      html+='<p style="font-size:.9rem;color:#525252;margin-bottom:.4rem"><b>'+escapeHtml(c.nickname)+'</b>: '+escapeHtml(c.content)+' <small style="color:#a3a3a3">'+new Date(c.created_at).toLocaleTimeString()+'</small></p>';
+      html+='<p style="font-size:.85rem;color:var(--text-sec);margin-bottom:.3rem"><b>'+escapeHtml(c.nickname)+'</b>: '+escapeHtml(c.content)+' <small style="color:var(--text-muted)">'+new Date(c.created_at).toLocaleTimeString()+'</small></p>';
     }
     box.innerHTML=html;
   }).catch(function(err){
@@ -604,7 +696,10 @@ window.postComment=function(id){
     toast('请先登录');
     return;
   }
-  if(!supabase)return;
+  if(!supabase){
+    toast('服务未就绪');
+    return;
+  }
   
   var input=document.getElementById('commentInput-'+id);
   if(!input||!input.value.trim())return;
@@ -673,7 +768,10 @@ window.submitArticle=function(){
 };
 
 window.deleteArticle=function(id,cat){
-  if(!supabase)return;
+  if(!supabase){
+    toast('服务未就绪');
+    return;
+  }
   if(!confirm('确认删除？'))return;
   
   supabase.from('articles').delete().eq('id',id).then(function(){
@@ -690,8 +788,11 @@ window.joinRoom=function(roomName){
     toast('请先登录');
     return;
   }
-  if(!supabase&&!initSupabase()){
+  if(!supabase){
     toast('服务未就绪');
+    waitForSupabase(function(ok){
+      if(ok)joinRoom(roomName);
+    },3000);
     return;
   }
   
@@ -745,7 +846,7 @@ function renderMsg(msg){
   
   var imgHtml='';
   if(msg.image_url){
-    imgHtml='<br><img src="'+escapeHtml(msg.image_url)+'" style="max-width:150px;border-radius:.6rem" onclick="openLightbox(\''+escapeHtml(msg.image_url)+'\')">';
+    imgHtml='<br><img src="'+escapeHtml(msg.image_url)+'" onclick="openLightbox(\''+escapeHtml(msg.image_url)+'\')">';
   }
   
   div.innerHTML='<b>'+escapeHtml(msg.nickname)+'</b><br>'+escapeHtml(msg.message||'')+imgHtml+'<span class="time">'+new Date(msg.created_at).toLocaleTimeString()+'</span>';
@@ -879,10 +980,10 @@ window.showUsers=function(){
     
     for(var i=0;i<res.data.length;i++){
       var u=res.data[i];
-      var tag=u.is_banned?'<span style="color:#dc2626;font-size:.75rem">[已拉黑]</span>':'';
-      html+='<div onclick="toggleBan(\''+u.email+'\','+(!u.is_banned)+')" style="padding:.8rem;border:1px solid rgba(0,0,0,.08);border-radius:12px;margin-bottom:.5rem;cursor:pointer">'+
+      var tag=u.is_banned?'<span style="color:#dc2626;font-size:.7rem">[已拉黑]</span>':'';
+      html+='<div onclick="toggleBan(\''+u.email+'\','+(!u.is_banned)+')" style="padding:.7rem;border:1px solid var(--border);border-radius:10px;margin-bottom:.4rem;cursor:pointer">'+
       '<div style="display:flex;justify-content:space-between"><b>'+escapeHtml(u.nickname)+'</b>'+tag+'</div>'+
-      '<div style="font-size:.8rem;color:#a3a3a3;margin-top:.2rem">'+escapeHtml(u.email)+'</div></div>';
+      '<div style="font-size:.75rem;color:var(--text-muted);margin-top:.15rem">'+escapeHtml(u.email)+'</div></div>';
     }
     
     list.innerHTML=html;
