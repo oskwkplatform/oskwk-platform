@@ -6,19 +6,15 @@
 <title>Oskwk Platform</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f8f7f4;--surface:#fff;--text:#1a1a1a;--text-sec:#525252;--text-muted:#a3a3a3;--border:rgba(0,0,0,.05);--accent:#0f3d2e;--accent-light:#1a5c47;--accent-glow:rgba(15,61,46,.15);--radius:16px;--radius-lg:24px}
+:root{--bg:#f8f7f4;--surface:#fff;--text:#1a1a1a;--text-sec:#525252;--text-muted:#a3a3a3;--border:rgba(0,0,0,.05);--accent:#0f3d2e;--accent-light:#1a5c47;--radius:16px;--radius-lg:24px}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-
-/* Loader */
 #loader{position:fixed;inset:0;z-index:99999;background:#0c0c0c;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #loader.done{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .6s,visibility .6s}
 .ld-logo{font-size:clamp(3rem,7vw,5rem);font-weight:200;color:#fff;letter-spacing:.5em;text-transform:uppercase;animation:breathe 3s ease-in-out infinite}
 .ld-sub{margin-top:1.2rem;font-size:.7rem;color:rgba(255,255,255,.25);letter-spacing:1em;text-transform:lowercase}
 @keyframes breathe{0%,100%{opacity:.25;transform:scale(.96)}50%{opacity:1;transform:scale(1.02)}}
-
-/* Auth */
 #authOverlay{position:fixed;inset:0;z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:1rem;background:#0c0c0c}
 #authOverlay.show{display:flex}
 #authOverlay.hidden{display:none}
@@ -38,20 +34,13 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .status-pill{position:absolute;top:1rem;left:50%;transform:translateX(-50%);padding:.4rem 1rem;border-radius:100px;font-size:.7rem;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);white-space:nowrap}
 .status-pill.ok{background:rgba(34,197,94,.15);color:#4ade80;border-color:rgba(74,222,128,.2)}
 .status-pill.err{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(248,113,113,.2)}
-.status-pill.loading{background:rgba(59,130,246,.15);color:#60a5fa;border-color:rgba(96,165,250,.2)}
-
-/* App */
 #app{display:none}
 #app.on{display:block;animation:fadeIn .5s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-
-/* Nav */
 .nav{position:fixed;top:0;left:0;right:0;z-index:90;height:60px;background:rgba(250,249,246,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:1400px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 1.2rem}
 .nav-brand{font-size:1.1rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
 .nav-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:600}
-
-/* Hero */
 .hero{position:relative;height:55vh;min-height:350px;display:flex;align-items:flex-end;padding-bottom:2.5rem;padding-top:60px;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0f3d2e 0%,#1a5c47 40%,#0c0c0c 100%)}
 .hero-mask{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.5) 100%)}
@@ -59,20 +48,14 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .hero-tag{display:inline-block;padding:.4rem 1rem;border-radius:100px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.2rem}
 .hero h1{font-size:clamp(1.8rem,7vw,3rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:.8rem}
 .hero p{font-size:.95rem;color:rgba(255,255,255,.75);line-height:1.6;max-width:380px}
-
-/* Main */
 .main{padding:1.5rem 1.2rem 5rem}
 .sec-title{font-size:1rem;font-weight:600;margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem}
 .sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent)}
 .page{display:none}
 .page.active{display:block;animation:fadeIn .3s ease}
-
-/* Admin */
 .admin-bar{display:none;align-items:center;gap:.8rem;margin-bottom:1.2rem;padding:.8rem;background:rgba(15,61,46,.03);border:1px dashed rgba(15,61,46,.15);border-radius:12px;font-size:.85rem}
 .admin-bar.vis{display:flex}
 .admin-bar button{padding:.4rem 1rem;border-radius:10px;background:var(--accent);color:#fff;border:none;font-size:.8rem;font-weight:500}
-
-/* Articles */
 .article-item{background:var(--surface);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem;border:1px solid var(--border);box-shadow:0 1px 8px rgba(0,0,0,.03);position:relative}
 .article-item h3{font-size:1.05rem;font-weight:600;margin-bottom:.4rem;padding-right:3.5rem}
 .article-item .art-content{color:var(--text-sec);line-height:1.7;font-size:.9rem;margin:.6rem 0}
@@ -84,8 +67,6 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .comment-input-row{display:flex;gap:.4rem;margin-top:.6rem}
 .comment-input-row input{flex:1;padding:.6rem .9rem;border-radius:10px;background:var(--bg);border:1px solid var(--border);font-size:.85rem;outline:none;font-family:inherit}
 .comment-input-row button{padding:.6rem 1rem;border-radius:10px;background:var(--accent);color:#fff;border:none;font-size:.8rem}
-
-/* Chat */
 .channel-grid{display:grid;gap:.8rem;grid-template-columns:repeat(2,1fr)}
 .channel-card{background:var(--surface);padding:1.2rem 1rem;border-radius:var(--radius);text-align:center;border:1px solid var(--border);font-size:.9rem;font-weight:500}
 .chat-box{height:45vh;overflow-y:auto;background:#faf9f6;border-radius:var(--radius);padding:1rem;margin:.8rem 0;border:1px solid var(--border);-webkit-overflow-scrolling:touch}
@@ -97,8 +78,6 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .chat-input{display:flex;gap:.4rem}
 .chat-input input{flex:1;padding:.7rem 1rem;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:.9rem;outline:none;font-family:inherit}
 .chat-input button{padding:.7rem 1.2rem;border-radius:100px;background:var(--accent);color:#fff;border:none;font-weight:600;font-size:.85rem}
-
-/* Profile */
 .profile-card{background:var(--surface);border-radius:var(--radius);padding:1.2rem;border:1px solid var(--border)}
 .profile-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem}
 .profile-avatar-lg{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;font-weight:600}
@@ -110,38 +89,26 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .btn-primary{background:var(--accent);color:#fff}
 .btn-secondary{background:#f8f7f4;color:var(--text-sec);border:1px solid var(--border)}
 .btn-danger{background:rgba(220,38,38,.05);color:#dc2626;border:1px solid rgba(220,38,38,.15)}
-
-/* Modals */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.show{display:flex}
 .modal-box{background:var(--surface);border-radius:var(--radius-lg);padding:1.5rem;max-width:400px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
 .modal-close{position:absolute;top:.8rem;right:.8rem;background:none;border:none;font-size:1.5rem;color:var(--text-muted);cursor:pointer;width:32px;height:32px}
 .inp{width:100%;padding:.8rem 1rem;border-radius:10px;background:#f8f7f4;border:1px solid var(--border);font-size:.95rem;margin-bottom:.6rem;outline:none;font-family:inherit}
-
-/* Footer */
 .footer{text-align:center;color:var(--text-muted);font-size:.8rem;padding:1.5rem 1rem;background:#faf9f6;margin-top:1.5rem}
-
-/* Toast */
 .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:.7rem 1.2rem;border-radius:100px;z-index:9999;display:none;font-size:.85rem;font-weight:500;white-space:nowrap}
-
-/* Lightbox */
 .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:1rem;z-index:300}
 .lightbox.show{display:flex}
 .lightbox img{max-width:95vw;max-height:80vh;border-radius:12px}
-
-/* Mobile nav */
 .mob-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(250,249,246,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:.3rem 0;z-index:80}
 .mob-nav button{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:.15rem;font-size:.55rem;color:var(--text-muted);padding:.25rem .5rem;font-family:inherit}
 .mob-nav button.on{color:var(--accent);font-weight:600}
 </style>
 </head>
 <body>
-
 <div id="loader"><div class="ld-logo">Oskwk</div><div class="ld-sub">platform</div></div>
 
 <div id="authOverlay">
   <div class="status-pill" id="statusPill">等待操作...</div>
-  
   <div class="auth-card" id="loginCard">
     <div class="auth-logo">Oskwk</div>
     <div class="auth-sub">platform</div>
@@ -151,7 +118,6 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
     <div class="auth-hint" id="loginHint"></div>
     <div class="auth-switch"><span>还没有账户？</span><a onclick="showRegister()">去注册</a></div>
   </div>
-  
   <div class="auth-card" id="registerCard" style="display:none">
     <div class="auth-logo">Oskwk</div>
     <div class="auth-sub">全人类共同体</div>
@@ -268,83 +234,44 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 
 <script>
 // ==================== 全局错误捕获 ====================
-window.onerror=function(msg,url,line){
-  console.error('JS Error:',msg,'Line:',line);
-  toast('脚本错误: '+msg);
-  return true;
-};
-window.onunhandledrejection=function(e){
-  console.error('Promise rejection:',e.reason);
-  toast('异步错误: '+(e.reason&&e.reason.message?e.reason.message:'未知'));
-};
+window.onerror=function(msg,url,line){console.error('JS Error:',msg,'Line:',line);toast('脚本错误: '+msg);return true;};
+window.onunhandledrejection=function(e){console.error('Promise rejection:',e.reason);toast('异步错误: '+(e.reason&&e.reason.message?e.reason.message:'未知'));};
 
-// ==================== Config ====================
+// ==================== 配置 ====================
 var SUPABASE_URL='https://qnblruruefgbixbfgwkh.supabase.co';
 var SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
 var ADMIN_EMAIL='279933264@qq.com';
 var API_URL=SUPABASE_URL+'/rest/v1';
-var STORAGE_UPLOAD_URL=SUPABASE_URL+'/storage/v1/object';
-var STORAGE_PUBLIC_URL=SUPABASE_URL+'/storage/v1/object/public';
+var STORAGE_URL=SUPABASE_URL+'/storage/v1/object';
 var FETCH_TIMEOUT=15000;
+var currentUser=null,currentRoom=null,pubCategory=null,pollInterval=null,lastMsgTime=null;
 
-var currentUser=null;
-var currentRoom=null;
-var pubCategory=null;
-var pollInterval=null;
-var lastMsgTime=null;
-
-// ==================== Safe Storage ====================
+// ==================== 安全存储 ====================
 function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function safeSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function safeRemove(k){try{localStorage.removeItem(k)}catch(e){}}
 
-// ==================== UI ====================
-function showLogin(){
-  document.getElementById('loginCard').style.display='block';
-  document.getElementById('registerCard').style.display='none';
-  document.getElementById('loginHint').textContent='';
-  document.getElementById('loginHint').className='auth-hint';
-}
-function showRegister(){
-  document.getElementById('loginCard').style.display='none';
-  document.getElementById('registerCard').style.display='block';
-}
-function hint(msg,isErr){
-  var h=document.getElementById('loginHint');
-  h.textContent=msg;
-  h.className='auth-hint'+(isErr?' err':'');
-}
-function setStatus(text,type){
-  var p=document.getElementById('statusPill');
-  p.textContent=text;
-  p.className='status-pill'+(type?' '+type:'');
-}
-function toast(msg){
-  var t=document.getElementById('toast');
-  t.textContent=msg;
-  t.style.display='block';
-  setTimeout(function(){t.style.display='none'},3000);
-}
+// ==================== UI 工具 ====================
+function showLogin(){document.getElementById('loginCard').style.display='block';document.getElementById('registerCard').style.display='none';}
+function showRegister(){document.getElementById('loginCard').style.display='none';document.getElementById('registerCard').style.display='block';}
+function hint(msg,isErr){var h=document.getElementById('loginHint');h.textContent=msg;h.className='auth-hint'+(isErr?' err':'');}
+function setStatus(text,type){var p=document.getElementById('statusPill');p.textContent=text;p.className='status-pill'+(type?' '+type:'');}
+function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},3000);}
+function escapeHtml(text){if(!text)return '';return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
 
-// ==================== 原生 Fetch 封装（零依赖） ====================
-function fetchTimeout(url,opts){
-  return new Promise(function(resolve,reject){
-    var timer=setTimeout(function(){reject(new Error('请求超时'));},FETCH_TIMEOUT);
-    fetch(url,opts).then(function(r){clearTimeout(timer);resolve(r);},function(e){clearTimeout(timer);reject(e);});
-  });
-}
+// ==================== Fetch 封装 ====================
 function apiHeaders(extra){
   var h={'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY};
-  if(extra){for(var k in extra)h[k]=extra[k];}
+  if(extra)for(var k in extra)h[k]=extra[k];
   return h;
 }
 function apiGet(table,query,cb){
-  fetchTimeout(API_URL+'/'+table+'?'+query,{headers:apiHeaders()})
-    .then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();})
+  fetch(API_URL+'/'+table+'?'+query,{headers:apiHeaders()})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
     .then(function(d){cb(null,d);}).catch(function(e){cb(e,null);});
 }
 function apiPost(table,body,cb){
-  fetchTimeout(API_URL+'/'+table,{
+  fetch(API_URL+'/'+table,{
     method:'POST',
     headers:apiHeaders({'Content-Type':'application/json','Prefer':'return=representation'}),
     body:JSON.stringify(body)
@@ -352,68 +279,47 @@ function apiPost(table,body,cb){
     .then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();})
     .then(function(d){cb(null,d);}).catch(function(e){cb(e,null);});
 }
-function apiUpsert(table,body,cb){
-  fetchTimeout(API_URL+'/'+table,{
-    method:'POST',
-    headers:apiHeaders({'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=representation'}),
-    body:JSON.stringify(body)
-  })
-    .then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();})
-    .then(function(d){cb(null,d);}).catch(function(e){cb(e,null);});
-}
 function apiPatch(table,query,body,cb){
-  fetchTimeout(API_URL+'/'+table+'?'+query,{
+  fetch(API_URL+'/'+table+'?'+query,{
     method:'PATCH',
     headers:apiHeaders({'Content-Type':'application/json'}),
     body:JSON.stringify(body)
   })
-    .then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});cb(null);})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);cb(null);})
     .catch(function(e){cb(e);});
 }
 function apiDelete(table,query,cb){
-  fetchTimeout(API_URL+'/'+table+'?'+query,{
-    method:'DELETE',
-    headers:apiHeaders({'Prefer':'return=minimal'})
-  })
-    .then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});cb(null);})
+  fetch(API_URL+'/'+table+'?'+query,{method:'DELETE',headers:apiHeaders({'Prefer':'return=minimal'})})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);cb(null);})
     .catch(function(e){cb(e);});
 }
-function uploadToStorage(bucket,path,file,cb){
-  var url=STORAGE_UPLOAD_URL+'/'+bucket+'/'+path;
-  var form=new FormData();
-  form.append('file',file);
-  fetchTimeout(url,{method:'POST',headers:{'Authorization':'Bearer '+SUPABASE_KEY},body:form})
+function uploadFile(bucket,path,file,cb){
+  var form=new FormData();form.append('file',file);
+  fetch(STORAGE_URL+'/'+bucket+'/'+path,{method:'POST',headers:{'Authorization':'Bearer '+SUPABASE_KEY},body:form})
     .then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();})
-    .then(function(d){var publicUrl=STORAGE_PUBLIC_URL+'/'+bucket+'/'+path;cb(null,publicUrl);})
+    .then(function(){cb(null,STORAGE_URL+'/public/'+bucket+'/'+path);})
     .catch(function(e){cb(e,null);});
 }
 
-// ==================== Boot ====================
+// ==================== 启动与自动登录 ====================
 setTimeout(function(){
-  var loader=document.getElementById('loader');
-  var auth=document.getElementById('authOverlay');
-  if(loader){loader.classList.add('done');setTimeout(function(){loader.style.display='none';},600);}
-  if(auth){auth.classList.add('show');showLogin();}
-  setStatus('服务就绪','ok');
+  document.getElementById('loader').classList.add('done');
+  setTimeout(function(){document.getElementById('loader').style.display='none';},600);
+  document.getElementById('authOverlay').classList.add('show');
+  showLogin();setStatus('服务就绪','ok');
   tryAutoLogin();
 },1000);
 
 function tryAutoLogin(){
-  var saved=safeGet('oskwk_user');
-  if(!saved)return;
-  try{
-    var user=JSON.parse(saved);
-    if(!user||!user.email)return;
-    apiGet('profiles','email=eq.'+encodeURIComponent(user.email)+'&select=*',function(err,data){
-      if(err||!data||!data.length||data[0].is_banned){safeRemove('oskwk_user');return;}
-      currentUser=data[0];
-      safeSet('oskwk_user',JSON.stringify(currentUser));
-      enterApp();
-    });
-  }catch(e){safeRemove('oskwk_user');}
+  var saved=safeGet('oskwk_user');if(!saved)return;
+  try{var user=JSON.parse(saved);if(!user||!user.email)return;}catch(e){safeRemove('oskwk_user');return;}
+  apiGet('profiles','email=eq.'+encodeURIComponent(user.email)+'&select=*',function(err,data){
+    if(err||!data||!data.length||data[0].is_banned){safeRemove('oskwk_user');return;}
+    currentUser=data[0];safeSet('oskwk_user',JSON.stringify(currentUser));enterApp();
+  });
 }
 
-// ==================== Auth (已优化错误提示) ====================
+// ==================== 认证功能 ====================
 window.doLogin=function(){
   var email=document.getElementById('loginEmail').value.trim();
   var pwd=document.getElementById('loginPassword').value.trim();
@@ -421,32 +327,13 @@ window.doLogin=function(){
   var btn=document.getElementById('loginBtn');
   function reset(){btn.disabled=false;btn.textContent='登录';}
   btn.disabled=true;btn.textContent='登录中...';
-  
   apiGet('profiles','email=eq.'+encodeURIComponent(email)+'&select=*',function(err,data){
-    if(err){
-      reset();
-      hint('请求失败: ' + (err.message || '请检查网络/后端配置'), true);
-      return;
-    }
-    if(!data || !data.length){
-      reset();
-      hint('该邮箱未注册', true);
-      return;
-    }
+    if(err){reset();hint('请求失败：'+(err.message||'网络错误'),true);return;}
+    if(!data||!data.length){reset();hint('邮箱未注册',true);return;}
     var user=data[0];
-    if(user.password_hash!==pwd){
-      reset();
-      hint('密码错误', true);
-      return;
-    }
-    if(user.is_banned){
-      reset();
-      hint('账号已被限制，请联系管理员', true);
-      return;
-    }
-    currentUser=user;
-    safeSet('oskwk_user',JSON.stringify(currentUser));
-    enterApp();
+    if(user.password_hash!==pwd){reset();hint('密码错误',true);return;}
+    if(user.is_banned){reset();hint('账号已被限制',true);return;}
+    currentUser=user;safeSet('oskwk_user',JSON.stringify(currentUser));enterApp();
   });
 };
 
@@ -466,63 +353,48 @@ window.doRegister=function(){
   function reset(){btn.disabled=false;btn.textContent='创建账户';}
   btn.disabled=true;btn.textContent='创建中...';
   var obj={email:email,nickname:nick,phone:phone,password_hash:pwd,created_at:new Date().toISOString(),location:'Earth',is_banned:false};
-  apiUpsert('profiles',obj,function(err,data){
-    if(err){reset();hint('注册失败: '+(err.message||'邮箱可能已注册'),true);return;}
-    currentUser=(data&&data[0])?data[0]:obj;
-    safeSet('oskwk_user',JSON.stringify(currentUser));
-    enterApp();
+  // 使用纯 INSERT，不再 upsert
+  apiPost('profiles',obj,function(err,data){
+    if(err){
+      reset();
+      var msg=(err.message||'').toLowerCase();
+      if(msg.indexOf('duplicate')>=0)hint('邮箱已注册',true);
+      else if(msg.indexOf('unique')>=0)hint('邮箱已注册',true);
+      else hint('注册失败：'+(err.message||'网络错误'),true);
+      return;
+    }
+    currentUser=data[0];safeSet('oskwk_user',JSON.stringify(currentUser));enterApp();
   });
 };
 
-// ==================== App ====================
+// ==================== 主界面 ====================
 function enterApp(){
-  var auth=document.getElementById('authOverlay');
-  var app=document.getElementById('app');
-  if(auth)auth.classList.add('hidden');
-  if(app){app.style.display='block';setTimeout(function(){app.classList.add('on');},50);}
+  document.getElementById('authOverlay').classList.add('hidden');
+  var app=document.getElementById('app');app.style.display='block';setTimeout(function(){app.classList.add('on');},50);
   updateProfile();
-  setTimeout(function(){
-    loadArticles('about');
-    loadArticles('discover');
-    loadArticles('study');
-  },100);
+  setTimeout(function(){loadArticles('about');loadArticles('discover');loadArticles('study');},100);
   if(currentUser&&currentUser.email===ADMIN_EMAIL){
-    var bars=document.querySelectorAll('.admin-bar');
-    for(var i=0;i<bars.length;i++)bars[i].classList.add('vis');
-    var ap=document.getElementById('adminProfile');
-    if(ap)ap.style.display='block';
+    var bars=document.querySelectorAll('.admin-bar');for(var i=0;i<bars.length;i++)bars[i].classList.add('vis');
+    document.getElementById('adminProfile').style.display='block';
   }
 }
 function updateProfile(){
   if(!currentUser)return;
-  var nickEl=document.getElementById('profileNick');
-  var mailEl=document.getElementById('profileMail');
-  var daysEl=document.getElementById('joinDays');
-  if(nickEl)nickEl.textContent=currentUser.nickname||'--';
-  if(mailEl)mailEl.textContent=currentUser.email||'--';
-  if(daysEl){
-    var days=Math.max(1,Math.floor((Date.now()-new Date(currentUser.created_at).getTime())/86400000));
-    daysEl.textContent=days;
-  }
+  document.getElementById('profileNick').textContent=currentUser.nickname||'--';
+  document.getElementById('profileMail').textContent=currentUser.email||'--';
+  var days=Math.max(1,Math.floor((Date.now()-new Date(currentUser.created_at).getTime())/86400000));
+  document.getElementById('joinDays').textContent=days;
   var initial=(currentUser.nickname?currentUser.nickname.charAt(0).toUpperCase():'?');
   var avaHtml=currentUser.avatar_url?'<img src="'+escapeHtml(currentUser.avatar_url)+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':'<span>'+initial+'</span>';
-  var userAvatar=document.getElementById('userAvatar');
-  var profileAvatar=document.getElementById('profileAvatar');
-  if(userAvatar)userAvatar.innerHTML=avaHtml;
-  if(profileAvatar)profileAvatar.innerHTML=avaHtml;
-}
-function escapeHtml(text){
-  if(!text)return '';
-  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  document.getElementById('userAvatar').innerHTML=avaHtml;
+  document.getElementById('profileAvatar').innerHTML=avaHtml;
 }
 window.doLogout=function(){safeRemove('oskwk_user');location.reload();};
 
-// ==================== Tabs ====================
+// ==================== 标签切换 ====================
 window.switchTab=function(cat){
-  var pages=document.querySelectorAll('.page');
-  for(var i=0;i<pages.length;i++)pages[i].classList.remove('active');
-  var el=document.getElementById('tab-'+cat);
-  if(el)el.classList.add('active');
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('tab-'+cat);if(el)el.classList.add('active');
   if(cat!=='chat'&&currentRoom)leaveRoom();
   window.scrollTo({top:0,behavior:'smooth'});
 };
@@ -531,21 +403,18 @@ window.setMob=function(idx){
   for(var i=0;i<btns.length;i++)btns[i].classList.toggle('on',i===idx);
 };
 
-// ==================== Articles ====================
+// ==================== 文章与评论 ====================
 function loadArticles(cat){
   var container=document.getElementById('article-'+cat);
-  if(!container)return;
   container.innerHTML='<p style="color:var(--text-muted)">加载中...</p>';
   apiGet('articles','category=eq.'+encodeURIComponent(cat)+'&order=created_at.desc&select=*',function(err,data){
     if(err||!data||!data.length){container.innerHTML='<p style="color:var(--text-muted)">'+(err?'加载失败':'暂无文章')+'</p>';return;}
     var html='';
     for(var i=0;i<data.length;i++){
-      var a=data[i];
-      var content=(a.content||'').replace(/\n/g,'<br>');
-      var imgHtml=a.image_url?'<br><img src="'+escapeHtml(a.image_url)+'" onclick="openLightbox(\''+escapeHtml(a.image_url)+'\')">':'';
+      var a=data[i],imgHtml=a.image_url?'<br><img src="'+escapeHtml(a.image_url)+'" onclick="openLightbox(\''+escapeHtml(a.image_url)+'\')">':'';
       var delBtn=(currentUser&&currentUser.email===ADMIN_EMAIL)?'<button class="art-del show" onclick="deleteArticle('+a.id+',\''+cat+'\')">删除</button>':'';
       html+='<div class="article-item">'+delBtn+'<h3>'+escapeHtml(a.title)+'</h3>'+
-      '<div class="art-content">'+content+imgHtml+'</div>'+
+      '<div class="art-content">'+(a.content||'').replace(/\n/g,'<br>')+imgHtml+'</div>'+
       '<small>'+escapeHtml(a.author||'匿名')+' · '+new Date(a.created_at).toLocaleString()+'</small>'+
       '<div class="comment-sec"><strong>留言</strong><div id="commentList-'+a.id+'"></div>'+
       '<div class="comment-input-row"><input id="commentInput-'+a.id+'" placeholder="写下想法..."><button onclick="postComment('+a.id+')">发送</button></div></div></div>';
@@ -556,22 +425,15 @@ function loadArticles(cat){
 }
 function loadComments(id){
   apiGet('comments','article_id=eq.'+id+'&order=created_at&select=*',function(err,data){
-    var box=document.getElementById('commentList-'+id);
-    if(!box)return;
+    var box=document.getElementById('commentList-'+id);if(!box)return;
     var html='';
-    if(data&&data.length){
-      for(var i=0;i<data.length;i++){
-        var c=data[i];
-        html+='<p style="font-size:.85rem;color:var(--text-sec);margin-bottom:.3rem"><b>'+escapeHtml(c.nickname)+'</b>: '+escapeHtml(c.content)+' <small style="color:var(--text-muted)">'+new Date(c.created_at).toLocaleTimeString()+'</small></p>';
-      }
-    }
+    if(data)for(var i=0;i<data.length;i++)html+='<p style="font-size:.85rem;color:var(--text-sec);margin-bottom:.3rem"><b>'+escapeHtml(data[i].nickname)+'</b>: '+escapeHtml(data[i].content)+' <small>'+new Date(data[i].created_at).toLocaleTimeString()+'</small></p>';
     box.innerHTML=html;
   });
 }
 window.postComment=function(id){
   if(!currentUser){toast('请先登录');return;}
-  var input=document.getElementById('commentInput-'+id);
-  if(!input||!input.value.trim())return;
+  var input=document.getElementById('commentInput-'+id);if(!input||!input.value.trim())return;
   apiPost('comments',{article_id:id,nickname:currentUser.nickname,content:input.value.trim()},function(err){
     if(err){toast('发送失败');return;}
     input.value='';loadComments(id);
@@ -579,8 +441,7 @@ window.postComment=function(id){
 };
 window.openPublish=function(cat){
   if(!currentUser||currentUser.email!==ADMIN_EMAIL){toast('无权操作');return;}
-  pubCategory=cat;
-  document.getElementById('publishModal').classList.add('show');
+  pubCategory=cat;document.getElementById('publishModal').classList.add('show');
 };
 window.closePublish=function(){document.getElementById('publishModal').classList.remove('show');};
 window.submitArticle=function(){
@@ -595,117 +456,92 @@ window.submitArticle=function(){
 };
 window.deleteArticle=function(id,cat){
   if(!confirm('确认删除？'))return;
-  apiDelete('articles','id=eq.'+id,function(err){
-    if(err){toast('删除失败');return;}
-    toast('已删除');loadArticles(cat);
-  });
+  apiDelete('articles','id=eq.'+id,function(err){if(err){toast('删除失败');}else{toast('已删除');loadArticles(cat);}});
 };
 
-// ==================== Chat（轮询版，无需 WebSocket） ====================
-window.joinRoom=function(roomName){
+// ==================== 聊天室（轮询） ====================
+window.joinRoom=function(room){
   if(!currentUser){toast('请先登录');return;}
-  currentRoom='oskwk-'+roomName;
+  currentRoom='oskwk-'+room;
   document.getElementById('channelSelector').style.display='none';
   document.getElementById('chatPanel').style.display='block';
-  document.getElementById('chatBox').innerHTML='';
-  lastMsgTime=null;
+  document.getElementById('chatBox').innerHTML='';lastMsgTime=null;
   loadChat(function(){startPolling();});
 };
 window.leaveRoom=function(){
-  stopPolling();
-  currentRoom=null;
+  stopPolling();currentRoom=null;
   document.getElementById('channelSelector').style.display='block';
   document.getElementById('chatPanel').style.display='none';
 };
-function startPolling(){
-  if(pollInterval)clearInterval(pollInterval);
-  pollInterval=setInterval(function(){if(currentRoom)loadChat();},3000);
-}
+function startPolling(){if(pollInterval)clearInterval(pollInterval);pollInterval=setInterval(function(){if(currentRoom)loadChat();},3000);}
 function stopPolling(){if(pollInterval){clearInterval(pollInterval);pollInterval=null;}}
 function loadChat(cb){
   if(!currentRoom)return;
   apiGet('messages','room=eq.'+encodeURIComponent(currentRoom)+'&order=created_at&select=*',function(err,data){
-    if(err)return;
-    var box=document.getElementById('chatBox');
-    if(!box)return;
+    if(err)return;var box=document.getElementById('chatBox');if(!box)return;
     if(data&&data.length){
       var lastTime=data[data.length-1].created_at;
       if(lastTime===lastMsgTime){if(cb)cb();return;}
-      lastMsgTime=lastTime;
-      box.innerHTML='';
+      lastMsgTime=lastTime;box.innerHTML='';
       for(var i=0;i<data.length;i++)renderMsg(data[i]);
       box.scrollTop=box.scrollHeight;
-    }else{
-      lastMsgTime=null;box.innerHTML='';
-    }
+    }else{lastMsgTime=null;box.innerHTML='';}
     if(cb)cb();
   });
 }
 function renderMsg(msg){
-  var cb=document.getElementById('chatBox');
-  if(!cb)return;
-  var div=document.createElement('div');
-  var isMine=msg.nickname===(currentUser?currentUser.nickname:'');
+  var cb=document.getElementById('chatBox');if(!cb)return;
+  var div=document.createElement('div'),isMine=msg.nickname===(currentUser?currentUser.nickname:'');
   div.className='msg '+(isMine?'mine':'other');
-  var imgHtml='';
-  if(msg.image_url){imgHtml='<br><img src="'+escapeHtml(msg.image_url)+'" onclick="openLightbox(\''+escapeHtml(msg.image_url)+'\')">';}
+  var imgHtml=msg.image_url?'<br><img src="'+escapeHtml(msg.image_url)+'" onclick="openLightbox(\''+escapeHtml(msg.image_url)+'\')">':'';
   div.innerHTML='<b>'+escapeHtml(msg.nickname)+'</b><br>'+escapeHtml(msg.message||'')+imgHtml+'<span class="time">'+new Date(msg.created_at).toLocaleTimeString()+'</span>';
   cb.appendChild(div);
 }
 window.sendMsg=function(){
-  if(!currentUser){toast('请先登录');return;}
-  if(!currentRoom){toast('未加入房间');return;}
-  var text=document.getElementById('msgInput').value.trim();
-  if(!text)return;
+  if(!currentUser||!currentRoom){toast('请先登录并加入房间');return;}
+  var text=document.getElementById('msgInput').value.trim();if(!text)return;
   apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,message:text},function(err){
-    if(err){toast('发送失败');return;}
-    document.getElementById('msgInput').value='';loadChat();
+    if(err){toast('发送失败');}else{document.getElementById('msgInput').value='';loadChat();}
   });
 };
 window.uploadImg=function(){
   if(!currentUser||!currentRoom){toast('请先登录并加入房间');return;}
-  var fileInput=document.getElementById('imgUp');
-  var file=fileInput.files[0];
-  if(!file)return;
-  if(file.size>5*1024*1024){toast('图片不能超过5MB');fileInput.value='';return;}
+  var file=document.getElementById('imgUp').files[0];if(!file)return;
+  if(file.size>5*1024*1024){toast('图片不能超过5MB');document.getElementById('imgUp').value='';return;}
   var ext=(file.name.split('.').pop()||'').toLowerCase();
   var fn=Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
-  uploadToStorage('CHAT-INMAGES','uploads/'+fn,file,function(err,url){
-    if(err||!url){toast('上传失败');fileInput.value='';return;}
+  uploadFile('chat-images','public/'+fn,file,function(err,url){
+    if(err){toast('上传失败');document.getElementById('imgUp').value='';return;}
     apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,image_url:url},function(err2){
       if(err2){toast('发送失败');}else{toast('图片已发送');loadChat();}
-      fileInput.value='';
+      document.getElementById('imgUp').value='';
     });
   });
 };
 
-// ==================== Admin ====================
+// ==================== 管理员功能 ====================
 window.showUsers=function(){
   if(!currentUser||currentUser.email!==ADMIN_EMAIL){toast('无权操作');return;}
   apiGet('profiles','select=*&order=created_at.desc',function(err,data){
-    if(err||!data||!data.length){toast('加载失败或暂无用户');return;}
-    var list=document.getElementById('adminUserList');
-    var html='';
+    if(err||!data){toast('加载失败');return;}
+    var list=document.getElementById('adminUserList'),html='';
     for(var i=0;i<data.length;i++){
-      var u=data[i];
-      var tag=u.is_banned?'<span style="color:#dc2626;font-size:.7rem">[已拉黑]</span>':'';
+      var u=data[i],tag=u.is_banned?'<span style="color:#dc2626;font-size:.7rem">[已拉黑]</span>':'';
       html+='<div onclick="toggleBan(\''+u.email+'\','+(!u.is_banned)+')" style="padding:.7rem;border:1px solid var(--border);border-radius:10px;margin-bottom:.4rem;cursor:pointer">'+
       '<div style="display:flex;justify-content:space-between"><b>'+escapeHtml(u.nickname)+'</b>'+tag+'</div>'+
       '<div style="font-size:.75rem;color:var(--text-muted);margin-top:.15rem">'+escapeHtml(u.email)+'</div></div>';
     }
-    list.innerHTML=html;
-    document.getElementById('adminModal').classList.add('show');
+    list.innerHTML=html;document.getElementById('adminModal').classList.add('show');
   });
 };
 window.toggleBan=function(email,ban){
   apiPatch('profiles','email=eq.'+encodeURIComponent(email),{is_banned:ban},function(err){
-    if(err){toast('操作失败');return;}
-    toast(ban?'已拉黑':'已解除');showUsers();
+    if(err){toast('操作失败');}else{toast(ban?'已拉黑':'已解除');showUsers();}
   });
 };
 window.closeAdmin=function(){document.getElementById('adminModal').classList.remove('show');};
 
-// ==================== Profile ====================
+// ==================== 个人资料 ====================
 window.openEdit=function(){
   if(!currentUser){toast('请先登录');return;}
   document.getElementById('editNickname').value=currentUser.nickname||'';
@@ -713,7 +549,7 @@ window.openEdit=function(){
 };
 window.closeEdit=function(){document.getElementById('editModal').classList.remove('show');};
 window.saveProfile=function(){
-  if(!currentUser){toast('请先登录');return;}
+  if(!currentUser)return;
   var nick=document.getElementById('editNickname').value.trim();
   var oldPwd=document.getElementById('editOldPwd').value.trim();
   var newPwd=document.getElementById('editNewPwd').value.trim();
@@ -727,42 +563,32 @@ window.saveProfile=function(){
   }
   if(Object.keys(updates).length===0){closeEdit();return;}
   apiPatch('profiles','email=eq.'+encodeURIComponent(currentUser.email),updates,function(err){
-    if(err){toast('保存失败');return;}
-    safeSet('oskwk_user',JSON.stringify(currentUser));
-    updateProfile();closeEdit();toast('已更新');
+    if(err){toast('保存失败');}else{safeSet('oskwk_user',JSON.stringify(currentUser));updateProfile();closeEdit();toast('已更新');}
   });
 };
 window.uploadAvatar=function(){
   if(!currentUser){toast('请先登录');return;}
-  var input=document.createElement('input');
-  input.type='file';input.accept='image/*';
+  var input=document.createElement('input');input.type='file';input.accept='image/*';
   input.onchange=function(){
-    var file=input.files[0];
-    if(!file)return;
+    var file=input.files[0];if(!file)return;
     if(file.size>2*1024*1024){toast('头像不能超过2MB');return;}
     var ext=(file.name.split('.').pop()||'').toLowerCase();
     var fn=currentUser.email.replace(/[^a-zA-Z0-9]/g,'_')+'_'+Date.now()+'.'+ext;
-    uploadToStorage('CHAT-INMAGES','avatars/'+fn,file,function(err,url){
-      if(err||!url){toast('上传失败');return;}
+    uploadFile('chat-images','avatars/'+fn,file,function(err,url){
+      if(err){toast('上传失败');return;}
       apiPatch('profiles','email=eq.'+encodeURIComponent(currentUser.email),{avatar_url:url},function(err2){
-        if(err2){toast('保存失败');return;}
-        currentUser.avatar_url=url;
-        safeSet('oskwk_user',JSON.stringify(currentUser));
-        updateProfile();toast('头像已更新');
+        if(err2){toast('保存失败');}else{
+          currentUser.avatar_url=url;safeSet('oskwk_user',JSON.stringify(currentUser));updateProfile();toast('头像已更新');
+        }
       });
     });
   };
   input.click();
 };
 
-// ==================== Lightbox ====================
-window.openLightbox=function(src){
-  document.getElementById('lightboxImg').src=src;
-  document.getElementById('lightbox').classList.add('show');
-};
-window.closeLightbox=function(){
-  document.getElementById('lightbox').classList.remove('show');
-};
+// ==================== 图片灯箱 ====================
+window.openLightbox=function(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('show');};
+window.closeLightbox=function(){document.getElementById('lightbox').classList.remove('show');};
 </script>
 </body>
 </html>
