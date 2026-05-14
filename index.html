@@ -425,7 +425,6 @@ window.doLogin=function(){
   apiGet('profiles','email=eq.'+encodeURIComponent(email)+'&select=*',function(err,data){
     if(err){
       reset();
-      // 区分网络/服务错误和认证错误
       hint('请求失败: ' + (err.message || '请检查网络/后端配置'), true);
       return;
     }
@@ -445,7 +444,6 @@ window.doLogin=function(){
       hint('账号已被限制，请联系管理员', true);
       return;
     }
-    // 登录成功
     currentUser=user;
     safeSet('oskwk_user',JSON.stringify(currentUser));
     enterApp();
