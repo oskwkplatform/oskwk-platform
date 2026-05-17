@@ -226,7 +226,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 <button onclick="switchTab('profile');setMob(5)">👤<br>我的</button>
 </div>
 
-<!-- 创建房间弹窗 -->
+<!-- 模态框同上，略 -->
 <div class="modal-overlay" id="createRoomModal" onclick="if(event.target===this)closeCreateRoom()">
   <div class="modal-box">
     <button class="modal-close" onclick="closeCreateRoom()">×</button>
@@ -236,8 +236,6 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
     <button class="btn-row btn-primary" onclick="createRoom()">创建</button>
   </div>
 </div>
-
-<!-- 输入密码弹窗 -->
 <div class="modal-overlay" id="passwordModal" onclick="if(event.target===this)closePasswordModal()">
   <div class="modal-box">
     <button class="modal-close" onclick="closePasswordModal()">×</button>
@@ -246,8 +244,6 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
     <button class="btn-row btn-primary" onclick="verifyRoomPassword()">进入</button>
   </div>
 </div>
-
-<!-- 其他弹窗保持不变 -->
 <div class="modal-overlay" id="postModal" onclick="if(event.target===this)closePostDialog()">
 <div class="modal-box">
 <button class="modal-close" onclick="closePostDialog()">×</button>
@@ -261,14 +257,12 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 <button class="btn-row btn-primary" onclick="submitPost()">发布</button>
 </div>
 </div>
-
 <div class="modal-overlay" id="friendModal" onclick="if(event.target===this)closeFriendModal()">
 <div class="modal-box" style="max-width:480px">
 <button class="modal-close" onclick="closeFriendModal()">×</button>
 <div id="friendModalContent"></div>
 </div>
 </div>
-
 <div class="modal-overlay" id="publishModal" onclick="if(event.target===this)closePublish()"><div class="modal-box">
 <button class="modal-close" onclick="closePublish()">×</button>
 <h3 style="margin-bottom:.8rem">发布文章</h3>
@@ -277,7 +271,6 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 <input id="pubImgUrl" class="inp" placeholder="图片URL（可选）">
 <button class="btn-row btn-primary" onclick="submitArticle()">发布</button>
 </div></div>
-
 <div class="modal-overlay" id="editModal" onclick="if(event.target===this)closeEdit()"><div class="modal-box">
 <button class="modal-close" onclick="closeEdit()">×</button>
 <h3 style="margin-bottom:.8rem">编辑资料</h3>
@@ -286,13 +279,11 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 <input id="editNewPwd" type="password" class="inp" placeholder="新密码（不修改留空）">
 <button class="btn-row btn-primary" onclick="saveProfile()">保存</button>
 </div></div>
-
 <div class="modal-overlay" id="adminModal" onclick="if(event.target===this)closeAdmin()"><div class="modal-box" style="max-width:480px">
 <button class="modal-close" onclick="closeAdmin()">×</button>
 <h3 style="margin-bottom:.8rem">用户管理</h3>
 <div id="adminUserList" style="max-height:60vh;overflow-y:auto"></div>
 </div></div>
-
 <div class="lightbox" id="lightbox" onclick="closeLightbox()"><img id="lightboxImg" src=""></div>
 <div class="toast" id="toast"></div>
 
@@ -304,7 +295,7 @@ var ADMIN_EMAIL='279933264@qq.com';
 var API_URL=SUPABASE_URL+'/rest/v1';
 var STORAGE_URL=SUPABASE_URL+'/storage/v1/object';
 var currentUser=null,currentRoom=null,pubCategory=null,pollInterval=null,lastMsgTime=null;
-var pendingRoom=null; // 用于密码验证临时存储
+var pendingRoom=null;
 
 // ==================== 存储 ====================
 function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
@@ -360,6 +351,42 @@ function uploadFile(bucket,fileName,file,cb){
     .then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();})
     .then(function(){var publicUrl=SUPABASE_URL+'/storage/v1/object/public/'+bucket+'/'+fileName;cb(null,publicUrl);})
     .catch(function(e){cb(e,null);});
+}
+
+// ==================== 图片压缩（新增） ====================
+function compressImage(file, maxWidth, quality, callback) {
+  // 如果不支持 Canvas，直接返回原文件
+  if (!document.createElement('canvas').getContext) {
+    callback(file);
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = new Image();
+    img.onload = function() {
+      var width = img.width, height = img.height;
+      if (width > maxWidth) {
+        height = Math.round(height * (maxWidth / width));
+        width = maxWidth;
+      }
+      var canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(function(blob) {
+        if (blob) {
+          var compressedFile = new File([blob], file.name, { type: 'image/jpeg' });
+          callback(compressedFile);
+        } else {
+          // 压缩失败，用原图
+          callback(file);
+        }
+      }, 'image/jpeg', quality);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 // ==================== 启动 ====================
@@ -455,7 +482,7 @@ function enterApp(){
     var bars=document.querySelectorAll('.admin-bar');for(var i=0;i<bars.length;i++)bars[i].classList.add('vis');
     document.getElementById('adminProfile').style.display='block';
   }
-  loadRoomList(); // 每次进入应用刷新房间列表
+  loadRoomList();
 }
 function updateProfile(){
   if(!currentUser)return;
@@ -497,7 +524,7 @@ function loadArticles(cat){
     if(err||!data||!data.length){container.innerHTML='<p style="color:var(--text-muted)">'+(err?'加载失败':'暂无文章')+'</p>';return;}
     var html='';
     for(var i=0;i<data.length;i++){
-      var a=data[i],imgHtml=a.image_url?'<br><img src="'+escapeHtml(a.image_url)+'" onclick="openLightbox(\''+escapeHtml(a.image_url)+'\')">':'';
+      var a=data[i],imgHtml=a.image_url?'<br><img src="'+escapeHtml(a.image_url)+'" onclick="openLightbox(\''+escapeHtml(a.image_url)+'\')" loading="lazy">':'';
       var delBtn=(currentUser&&currentUser.email===ADMIN_EMAIL)?'<button class="art-del show" onclick="deleteArticle('+a.id+',\''+cat+'\')">删除</button>':'';
       html+='<div class="article-item">'+delBtn+'<h3>'+escapeHtml(a.title)+'</h3>'+
       '<div class="art-content">'+(a.content||'').replace(/\n/g,'<br>')+imgHtml+'</div>'+
@@ -546,19 +573,16 @@ window.deleteArticle=function(id,cat){
 };
 
 // ==================== 聊天（带头像 + 房间系统） ====================
-// 公共房间直接进入
 window.joinPublicRoom = function(roomName) {
   if(!currentUser){toast('请先登录');return;}
   currentRoom = 'oskwk-' + roomName;
   startChatSession();
 };
 
-// 加载自定义房间列表
 function loadRoomList() {
   apiGet('rooms', 'order=created_at.desc&select=*', function(err, data) {
     if(err || !data) return;
     var grid = document.getElementById('channelGrid');
-    // 移除旧的自定义房间卡片（保留前四个公共房间）
     var cards = grid.querySelectorAll('.custom-room');
     cards.forEach(function(c) { c.remove(); });
     data.forEach(function(room) {
@@ -571,16 +595,13 @@ function loadRoomList() {
   });
 }
 
-// 加入自定义房间
 window.joinCustomRoom = function(roomName, password) {
   if(!currentUser){toast('请先登录');return;}
   if(password && password.trim() !== '') {
-    // 有密码，先暂存房间名，弹出密码框
     pendingRoom = { name: roomName, password: password };
     document.getElementById('passwordModal').classList.add('show');
     document.getElementById('roomPasswordInput').value = '';
   } else {
-    // 无密码直接进入
     currentRoom = 'oskwk-' + roomName;
     startChatSession();
   }
@@ -601,7 +622,6 @@ window.closePasswordModal = function() {
   document.getElementById('passwordModal').classList.remove('show');
 };
 
-// 创建房间
 window.showCreateRoom = function() {
   document.getElementById('createRoomModal').classList.add('show');
 };
@@ -612,7 +632,6 @@ window.createRoom = function() {
   var name = document.getElementById('newRoomName').value.trim();
   var password = document.getElementById('newRoomPassword').value.trim();
   if(!name) { toast('请输入房间名称'); return; }
-  // 检查是否与公共房间重名
   var publicRooms = ['大厅','技术','理论','艺术'];
   if(publicRooms.indexOf(name) !== -1) { toast('不能与公共房间重名'); return; }
   var obj = {
@@ -628,7 +647,6 @@ window.createRoom = function() {
   });
 };
 
-// 进入房间通用初始化
 function startChatSession() {
   document.getElementById('channelSelector').style.display = 'none';
   document.getElementById('chatPanel').style.display = 'block';
@@ -637,7 +655,7 @@ function startChatSession() {
   loadChat(function() { startPolling(); });
 }
 
-window.joinRoom = window.joinPublicRoom; // 兼容原有调用
+window.joinRoom = window.joinPublicRoom;
 
 window.leaveRoom=function(){
   stopPolling();currentRoom=null;
@@ -665,7 +683,7 @@ function renderMsg(msg){
   var div=document.createElement('div'),isMine=msg.nickname===(currentUser?currentUser.nickname:'');
   div.className='msg '+(isMine?'mine':'other');
   var avatarHtml = msg.avatar_url ? '<img src="'+escapeHtml(msg.avatar_url)+'" class="msg-avatar">' : '';
-  var imgHtml=msg.image_url?'<br><img src="'+escapeHtml(msg.image_url)+'" onclick="openLightbox(\''+escapeHtml(msg.image_url)+'\')">':'';
+  var imgHtml=msg.image_url?'<br><img src="'+escapeHtml(msg.image_url)+'" loading="lazy" onclick="openLightbox(\''+escapeHtml(msg.image_url)+'\')">':'';
   div.innerHTML=avatarHtml+'<b>'+escapeHtml(msg.nickname)+'</b><br>'+escapeHtml(msg.message||'')+imgHtml+'<span class="time">'+new Date(msg.created_at).toLocaleTimeString()+'</span>';
   cb.appendChild(div);
 }
@@ -676,22 +694,26 @@ window.sendMsg=function(){
     if(err){toast('发送失败');}else{document.getElementById('msgInput').value='';loadChat();}
   });
 };
+
+// 修改后的上传：压缩后上传
 window.uploadImg=function(){
   if(!currentUser||!currentRoom){toast('请先登录并加入房间');return;}
   var file=document.getElementById('imgUp').files[0];if(!file)return;
   if(file.size>5*1024*1024){toast('图片不能超过5MB');document.getElementById('imgUp').value='';return;}
-  var ext=(file.name.split('.').pop()||'').toLowerCase();
-  var fileName='chat_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
-  uploadFile('chat-images',fileName,file,function(err,publicUrl){
-    if(err){toast('上传失败：'+(err.message||'检查存储桶'));document.getElementById('imgUp').value='';return;}
-    apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,image_url:publicUrl,avatar_url:currentUser.avatar_url||null},function(err2){
-      if(err2){toast('发送失败');}else{toast('图片已发送');loadChat();}
-      document.getElementById('imgUp').value='';
+  compressImage(file, 800, 0.7, function(compressedFile){
+    var ext = 'jpg'; // 统一使用 jpg
+    var fileName='chat_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
+    uploadFile('chat-images',fileName,compressedFile,function(err,publicUrl){
+      if(err){toast('上传失败：'+(err.message||'检查存储桶'));document.getElementById('imgUp').value='';return;}
+      apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,image_url:publicUrl,avatar_url:currentUser.avatar_url||null},function(err2){
+        if(err2){toast('发送失败');}else{toast('图片已发送');loadChat();}
+        document.getElementById('imgUp').value='';
+      });
     });
   });
 };
 
-// ==================== 好友系统 ====================
+// ==================== 好友系统（保持不变） ====================
 window.showFriends = function(){ /* ...保持不变... */
   if(!currentUser)return;
   var q = 'or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&status=eq.accepted&select=*';
@@ -758,7 +780,7 @@ window.searchUser = function(){ /* ...保持不变... */
 };
 window.closeFriendModal = function(){document.getElementById('friendModal').classList.remove('show');};
 
-// ==================== 朋友圈 ====================
+// ==================== 朋友圈（支持压缩上传） ====================
 var pendingPostFile = null;
 window.previewPostImg = function () {
   var file = document.getElementById('postFile').files[0];
@@ -773,7 +795,8 @@ window.openPostDialog = function(){
   document.getElementById('postModal').classList.add('show');
 };
 window.closePostDialog = function(){document.getElementById('postModal').classList.remove('show');};
-window.submitPost = function () { /* ...保持不变... */
+
+window.submitPost = function () {
   var content = document.getElementById('postContent').value.trim();
   if (!content && !pendingPostFile) { toast('请输入内容或选择图片'); return; }
 
@@ -795,18 +818,20 @@ window.submitPost = function () { /* ...保持不变... */
   }
 
   if (pendingPostFile) {
-    var ext = (pendingPostFile.name.split('.').pop() || '').toLowerCase();
-    var fileName = 'post_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '.' + ext;
-    uploadFile('chat-images', fileName, pendingPostFile, function (err, publicUrl) {
-      if (err) { toast('图片上传失败'); return; }
-      doPost(publicUrl);
+    compressImage(pendingPostFile, 800, 0.7, function(compressedFile){
+      var ext = 'jpg';
+      var fileName = 'post_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+      uploadFile('chat-images', fileName, compressedFile, function (err, publicUrl) {
+        if (err) { toast('图片上传失败'); return; }
+        doPost(publicUrl);
+      });
     });
   } else {
     doPost(null);
   }
 };
 
-function loadFriendsFeed(){ /* ...保持不变... */
+function loadFriendsFeed(){
   if(!currentUser)return;
   var q = 'or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&status=eq.accepted&select=*';
   apiGet('friendships', q, function(err, data){
@@ -823,7 +848,7 @@ function loadFriendsFeed(){ /* ...保持不变... */
       var html = '';
       posts.forEach(function(p){
         var ava = p.avatar_url ? '<img src="'+escapeHtml(p.avatar_url)+'" class="post-avatar">' : '<div class="post-avatar">'+p.nickname.charAt(0).toUpperCase()+'</div>';
-        var imgHtml = p.image_url ? '<img src="'+escapeHtml(p.image_url)+'" onclick="openLightbox(\''+escapeHtml(p.image_url)+'\')">' : '';
+        var imgHtml = p.image_url ? '<img src="'+escapeHtml(p.image_url)+'" loading="lazy" onclick="openLightbox(\''+escapeHtml(p.image_url)+'\')">' : '';
         html += '<div class="post-card"><div class="post-header">'+ava+'<div><b>'+escapeHtml(p.nickname)+'</b><div style="font-size:.75rem;color:var(--text-muted)">'+new Date(p.created_at).toLocaleString()+'</div></div></div>';
         if(p.content) html += '<div class="post-content">'+escapeHtml(p.content).replace(/\n/g,'<br>')+'</div>';
         if(imgHtml) html += imgHtml;
@@ -856,7 +881,7 @@ window.toggleBan = function (email, ban) { /* ...保持不变... */
 };
 window.closeAdmin = function () { document.getElementById('adminModal').classList.remove('show'); };
 
-// ==================== 个人资料 ====================
+// ==================== 个人资料（头像上传保持原样） ====================
 window.openEdit = function () { /* ...保持不变... */
   if (!currentUser) { toast('请先登录'); return; }
   document.getElementById('editNickname').value = currentUser.nickname || '';
@@ -885,7 +910,7 @@ window.saveProfile = function () { /* ...保持不变... */
   });
 };
 
-window.uploadAvatar = function () { /* ...保持不变... */
+window.uploadAvatar = function () { /* 头像不压缩 */
   if (!currentUser) { toast('请先登录'); return; }
   var input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
   input.onchange = function () {
