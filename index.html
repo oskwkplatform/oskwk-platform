@@ -171,12 +171,15 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 </div>
 <div class="page" id="tab-chat">
 <div class="sec-title">交流中心</div>
-<div id="channelSelector"><div class="channel-grid">
-<div class="channel-card" onclick="joinRoom('大厅')">🏠 大厅</div>
-<div class="channel-card" onclick="joinRoom('技术')">💻 技术</div>
-<div class="channel-card" onclick="joinRoom('理论')">📖 理论</div>
-<div class="channel-card" onclick="joinRoom('艺术')">🎨 艺术</div>
-</div></div>
+<div id="channelSelector">
+  <div class="channel-grid" id="channelGrid">
+    <div class="channel-card" onclick="joinPublicRoom('大厅')">🏠 大厅</div>
+    <div class="channel-card" onclick="joinPublicRoom('技术')">💻 技术</div>
+    <div class="channel-card" onclick="joinPublicRoom('理论')">📖 理论</div>
+    <div class="channel-card" onclick="joinPublicRoom('艺术')">🎨 艺术</div>
+  </div>
+  <button class="btn-row btn-secondary" onclick="showCreateRoom()">＋ 创建房间</button>
+</div>
 <div id="chatPanel" style="display:none">
 <button onclick="leaveRoom()" style="margin-bottom:.8rem;padding:.4rem .8rem;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:.85rem">← 返回</button>
 <div class="chat-box" id="chatBox"></div>
@@ -223,7 +226,28 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 <button onclick="switchTab('profile');setMob(5)">👤<br>我的</button>
 </div>
 
-<!-- 发布动态（从相册选图） -->
+<!-- 创建房间弹窗 -->
+<div class="modal-overlay" id="createRoomModal" onclick="if(event.target===this)closeCreateRoom()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeCreateRoom()">×</button>
+    <h3 style="margin-bottom:.8rem">创建房间</h3>
+    <input id="newRoomName" class="inp" placeholder="房间名称">
+    <input id="newRoomPassword" type="password" class="inp" placeholder="密码（可选）">
+    <button class="btn-row btn-primary" onclick="createRoom()">创建</button>
+  </div>
+</div>
+
+<!-- 输入密码弹窗 -->
+<div class="modal-overlay" id="passwordModal" onclick="if(event.target===this)closePasswordModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closePasswordModal()">×</button>
+    <h3 style="margin-bottom:.8rem">房间已加密</h3>
+    <input id="roomPasswordInput" type="password" class="inp" placeholder="请输入房间密码">
+    <button class="btn-row btn-primary" onclick="verifyRoomPassword()">进入</button>
+  </div>
+</div>
+
+<!-- 其他弹窗保持不变 -->
 <div class="modal-overlay" id="postModal" onclick="if(event.target===this)closePostDialog()">
 <div class="modal-box">
 <button class="modal-close" onclick="closePostDialog()">×</button>
@@ -280,6 +304,7 @@ var ADMIN_EMAIL='279933264@qq.com';
 var API_URL=SUPABASE_URL+'/rest/v1';
 var STORAGE_URL=SUPABASE_URL+'/storage/v1/object';
 var currentUser=null,currentRoom=null,pubCategory=null,pollInterval=null,lastMsgTime=null;
+var pendingRoom=null; // 用于密码验证临时存储
 
 // ==================== 存储 ====================
 function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
@@ -430,6 +455,7 @@ function enterApp(){
     var bars=document.querySelectorAll('.admin-bar');for(var i=0;i<bars.length;i++)bars[i].classList.add('vis');
     document.getElementById('adminProfile').style.display='block';
   }
+  loadRoomList(); // 每次进入应用刷新房间列表
 }
 function updateProfile(){
   if(!currentUser)return;
@@ -443,7 +469,6 @@ function updateProfile(){
   document.getElementById('profileAvatar').innerHTML=avaHtml;
 }
 
-// 退出登录（带确认）
 window.doLogout=function(){
   if(confirm('确定要退出登录吗？')){
     safeRemove('oskwk_user');
@@ -520,15 +545,100 @@ window.deleteArticle=function(id,cat){
   apiDelete('articles','id=eq.'+id,function(err){if(err){toast('删除失败');}else{toast('已删除');loadArticles(cat);}});
 };
 
-// ==================== 聊天（带头像） ====================
-window.joinRoom=function(room){
+// ==================== 聊天（带头像 + 房间系统） ====================
+// 公共房间直接进入
+window.joinPublicRoom = function(roomName) {
   if(!currentUser){toast('请先登录');return;}
-  currentRoom='oskwk-'+room;
-  document.getElementById('channelSelector').style.display='none';
-  document.getElementById('chatPanel').style.display='block';
-  document.getElementById('chatBox').innerHTML='';lastMsgTime=null;
-  loadChat(function(){startPolling();});
+  currentRoom = 'oskwk-' + roomName;
+  startChatSession();
 };
+
+// 加载自定义房间列表
+function loadRoomList() {
+  apiGet('rooms', 'order=created_at.desc&select=*', function(err, data) {
+    if(err || !data) return;
+    var grid = document.getElementById('channelGrid');
+    // 移除旧的自定义房间卡片（保留前四个公共房间）
+    var cards = grid.querySelectorAll('.custom-room');
+    cards.forEach(function(c) { c.remove(); });
+    data.forEach(function(room) {
+      var card = document.createElement('div');
+      card.className = 'channel-card custom-room';
+      card.textContent = '🔒 ' + room.name;
+      card.onclick = function() { joinCustomRoom(room.name, room.password); };
+      grid.appendChild(card);
+    });
+  });
+}
+
+// 加入自定义房间
+window.joinCustomRoom = function(roomName, password) {
+  if(!currentUser){toast('请先登录');return;}
+  if(password && password.trim() !== '') {
+    // 有密码，先暂存房间名，弹出密码框
+    pendingRoom = { name: roomName, password: password };
+    document.getElementById('passwordModal').classList.add('show');
+    document.getElementById('roomPasswordInput').value = '';
+  } else {
+    // 无密码直接进入
+    currentRoom = 'oskwk-' + roomName;
+    startChatSession();
+  }
+};
+
+window.verifyRoomPassword = function() {
+  var inputPwd = document.getElementById('roomPasswordInput').value.trim();
+  if(pendingRoom && inputPwd === pendingRoom.password) {
+    currentRoom = 'oskwk-' + pendingRoom.name;
+    closePasswordModal();
+    startChatSession();
+  } else {
+    toast('密码错误');
+  }
+};
+
+window.closePasswordModal = function() {
+  document.getElementById('passwordModal').classList.remove('show');
+};
+
+// 创建房间
+window.showCreateRoom = function() {
+  document.getElementById('createRoomModal').classList.add('show');
+};
+window.closeCreateRoom = function() {
+  document.getElementById('createRoomModal').classList.remove('show');
+};
+window.createRoom = function() {
+  var name = document.getElementById('newRoomName').value.trim();
+  var password = document.getElementById('newRoomPassword').value.trim();
+  if(!name) { toast('请输入房间名称'); return; }
+  // 检查是否与公共房间重名
+  var publicRooms = ['大厅','技术','理论','艺术'];
+  if(publicRooms.indexOf(name) !== -1) { toast('不能与公共房间重名'); return; }
+  var obj = {
+    name: name,
+    password: password,
+    created_by: currentUser.email
+  };
+  apiPost('rooms', obj, function(err, data) {
+    if(err) { toast('创建失败'); return; }
+    toast('房间已创建');
+    closeCreateRoom();
+    loadRoomList();
+  });
+};
+
+// 进入房间通用初始化
+function startChatSession() {
+  document.getElementById('channelSelector').style.display = 'none';
+  document.getElementById('chatPanel').style.display = 'block';
+  document.getElementById('chatBox').innerHTML = '';
+  lastMsgTime = null;
+  loadChat(function() { startPolling(); });
+}
+
+window.joinRoom = window.joinPublicRoom; // 兼容原有调用
+
 window.leaveRoom=function(){
   stopPolling();currentRoom=null;
   document.getElementById('channelSelector').style.display='block';
@@ -582,7 +692,7 @@ window.uploadImg=function(){
 };
 
 // ==================== 好友系统 ====================
-window.showFriends = function(){
+window.showFriends = function(){ /* ...保持不变... */
   if(!currentUser)return;
   var q = 'or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&status=eq.accepted&select=*';
   apiGet('friendships', q, function(err, data){
@@ -608,8 +718,7 @@ window.showFriends = function(){
     document.getElementById('friendModal').classList.add('show');
   });
 };
-
-window.showFriendRequests = function(){
+window.showFriendRequests = function(){ /* ...保持不变... */
   if(!currentUser)return;
   var q = 'to_email=eq.'+encodeURIComponent(currentUser.email)+'&status=eq.pending&select=*';
   apiGet('friendships', q, function(err, data){
@@ -625,14 +734,12 @@ window.showFriendRequests = function(){
     document.getElementById('friendModal').classList.add('show');
   });
 };
-
-window.handleRequest = function(id, status){
+window.handleRequest = function(id, status){ /* ...保持不变... */
   apiPatch('friendships','id=eq.'+id,{status:status},function(err){
     if(err){toast('操作失败');}else{toast(status==='accepted'?'已接受':'已拒绝');showFriendRequests();}
   });
 };
-
-window.searchUser = function(){
+window.searchUser = function(){ /* ...保持不变... */
   var email = prompt('输入对方邮箱或昵称搜索：');
   if(!email)return;
   apiGet('profiles','or=(email.eq.'+encodeURIComponent(email)+',nickname.eq.'+encodeURIComponent(email)+')&select=*',function(err,data){
@@ -649,10 +756,9 @@ window.searchUser = function(){
     });
   });
 };
-
 window.closeFriendModal = function(){document.getElementById('friendModal').classList.remove('show');};
 
-// ==================== 朋友圈（支持相册上传） ====================
+// ==================== 朋友圈 ====================
 var pendingPostFile = null;
 window.previewPostImg = function () {
   var file = document.getElementById('postFile').files[0];
@@ -660,7 +766,6 @@ window.previewPostImg = function () {
   pendingPostFile = file;
   document.getElementById('postFileName').textContent = file.name;
 };
-
 window.openPostDialog = function(){
   document.getElementById('postContent').value = '';
   document.getElementById('postFileName').textContent = '未选择';
@@ -668,8 +773,7 @@ window.openPostDialog = function(){
   document.getElementById('postModal').classList.add('show');
 };
 window.closePostDialog = function(){document.getElementById('postModal').classList.remove('show');};
-
-window.submitPost = function () {
+window.submitPost = function () { /* ...保持不变... */
   var content = document.getElementById('postContent').value.trim();
   if (!content && !pendingPostFile) { toast('请输入内容或选择图片'); return; }
 
@@ -702,7 +806,7 @@ window.submitPost = function () {
   }
 };
 
-function loadFriendsFeed(){
+function loadFriendsFeed(){ /* ...保持不变... */
   if(!currentUser)return;
   var q = 'or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&status=eq.accepted&select=*';
   apiGet('friendships', q, function(err, data){
@@ -731,7 +835,7 @@ function loadFriendsFeed(){
 }
 
 // ==================== 管理员 ====================
-window.showUsers = function () {
+window.showUsers = function () { /* ...保持不变... */
   if (!currentUser || currentUser.email !== ADMIN_EMAIL) { toast('无权操作'); return; }
   apiGet('profiles', 'select=*&order=created_at.desc', function (err, data) {
     if (err || !data) { toast('加载失败'); return; }
@@ -745,7 +849,7 @@ window.showUsers = function () {
     list.innerHTML = html; document.getElementById('adminModal').classList.add('show');
   });
 };
-window.toggleBan = function (email, ban) {
+window.toggleBan = function (email, ban) { /* ...保持不变... */
   apiPatch('profiles', 'email=eq.' + encodeURIComponent(email), { is_banned: ban }, function (err) {
     if (err) { toast('操作失败'); } else { toast(ban ? '已拉黑' : '已解除'); showUsers(); }
   });
@@ -753,13 +857,13 @@ window.toggleBan = function (email, ban) {
 window.closeAdmin = function () { document.getElementById('adminModal').classList.remove('show'); };
 
 // ==================== 个人资料 ====================
-window.openEdit = function () {
+window.openEdit = function () { /* ...保持不变... */
   if (!currentUser) { toast('请先登录'); return; }
   document.getElementById('editNickname').value = currentUser.nickname || '';
   document.getElementById('editModal').classList.add('show');
 };
 window.closeEdit = function () { document.getElementById('editModal').classList.remove('show'); };
-window.saveProfile = function () {
+window.saveProfile = function () { /* ...保持不变... */
   if (!currentUser) return;
   var nick = document.getElementById('editNickname').value.trim();
   var oldPwd = document.getElementById('editOldPwd').value.trim();
@@ -781,7 +885,7 @@ window.saveProfile = function () {
   });
 };
 
-window.uploadAvatar = function () {
+window.uploadAvatar = function () { /* ...保持不变... */
   if (!currentUser) { toast('请先登录'); return; }
   var input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
   input.onchange = function () {
