@@ -247,7 +247,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
   </div>
 </div>
 
-<!-- 其他弹窗保持不变 -->
+<!-- 其他弹窗 -->
 <div class="modal-overlay" id="postModal" onclick="if(event.target===this)closePostDialog()">
 <div class="modal-box">
 <button class="modal-close" onclick="closePostDialog()">×</button>
@@ -360,36 +360,6 @@ function uploadFile(bucket,fileName,file,cb){
     .then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();})
     .then(function(){var publicUrl=SUPABASE_URL+'/storage/v1/object/public/'+bucket+'/'+fileName;cb(null,publicUrl);})
     .catch(function(e){cb(e,null);});
-}
-
-// ==================== 图片压缩 ====================
-function compressImage(file, maxWidth, quality, callback) {
-  if (!document.createElement('canvas').getContext) { callback(file); return; }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var img = new Image();
-    img.onload = function() {
-      var width = img.width, height = img.height;
-      if (width > maxWidth) {
-        height = Math.round(height * (maxWidth / width));
-        width = maxWidth;
-      }
-      var canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-      canvas.toBlob(function(blob) {
-        if (blob) {
-          callback(new File([blob], file.name, { type: 'image/jpeg' }));
-        } else {
-          callback(file);
-        }
-      }, 'image/jpeg', quality);
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
 }
 
 // ==================== 启动 ====================
@@ -528,6 +498,7 @@ function loadArticles(cat){
     var html='';
     for(var i=0;i<data.length;i++){
       var a=data[i];
+      // 关键：图片 URL 不转义
       var imgHtml = a.image_url ? '<br><img src="'+a.image_url+'" style="max-width:100%;border-radius:12px;margin:.4rem 0;display:block" loading="lazy" onclick="openLightbox(\''+a.image_url+'\')">' : '';
       var delBtn=(currentUser&&currentUser.email===ADMIN_EMAIL)?'<button class="art-del show" onclick="deleteArticle('+a.id+',\''+cat+'\')">删除</button>':'';
       html+='<div class="article-item">'+delBtn+'<h3>'+escapeHtml(a.title)+'</h3>'+
@@ -673,10 +644,12 @@ function loadChat(cb){
   apiGet('messages','room=eq.'+encodeURIComponent(currentRoom)+'&order=created_at&select=*',function(err,data){
     if(err)return;var box=document.getElementById('chatBox');if(!box)return;
     if(data&&data.length){
-      var lastTime=data[data.length-1].created_at;
+      // 只取最近 50 条，防止卡顿
+      var recent = data.slice(-50);
+      var lastTime = recent[recent.length-1].created_at;
       if(lastTime===lastMsgTime){if(cb)cb();return;}
       lastMsgTime=lastTime;box.innerHTML='';
-      for(var i=0;i<data.length;i++)renderMsg(data[i]);
+      for(var i=0;i<recent.length;i++)renderMsg(recent[i]);
       box.scrollTop=box.scrollHeight;
     }else{lastMsgTime=null;box.innerHTML='';}
     if(cb)cb();
@@ -689,6 +662,7 @@ function renderMsg(msg){
   var avatarHtml = msg.avatar_url ? '<img src="'+msg.avatar_url+'" class="msg-avatar">' : '';
   var imgHtml = '';
   if (msg.image_url) {
+    // 图片 URL 不转义，直接使用
     imgHtml = '<br><img src="'+msg.image_url+'" style="max-width:140px;border-radius:.6rem;margin-top:.2rem;display:block" loading="lazy" onclick="openLightbox(\''+msg.image_url+'\')">';
   }
   div.innerHTML = avatarHtml + '<b>'+escapeHtml(msg.nickname)+'</b><br>'+escapeHtml(msg.message||'') + imgHtml + '<span class="time">'+new Date(msg.created_at).toLocaleTimeString()+'</span>';
@@ -702,25 +676,24 @@ window.sendMsg=function(){
   });
 };
 
+// 图片上传（无压缩，直接传）
 window.uploadImg=function(){
   if(!currentUser||!currentRoom){toast('请先登录并加入房间');return;}
   var file=document.getElementById('imgUp').files[0];if(!file)return;
   if(file.size>5*1024*1024){toast('图片不能超过5MB');document.getElementById('imgUp').value='';return;}
-  compressImage(file, 800, 0.7, function(compressedFile){
-    var ext = 'jpg';
-    var fileName='chat_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
-    uploadFile('chat-images',fileName,compressedFile,function(err,publicUrl){
-      if(err){toast('上传失败：'+(err.message||'检查存储桶'));document.getElementById('imgUp').value='';return;}
-      apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,image_url:publicUrl,avatar_url:currentUser.avatar_url||null},function(err2){
-        if(err2){toast('发送失败');}else{toast('图片已发送');loadChat();}
-        document.getElementById('imgUp').value='';
-      });
+  var ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+  var fileName='chat_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
+  uploadFile('chat-images',fileName,file,function(err,publicUrl){
+    if(err){toast('上传失败：'+(err.message||'检查存储桶'));document.getElementById('imgUp').value='';return;}
+    apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,image_url:publicUrl,avatar_url:currentUser.avatar_url||null},function(err2){
+      if(err2){toast('发送失败');}else{toast('图片已发送');loadChat();}
+      document.getElementById('imgUp').value='';
     });
   });
 };
 
 // ==================== 好友系统 ====================
-window.showFriends = function(){ /* ...保持不变... */
+window.showFriends = function(){
   if(!currentUser)return;
   var q = 'or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&status=eq.accepted&select=*';
   apiGet('friendships', q, function(err, data){
@@ -746,7 +719,7 @@ window.showFriends = function(){ /* ...保持不变... */
     document.getElementById('friendModal').classList.add('show');
   });
 };
-window.showFriendRequests = function(){ /* ...保持不变... */
+window.showFriendRequests = function(){
   if(!currentUser)return;
   var q = 'to_email=eq.'+encodeURIComponent(currentUser.email)+'&status=eq.pending&select=*';
   apiGet('friendships', q, function(err, data){
@@ -762,12 +735,12 @@ window.showFriendRequests = function(){ /* ...保持不变... */
     document.getElementById('friendModal').classList.add('show');
   });
 };
-window.handleRequest = function(id, status){ /* ...保持不变... */
+window.handleRequest = function(id, status){
   apiPatch('friendships','id=eq.'+id,{status:status},function(err){
     if(err){toast('操作失败');}else{toast(status==='accepted'?'已接受':'已拒绝');showFriendRequests();}
   });
 };
-window.searchUser = function(){ /* ...保持不变... */
+window.searchUser = function(){
   var email = prompt('输入对方邮箱或昵称搜索：');
   if(!email)return;
   apiGet('profiles','or=(email.eq.'+encodeURIComponent(email)+',nickname.eq.'+encodeURIComponent(email)+')&select=*',function(err,data){
@@ -786,7 +759,7 @@ window.searchUser = function(){ /* ...保持不变... */
 };
 window.closeFriendModal = function(){document.getElementById('friendModal').classList.remove('show');};
 
-// ==================== 朋友圈（支持压缩上传） ====================
+// ==================== 朋友圈（图片上传无压缩） ====================
 var pendingPostFile = null;
 window.previewPostImg = function () {
   var file = document.getElementById('postFile').files[0];
@@ -824,13 +797,11 @@ window.submitPost = function () {
   }
 
   if (pendingPostFile) {
-    compressImage(pendingPostFile, 800, 0.7, function(compressedFile){
-      var ext = 'jpg';
-      var fileName = 'post_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '.' + ext;
-      uploadFile('chat-images', fileName, compressedFile, function (err, publicUrl) {
-        if (err) { toast('图片上传失败'); return; }
-        doPost(publicUrl);
-      });
+    var ext = (pendingPostFile.name.split('.').pop() || 'jpg').toLowerCase();
+    var fileName = 'post_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+    uploadFile('chat-images', fileName, pendingPostFile, function (err, publicUrl) {
+      if (err) { toast('图片上传失败'); return; }
+      doPost(publicUrl);
     });
   } else {
     doPost(null);
@@ -854,6 +825,7 @@ function loadFriendsFeed(){
       var html = '';
       posts.forEach(function(p){
         var ava = p.avatar_url ? '<img src="'+p.avatar_url+'" class="post-avatar">' : '<div class="post-avatar">'+p.nickname.charAt(0).toUpperCase()+'</div>';
+        // 图片 URL 不转义
         var imgHtml = p.image_url ? '<img src="'+p.image_url+'" style="max-width:100%;border-radius:12px;margin-top:.4rem" loading="lazy" onclick="openLightbox(\''+p.image_url+'\')">' : '';
         html += '<div class="post-card"><div class="post-header">'+ava+'<div><b>'+escapeHtml(p.nickname)+'</b><div style="font-size:.75rem;color:var(--text-muted)">'+new Date(p.created_at).toLocaleString()+'</div></div></div>';
         if(p.content) html += '<div class="post-content">'+escapeHtml(p.content).replace(/\n/g,'<br>')+'</div>';
@@ -866,7 +838,7 @@ function loadFriendsFeed(){
 }
 
 // ==================== 管理员 ====================
-window.showUsers = function () { /* ...保持不变... */
+window.showUsers = function () {
   if (!currentUser || currentUser.email !== ADMIN_EMAIL) { toast('无权操作'); return; }
   apiGet('profiles', 'select=*&order=created_at.desc', function (err, data) {
     if (err || !data) { toast('加载失败'); return; }
@@ -880,21 +852,21 @@ window.showUsers = function () { /* ...保持不变... */
     list.innerHTML = html; document.getElementById('adminModal').classList.add('show');
   });
 };
-window.toggleBan = function (email, ban) { /* ...保持不变... */
+window.toggleBan = function (email, ban) {
   apiPatch('profiles', 'email=eq.' + encodeURIComponent(email), { is_banned: ban }, function (err) {
     if (err) { toast('操作失败'); } else { toast(ban ? '已拉黑' : '已解除'); showUsers(); }
   });
 };
 window.closeAdmin = function () { document.getElementById('adminModal').classList.remove('show'); };
 
-// ==================== 个人资料（头像上传保持原样） ====================
-window.openEdit = function () { /* ...保持不变... */
+// ==================== 个人资料 ====================
+window.openEdit = function () {
   if (!currentUser) { toast('请先登录'); return; }
   document.getElementById('editNickname').value = currentUser.nickname || '';
   document.getElementById('editModal').classList.add('show');
 };
 window.closeEdit = function () { document.getElementById('editModal').classList.remove('show'); };
-window.saveProfile = function () { /* ...保持不变... */
+window.saveProfile = function () {
   if (!currentUser) return;
   var nick = document.getElementById('editNickname').value.trim();
   var oldPwd = document.getElementById('editOldPwd').value.trim();
@@ -916,13 +888,13 @@ window.saveProfile = function () { /* ...保持不变... */
   });
 };
 
-window.uploadAvatar = function () { /* 头像不压缩 */
+window.uploadAvatar = function () {
   if (!currentUser) { toast('请先登录'); return; }
   var input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
   input.onchange = function () {
     var file = input.files[0]; if (!file) return;
     if (file.size > 2 * 1024 * 1024) { toast('头像不能超过2MB'); return; }
-    var ext = (file.name.split('.').pop() || '').toLowerCase();
+    var ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
     var fileName = 'avatar_' + currentUser.email.replace(/[^a-zA-Z0-9]/g, '_') + '_' + Date.now() + '.' + ext;
     uploadFile('chat-images', 'avatars/' + fileName, file, function (err, publicUrl) {
       if (err) { toast('头像上传失败'); return; }
