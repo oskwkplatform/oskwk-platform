@@ -75,7 +75,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .msg.mine{background:var(--accent);color:#fff;margin-left:auto;border-bottom-right-radius:.3rem}
 .msg.other{background:var(--surface);border:1px solid var(--border);margin-right:auto;border-bottom-left-radius:.3rem}
 .msg .time{font-size:.65rem;opacity:.5;display:block;text-align:right;margin-top:.2rem}
-.msg img{max-width:140px;border-radius:.6rem;margin-top:.2rem;display:block}
+.msg img{max-width:140px;border-radius:.6rem;margin-top:.2rem;display:block;background:#f0f4f8}
 .msg-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;margin-right:.4rem;vertical-align:middle}
 .chat-input{display:flex;gap:.4rem}
 .chat-input input{flex:1;padding:.7rem 1rem;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:.9rem;outline:none;font-family:inherit}
@@ -109,7 +109,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .post-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
 .post-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600}
 .post-content{margin:.5rem 0;line-height:1.5}
-.post-content img{max-width:100%;border-radius:12px;margin-top:.4rem}
+.post-content img{max-width:100%;border-radius:12px;margin-top:.4rem;background:#f0f4f8}
 .room-search{display:flex;gap:.4rem;margin-bottom:.8rem}
 .room-search input{flex:1;padding:.6rem .9rem;border-radius:10px;background:var(--surface);border:1px solid var(--border);font-size:.85rem;outline:none;font-family:inherit}
 </style>
@@ -206,6 +206,26 @@ function apiPost(table,body,cb){fetch(API_URL+'/'+table,{method:'POST',headers:a
 function apiPatch(table,query,body,cb){fetch(API_URL+'/'+table+'?'+query,{method:'PATCH',headers:apiHeaders({'Content-Type':'application/json'}),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);cb(null);}).catch(function(e){cb(e);});}
 function apiDelete(table,query,cb){fetch(API_URL+'/'+table+'?'+query,{method:'DELETE',headers:apiHeaders({'Prefer':'return=minimal'})}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);cb(null);}).catch(function(e){cb(e);});}
 function uploadFile(bucket,fileName,file,cb){var url=STORAGE_URL+'/'+bucket+'/'+fileName;var form=new FormData();form.append('file',file);fetch(url,{method:'POST',headers:{'Authorization':'Bearer '+SUPABASE_KEY},body:form}).then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();}).then(function(){var publicUrl=SUPABASE_URL+'/storage/v1/object/public/'+bucket+'/'+fileName;cb(null,publicUrl);}).catch(function(e){cb(e,null);});}
+
+// 图片压缩函数（轻量 Canvas 压缩，保证加载速度）
+function compressImage(file, maxW, quality, cb){
+  if(!file.type.match(/image\//)){cb(file);return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var w=img.width,h=img.height;
+      if(w>maxW){h=Math.round(h*(maxW/w));w=maxW;}
+      var canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+      var ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,w,h);
+      canvas.toBlob(function(blob){
+        if(blob){cb(new File([blob],file.name,{type:'image/jpeg'}));}else{cb(file);}
+      },'image/jpeg',quality);
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
 
 setTimeout(function(){
   document.getElementById('loader').classList.add('done');
@@ -381,17 +401,21 @@ function renderMsg(msg){
   cb.appendChild(div);
 }
 window.sendMsg=function(){if(!currentUser||!currentRoom)return;var text=document.getElementById('msgInput').value.trim();if(!text)return;apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,message:text,avatar_url:currentUser.avatar_url||null},function(err){if(err)toast('发送失败');else{document.getElementById('msgInput').value='';loadChat();}});};
+
+// 最终版图片上传：前端压缩为 800px 宽 + 0.7 质量
 window.uploadImg=function(){
   if(!currentUser||!currentRoom)return;
   var file=document.getElementById('imgUp').files[0];if(!file)return;
-  if(file.size>5*1024*1024){toast('图片不能超过5MB');document.getElementById('imgUp').value='';return;}
-  var ext=(file.name.split('.').pop()||'jpg').toLowerCase();
-  var fileName='chat_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
-  uploadFile('chat-images',fileName,file,function(err,publicUrl){
-    if(err){toast('上传失败：'+(err.message||'检查存储桶'));document.getElementById('imgUp').value='';return;}
-    apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,image_url:publicUrl,avatar_url:currentUser.avatar_url||null},function(err2){
-      if(err2){toast('发送失败');}else{toast('图片已发送');loadChat();}
-      document.getElementById('imgUp').value='';
+  if(file.size>20*1024*1024){toast('图片不能超过20MB');document.getElementById('imgUp').value='';return;}
+  compressImage(file,800,0.7,function(compressedFile){
+    var ext='jpg';
+    var fileName='chat_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
+    uploadFile('chat-images',fileName,compressedFile,function(err,publicUrl){
+      if(err){toast('上传失败');document.getElementById('imgUp').value='';return;}
+      apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,image_url:publicUrl,avatar_url:currentUser.avatar_url||null},function(err2){
+        if(err2){toast('发送失败');}else{toast('图片已发送');loadChat();}
+        document.getElementById('imgUp').value='';
+      });
     });
   });
 };
