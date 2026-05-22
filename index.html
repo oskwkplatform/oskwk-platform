@@ -69,7 +69,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .comment-input-row input{flex:1;padding:.6rem .9rem;border-radius:10px;background:var(--bg);border:1px solid var(--border);font-size:.85rem;outline:none;font-family:inherit}
 .comment-input-row button{padding:.6rem 1rem;border-radius:10px;background:var(--accent);color:#fff;border:none;font-size:.8rem}
 .channel-grid{display:grid;gap:.8rem;grid-template-columns:repeat(2,1fr)}
-.channel-card{background:var(--surface);padding:1.2rem 1rem;border-radius:var(--radius);text-align:center;border:1px solid var(--border);font-size:.9rem;font-weight:500}
+.channel-card{background:var(--surface);padding:1.2rem 1rem;border-radius:var(--radius);text-align:center;border:1px solid var(--border);font-size:.9rem;font-weight:500;cursor:pointer}
 .chat-box{height:45vh;overflow-y:auto;background:#faf9f6;border-radius:var(--radius);padding:1rem;margin:.8rem 0;border:1px solid var(--border);-webkit-overflow-scrolling:touch}
 .msg{max-width:88%;padding:.7rem 1rem;border-radius:1rem;margin-bottom:.6rem;font-size:.9rem;line-height:1.5;word-break:break-word}
 .msg.mine{background:var(--accent);color:#fff;margin-left:auto;border-bottom-right-radius:.3rem}
@@ -79,7 +79,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .msg-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;margin-right:.4rem;vertical-align:middle}
 .chat-input{display:flex;gap:.4rem}
 .chat-input input{flex:1;padding:.7rem 1rem;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:.9rem;outline:none;font-family:inherit}
-.chat-input button{padding:.7rem 1.2rem;border-radius:100px;background:var(--accent);color:#fff;border:none;font-weight:600;font-size:.85rem}
+.chat-input button{padding:.7rem 1.2rem;border-radius:100px;background:var(--accent);color:#fff;border:none;font-weight:600;font-size:.85rem;cursor:pointer}
 .profile-card{background:var(--surface);border-radius:var(--radius);padding:1.2rem;border:1px solid var(--border)}
 .profile-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem}
 .profile-avatar-lg{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;font-weight:600}
@@ -269,8 +269,7 @@ function updateProfile(){
   if(!currentUser)return;
   document.getElementById('profileNick').textContent=currentUser.nickname||'--';
   document.getElementById('profileMail').textContent=currentUser.email||'--';
-  var days=Math.max(1,Math.floor((Date.now()-new Date(currentUser.created_at).getTime())/86400000));
-  document.getElementById('joinDays').textContent=days;
+  document.getElementById('joinDays').textContent=Math.max(1,Math.floor((Date.now()-new Date(currentUser.created_at).getTime())/86400000));
   var initial=(currentUser.nickname?currentUser.nickname.charAt(0).toUpperCase():'?');
   var avaHtml=currentUser.avatar_url?'<img src="'+currentUser.avatar_url+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':'<span>'+initial+'</span>';
   document.getElementById('userAvatar').innerHTML=avaHtml;document.getElementById('profileAvatar').innerHTML=avaHtml;
@@ -367,7 +366,6 @@ function renderMsg(msg){
   var div=document.createElement('div'),isMine=msg.nickname===(currentUser?currentUser.nickname:'');
   div.className='msg '+(isMine?'mine':'other');
   var avatarHtml=msg.avatar_url?'<img src="'+msg.avatar_url+'" class="msg-avatar">':'';
-  // 图片 URL 不转义，直接使用原始 URL
   var imgHtml=msg.image_url?'<br><img src="'+msg.image_url+'" style="max-width:140px;border-radius:.6rem;margin-top:.2rem;display:block" loading="lazy" onclick="openLightbox(\''+msg.image_url+'\')">':'';
   div.innerHTML=avatarHtml+'<b>'+escapeHtml(msg.nickname)+'</b><br>'+escapeHtml(msg.message||'')+imgHtml+'<span class="time">'+new Date(msg.created_at).toLocaleTimeString()+'</span>';
   cb.appendChild(div);
