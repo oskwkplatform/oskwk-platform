@@ -328,17 +328,33 @@ function loadArticles(cat){
     var html='';
     for(var i=0;i<data.length;i++){
       var a=data[i];
-      var imgHtml=a.image_url?'<br><img src="'+a.image_url+'" style="max-width:100%;border-radius:12px;margin:.4rem 0;background:#f0f4f8" loading="lazy" onclick="event.stopPropagation();openLightbox(\''+a.image_url+'\')">':'';
       var delBtn=(currentUser&&currentUser.email===ADMIN_EMAIL)?'<button class="art-del show" onclick="event.stopPropagation();deleteArticle('+a.id+',\''+cat+'\')">删除</button>':'';
       html+='<div class="article-item" onclick="toggleArticle(this)">'+delBtn+'<h3>'+escapeHtml(a.title)+'</h3>'+
-      '<div class="art-content">'+(a.content||'').replace(/\n/g,'<br>')+imgHtml+'</div>'+
+      '<div class="art-content" id="artContent-'+a.id+'">'+(a.content||'').replace(/\n/g,'<br>')+'</div>'+
       '<small>'+escapeHtml(a.author||'匿名')+' · '+new Date(a.created_at).toLocaleString()+'</small>'+
       '<div class="comment-sec"><strong>留言</strong><div id="commentList-'+a.id+'"></div>'+
-      '<div class="comment-input-row"><input id="commentInput-'+a.id+'" placeholder="写下想法..." onclick="event.stopPropagation()"><button onclick="event.stopPropagation();postComment('+a.id+')">发送</button></div></div></div>';
+      '<div class="comment-input-row"><input id="commentInput-'+a.id+'" placeholder="写下想法..." onclick="event.stopPropagation()"><button id="commentBtn-'+a.id+'" onclick="event.stopPropagation();postComment('+a.id+')">发送</button></div></div></div>';
     }
     container.innerHTML=html;
-    for(var j=0;j<data.length;j++)loadComments(data[j].id);
+    for(var j=0;j<data.length;j++){
+      loadComments(data[j].id);
+      if(data[j].image_url) addArticleImage(data[j].id, data[j].image_url);
+    }
   });
+}
+function addArticleImage(id, url){
+  var contentDiv = document.getElementById('artContent-'+id);
+  if(!contentDiv) return;
+  var img = document.createElement('img');
+  img.src = url;
+  img.loading = 'lazy';
+  img.style.maxWidth = '100%';
+  img.style.borderRadius = '12px';
+  img.style.margin = '.4rem 0';
+  img.style.background = '#f0f4f8';
+  img.onclick = function(e){ e.stopPropagation(); openLightbox(url); };
+  img.onerror = function(){ img.style.display = 'none'; };
+  contentDiv.appendChild(img);
 }
 window.toggleArticle=function(el){
   if(event.target.closest('.art-del')||event.target.closest('button')||event.target.closest('input')||event.target.closest('textarea'))return;
@@ -358,8 +374,11 @@ function loadComments(id){
 window.postComment=function(id){
   if(!currentUser){toast('请先登录');return;}
   var input=document.getElementById('commentInput-'+id);if(!input||!input.value.trim())return;
+  var btn=document.getElementById('commentBtn-'+id);if(btn){btn.disabled=true;btn.textContent='发送中...';}
   apiPost('comments',{article_id:id,nickname:currentUser.nickname,content:input.value.trim(),avatar_url:currentUser.avatar_url||null},function(err){
-    if(err){toast('发送失败');return;}input.value='';loadComments(id);
+    if(err){toast('评论发送失败');if(btn){btn.disabled=false;btn.textContent='发送';}return;}
+    input.value='';if(btn){btn.disabled=false;btn.textContent='发送';}
+    loadComments(id);toast('评论已发送');
   });
 };
 window.openPublish=function(cat){if(!currentUser||currentUser.email!==ADMIN_EMAIL)return;pubCategory=cat;document.getElementById('publishModal').classList.add('show');};
@@ -407,27 +426,28 @@ function renderMsg(msg){
   var ava=document.createElement('div');ava.className='msg-avatar-col';
   if(msg.avatar_url)ava.innerHTML='<img src="'+msg.avatar_url+'">';else ava.textContent=(msg.nickname||'?').charAt(0).toUpperCase();
   var bubble=document.createElement('div');bubble.className='msg-bubble '+(isMine?'mine':'other');
-  var sender='<span class="msg-sender">'+escapeHtml(msg.nickname||'匿名')+'</span>';
-  var text=msg.message?escapeHtml(msg.message).replace(/\n/g,'<br>'):'';
-  var time='<span class="msg-time">'+new Date(msg.created_at).toLocaleTimeString()+'</span>';
-  bubble.innerHTML=sender+text+time;
+  var sender=document.createElement('span');sender.className='msg-sender';sender.textContent=msg.nickname||'匿名';
+  bubble.appendChild(sender);
+  if(msg.message){
+    var textSpan=document.createElement('span');
+    textSpan.innerHTML=escapeHtml(msg.message).replace(/\n/g,'<br>');
+    bubble.appendChild(textSpan);
+  }
   if(msg.image_url){
     if(msg.media_type==='video'){
-      var vid=document.createElement('video');
-      vid.src=msg.image_url;vid.controls=true;vid.playsInline=true;
-      vid.style.maxWidth='160px';vid.style.borderRadius='.6rem';vid.style.marginTop='.4rem';
-      vid.style.background='#f0f4f8';
+      var vid=document.createElement('video');vid.src=msg.image_url;vid.controls=true;vid.playsInline=true;
+      vid.style.maxWidth='160px';vid.style.borderRadius='.6rem';vid.style.marginTop='.4rem';vid.style.background='#f0f4f8';
       bubble.appendChild(vid);
     }else{
-      var img=document.createElement('img');
-      img.src=msg.image_url;img.loading='lazy';
-      img.style.maxWidth='160px';img.style.borderRadius='.6rem';img.style.marginTop='.4rem';
-      img.style.background='#f0f4f8';img.style.minHeight='80px';
+      var img=document.createElement('img');img.src=msg.image_url;img.loading='lazy';
+      img.style.maxWidth='160px';img.style.borderRadius='.6rem';img.style.marginTop='.4rem';img.style.background='#f0f4f8';img.style.minHeight='80px';
       img.onclick=function(){openLightbox(msg.image_url);};
-      img.onerror=function(){bubble.innerHTML+='<br><span style="color:#f87171">[图片加载失败]</span>';};
+      img.onerror=function(){img.style.display='none';var errSpan=document.createElement('span');errSpan.style.color='#f87171';errSpan.textContent='[图片加载失败]';bubble.appendChild(errSpan);};
       bubble.appendChild(img);
     }
   }
+  var time=document.createElement('span');time.className='msg-time';time.textContent=new Date(msg.created_at).toLocaleTimeString();
+  bubble.appendChild(time);
   wrapper.appendChild(ava);wrapper.appendChild(bubble);cb.appendChild(wrapper);
 }
 window.sendMsg=function(){if(!currentUser||!currentRoom)return;var text=document.getElementById('msgInput').value.trim();if(!text)return;apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,message:text,avatar_url:currentUser.avatar_url||null},function(err){if(err)toast('发送失败');else{document.getElementById('msgInput').value='';loadChat();}});};
