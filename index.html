@@ -361,18 +361,26 @@ function loadChat(cb){
     if(cb)cb();
   });
 }
-// 关键：稳定版 renderMsg，图片 URL 不转义
 function renderMsg(msg){
   var cb=document.getElementById('chatBox');if(!cb)return;
   var div=document.createElement('div'),isMine=msg.nickname===(currentUser?currentUser.nickname:'');
   div.className='msg '+(isMine?'mine':'other');
-  var avatarHtml=msg.avatar_url?'<img src="'+msg.avatar_url+'" class="msg-avatar">':'';
-  var imgHtml=msg.image_url?'<br><img src="'+msg.image_url+'" style="max-width:140px;border-radius:.6rem;margin-top:.2rem;display:block" loading="lazy" onclick="openLightbox(\''+msg.image_url+'\')">':'';
-  div.innerHTML=avatarHtml+'<b>'+escapeHtml(msg.nickname)+'</b><br>'+escapeHtml(msg.message||'')+imgHtml+'<span class="time">'+new Date(msg.created_at).toLocaleTimeString()+'</span>';
+  if(msg.avatar_url){var ava=document.createElement('img');ava.src=msg.avatar_url;ava.className='msg-avatar';div.appendChild(ava);}
+  div.appendChild(document.createTextNode((msg.nickname||'')+': '));
+  if(msg.message){var span=document.createElement('span');span.innerHTML=escapeHtml(msg.message).replace(/\n/g,'<br>');div.appendChild(span);}
+  if(msg.image_url){
+    var img=document.createElement('img');
+    img.src=msg.image_url;
+    img.style.maxWidth='140px';img.style.borderRadius='.6rem';img.style.marginTop='.2rem';img.style.display='block';
+    img.loading='lazy';
+    img.onclick=function(){openLightbox(msg.image_url);};
+    img.onerror=function(){var err=document.createElement('span');err.style.color='#f87171';err.textContent='[图片加载失败]';div.appendChild(err);};
+    div.appendChild(img);
+  }
+  var time=document.createElement('span');time.className='time';time.textContent=new Date(msg.created_at).toLocaleTimeString();div.appendChild(time);
   cb.appendChild(div);
 }
 window.sendMsg=function(){if(!currentUser||!currentRoom)return;var text=document.getElementById('msgInput').value.trim();if(!text)return;apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,message:text,avatar_url:currentUser.avatar_url||null},function(err){if(err)toast('发送失败');else{document.getElementById('msgInput').value='';loadChat();}});};
-// 稳定版上传函数，只上传图片
 window.uploadImg=function(){
   if(!currentUser||!currentRoom)return;
   var file=document.getElementById('imgUp').files[0];if(!file)return;
@@ -388,7 +396,6 @@ window.uploadImg=function(){
   });
 };
 
-// 好友系统
 window.showFriends=function(){
   if(!currentUser)return;
   apiGet('friendships','or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&status=eq.accepted&select=*',function(err,data){
@@ -425,7 +432,6 @@ window.searchUser=function(){
 };
 window.closeFriendModal=function(){document.getElementById('friendModal').classList.remove('show');};
 
-// 朋友圈
 var pendingPostFile=null;
 window.previewPostImg=function(){var file=document.getElementById('postFile').files[0];if(!file)return;pendingPostFile=file;document.getElementById('postFileName').textContent=file.name;};
 window.openPostDialog=function(){document.getElementById('postContent').value='';document.getElementById('postFileName').textContent='未选择';pendingPostFile=null;document.getElementById('postModal').classList.add('show');};
