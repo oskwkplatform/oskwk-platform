@@ -219,6 +219,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 <div class="toast" id="toast"></div>
 
 <script>
+// ==================== 配置 ====================
 var SUPABASE_URL='https://qnblruruefgbixbfgwkh.supabase.co';
 var SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
 var ADMIN_EMAIL='279933264@qq.com';
@@ -227,6 +228,7 @@ var STORAGE_URL=SUPABASE_URL+'/storage/v1/object';
 var currentUser=null,currentRoom=null,pubCategory=null,pollInterval=null,lastMsgTime=null;
 var pendingRoom=null,allRooms=[],pendingPostFile=null,pendingPostType='image';
 
+// ==================== 工具函数 ====================
 function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function safeSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function safeRemove(k){try{localStorage.removeItem(k)}catch(e){}}
@@ -243,6 +245,7 @@ function apiPatch(table,query,body,cb){fetch(API_URL+'/'+table+'?'+query,{method
 function apiDelete(table,query,cb){fetch(API_URL+'/'+table+'?'+query,{method:'DELETE',headers:apiHeaders({'Prefer':'return=minimal'})}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);cb(null);}).catch(function(e){cb(e);});}
 function uploadFile(bucket,fileName,file,cb){var url=STORAGE_URL+'/'+bucket+'/'+fileName;var form=new FormData();form.append('file',file);fetch(url,{method:'POST',headers:{'Authorization':'Bearer '+SUPABASE_KEY},body:form}).then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();}).then(function(){var publicUrl=SUPABASE_URL+'/storage/v1/object/public/'+bucket+'/'+fileName;cb(null,publicUrl);}).catch(function(e){cb(e,null);});}
 
+// ==================== 启动 ====================
 setTimeout(function(){
   document.getElementById('loader').classList.add('done');
   setTimeout(function(){document.getElementById('loader').style.display='none';},600);
@@ -261,6 +264,7 @@ function tryAutoLogin(){
   return true;
 }
 
+// ==================== 认证 ====================
 window.doLogin=function(){
   var email=document.getElementById('loginEmail').value.trim(),pwd=document.getElementById('loginPassword').value.trim();
   if(!email||!pwd){hint('请输入邮箱和密码',true);return;}
@@ -290,6 +294,7 @@ window.doRegister=function(){
   });
 };
 
+// ==================== 主界面 ====================
 function enterApp(){
   document.getElementById('authOverlay').classList.add('hidden');
   var app=document.getElementById('app');app.style.display='block';setTimeout(function(){app.classList.add('on');},50);
@@ -312,6 +317,7 @@ function updateProfile(){
 }
 window.doLogout=function(){if(confirm('确定要退出登录吗？')){safeRemove('oskwk_user');location.reload();}};
 
+// ==================== 标签切换 ====================
 window.switchTab=function(cat){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   var el=document.getElementById('tab-'+cat);if(el)el.classList.add('active');
@@ -321,7 +327,7 @@ window.switchTab=function(cat){
 };
 window.setMob=function(idx){var btns=document.querySelectorAll('.mob-nav button');for(var i=0;i<btns.length;i++)btns[i].classList.toggle('on',i===idx);};
 
-// 文章
+// ==================== 文章（折叠已修复） ====================
 function loadArticles(cat){
   var container=document.getElementById('article-'+cat);
   container.innerHTML='<p style="color:var(--text-muted)">加载中...</p>';
@@ -375,7 +381,7 @@ window.submitArticle=function(){
 };
 window.deleteArticle=function(id,cat){if(!confirm('确认删除？'))return;apiDelete('articles','id=eq.'+id,function(err){if(err)toast('删除失败');else{toast('已删除');loadArticles(cat);}});};
 
-// 聊天
+// ==================== 聊天 ====================
 window.joinPublicRoom=function(name){if(!currentUser)return;currentRoom='oskwk-'+name;startChatSession();};
 function loadRoomList(){apiGet('rooms','order=created_at.desc&select=*',function(err,data){if(err||!data)return;allRooms=data;renderRoomGrid(allRooms);});}
 function renderRoomGrid(rooms){
@@ -414,7 +420,7 @@ function renderMsg(msg){
   var text=msg.message?escapeHtml(msg.message).replace(/\n/g,'<br>'):'';
   var time='<span class="msg-time">'+new Date(msg.created_at).toLocaleTimeString()+'</span>';
   bubble.innerHTML=sender+text+time;
-  // 图片/视频：用 JS 对象加载，绕过转义
+  // 图片/视频：用JS对象加载，绕过转义
   if(msg.image_url){
     if(msg.media_type==='video'){
       var vid=document.createElement('video');
@@ -449,7 +455,7 @@ window.uploadMedia=function(type){
   });
 };
 
-// 好友
+// ==================== 好友 ====================
 window.showFriends=function(){
   if(!currentUser)return;
   apiGet('friendships','or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&status=eq.accepted&select=*',function(err,data){
@@ -486,7 +492,7 @@ window.searchUser=function(){
 };
 window.closeFriendModal=function(){document.getElementById('friendModal').classList.remove('show');};
 
-// 朋友圈
+// ==================== 朋友圈 ====================
 window.previewPostMedia=function(){var file=document.getElementById('postFile').files[0];if(!file)return;pendingPostFile=file;pendingPostType=file.type.startsWith('video/')?'video':'image';document.getElementById('postFileName').textContent=file.name;};
 window.openPostDialog=function(){document.getElementById('postContent').value='';document.getElementById('postFileName').textContent='未选择';pendingPostFile=null;pendingPostType='image';document.getElementById('postModal').classList.add('show');};
 window.closePostDialog=function(){document.getElementById('postModal').classList.remove('show');};
@@ -523,18 +529,18 @@ function loadFriendsFeed(){
   });
 }
 
-// 管理员
+// ==================== 管理员 ====================
 window.showUsers=function(){if(!currentUser||currentUser.email!==ADMIN_EMAIL)return;apiGet('profiles','select=*&order=created_at.desc',function(err,data){if(err||!data)return;var list=document.getElementById('adminUserList'),html='';for(var i=0;i<data.length;i++){var u=data[i],tag=u.is_banned?'<span style="color:#dc2626;font-size:.7rem">[已拉黑]</span>':'';html+='<div onclick="toggleBan(\''+u.email+'\','+(!u.is_banned)+')" style="padding:.7rem;border:1px solid var(--border);border-radius:10px;margin-bottom:.4rem;cursor:pointer"><div style="display:flex;justify-content:space-between"><b>'+escapeHtml(u.nickname)+'</b>'+tag+'</div><div style="font-size:.75rem;color:var(--text-muted);margin-top:.15rem">'+escapeHtml(u.email)+'</div></div>';}list.innerHTML=html;document.getElementById('adminModal').classList.add('show');});};
 window.toggleBan=function(email,ban){apiPatch('profiles','email=eq.'+encodeURIComponent(email),{is_banned:ban},function(err){if(err)toast('操作失败');else{toast(ban?'已拉黑':'已解除');showUsers();}});};
 window.closeAdmin=function(){document.getElementById('adminModal').classList.remove('show');};
 
-// 个人资料
+// ==================== 个人资料 ====================
 window.openEdit=function(){if(!currentUser)return;document.getElementById('editNickname').value=currentUser.nickname||'';document.getElementById('editModal').classList.add('show');};
 window.closeEdit=function(){document.getElementById('editModal').classList.remove('show');};
 window.saveProfile=function(){if(!currentUser)return;var nick=document.getElementById('editNickname').value.trim(),oldPwd=document.getElementById('editOldPwd').value.trim(),newPwd=document.getElementById('editNewPwd').value.trim(),updates={};if(nick&&nick!==currentUser.nickname){updates.nickname=nick;currentUser.nickname=nick;}if(newPwd){if(!oldPwd)return toast('请输入当前密码');if(oldPwd!==currentUser.password_hash)return toast('当前密码错误');if(newPwd.length<6)return toast('新密码至少6位');updates.password_hash=newPwd;currentUser.password_hash=newPwd;}if(!Object.keys(updates).length)return closeEdit();apiPatch('profiles','email=eq.'+encodeURIComponent(currentUser.email),updates,function(err){if(err)toast('保存失败');else{safeSet('oskwk_user',JSON.stringify(currentUser));updateProfile();closeEdit();toast('已更新');}});};
 window.uploadAvatar=function(){if(!currentUser)return;var input=document.createElement('input');input.type='file';input.accept='image/*';input.onchange=function(){var file=input.files[0];if(!file||file.size>2*1024*1024)return toast('头像不能超过2MB');var ext=(file.name.split('.').pop()||'jpg').toLowerCase();var fileName='avatar_'+currentUser.email.replace(/[^a-zA-Z0-9]/g,'_')+'_'+Date.now()+'.'+ext;uploadFile('chat-images','avatars/'+fileName,file,function(err,url){if(err)return toast('头像上传失败');apiPatch('profiles','email=eq.'+encodeURIComponent(currentUser.email),{avatar_url:url},function(e2){if(e2)return toast('保存失败');currentUser.avatar_url=url;safeSet('oskwk_user',JSON.stringify(currentUser));updateProfile();toast('头像已更新');});});};input.click();};
 
-// 灯箱
+// ==================== 灯箱 ====================
 window.openLightbox=function(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('show');};
 window.closeLightbox=function(){document.getElementById('lightbox').classList.remove('show');};
 window.addEventListener('scroll',function(){document.querySelector('.nav').classList.toggle('scrolled',window.scrollY>10);});
