@@ -79,7 +79,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .msg-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;margin-right:.4rem;vertical-align:middle}
 .chat-input{display:flex;gap:.4rem}
 .chat-input input{flex:1;padding:.7rem 1rem;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:.9rem;outline:none;font-family:inherit}
-.chat-input button{padding:.7rem 1.2rem;border-radius:100px;background:var(--accent);color:#fff;border:none;font-weight:600;font-size:.85rem;cursor:pointer}
+.chat-input button{padding:.7rem 1.2rem;border-radius:100px;background:var(--accent);color:#fff;border:none;font-weight:600;font-size:.85rem}
 .profile-card{background:var(--surface);border-radius:var(--radius);padding:1.2rem;border:1px solid var(--border)}
 .profile-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem}
 .profile-avatar-lg{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;font-weight:600}
@@ -361,6 +361,7 @@ function loadChat(cb){
     if(cb)cb();
   });
 }
+// 关键：稳定版 renderMsg，图片 URL 不转义
 function renderMsg(msg){
   var cb=document.getElementById('chatBox');if(!cb)return;
   var div=document.createElement('div'),isMine=msg.nickname===(currentUser?currentUser.nickname:'');
@@ -371,6 +372,7 @@ function renderMsg(msg){
   cb.appendChild(div);
 }
 window.sendMsg=function(){if(!currentUser||!currentRoom)return;var text=document.getElementById('msgInput').value.trim();if(!text)return;apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,message:text,avatar_url:currentUser.avatar_url||null},function(err){if(err)toast('发送失败');else{document.getElementById('msgInput').value='';loadChat();}});};
+// 稳定版上传函数，只上传图片
 window.uploadImg=function(){
   if(!currentUser||!currentRoom)return;
   var file=document.getElementById('imgUp').files[0];if(!file)return;
@@ -386,6 +388,7 @@ window.uploadImg=function(){
   });
 };
 
+// 好友系统
 window.showFriends=function(){
   if(!currentUser)return;
   apiGet('friendships','or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&status=eq.accepted&select=*',function(err,data){
@@ -422,6 +425,7 @@ window.searchUser=function(){
 };
 window.closeFriendModal=function(){document.getElementById('friendModal').classList.remove('show');};
 
+// 朋友圈
 var pendingPostFile=null;
 window.previewPostImg=function(){var file=document.getElementById('postFile').files[0];if(!file)return;pendingPostFile=file;document.getElementById('postFileName').textContent=file.name;};
 window.openPostDialog=function(){document.getElementById('postContent').value='';document.getElementById('postFileName').textContent='未选择';pendingPostFile=null;document.getElementById('postModal').classList.add('show');};
