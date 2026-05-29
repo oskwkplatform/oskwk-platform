@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #050505; --surface: #0a0a0a; --surface2: #111111;
+      --bg: #050505; --surface: #0a0a0a; --surface2: #111;
       --text: #f0f0f0; --text2: #a8a8a8; --text3: #606060;
       --border: rgba(255,255,255,0.06); --border-light: rgba(255,255,255,0.12);
       --accent: #b8956a; --danger: #e76f51; --success: #2a9d8f;
@@ -16,56 +16,42 @@
       --blur: 24px; --font-size: 16px;
     }
     [data-theme="light"] {
-      --bg: #f5f2ed; --surface: #ffffff; --surface2: #ebe5db;
+      --bg: #f5f2ed; --surface: #fff; --surface2: #ebe5db;
       --text: #1a1a1a; --text2: #555; --text3: #999;
       --border: rgba(0,0,0,0.06); --border-light: rgba(0,0,0,0.1);
       --glass-bg: rgba(255,255,255,0.7); --glass-border: rgba(0,0,0,0.08);
     }
     *{margin:0;padding:0;box-sizing:border-box}
-    html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;font-size:var(--font-size)}
+    html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;font-size:var(--font-size)}
     body{background:var(--bg);overflow-x:hidden}
     ::selection{background:var(--accent);color:#111}
     ::-webkit-scrollbar{width:3px}
     ::-webkit-scrollbar-track{background:transparent}
     ::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:3px}
 
-    #loader{position:fixed;inset:0;z-index:10000;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
-    #loader.done{opacity:0;visibility:hidden;pointer-events:none}
+    #loader{position:fixed;inset:0;z-index:10000;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .5s}
+    #loader.done{opacity:0;pointer-events:none}
     .loader-ring{width:44px;height:44px;border:2px solid var(--border-light);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
 
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 登录注册艺术背景 */
-    .auth-overlay{
-      position:fixed;inset:0;z-index:1000;
-      background:radial-gradient(circle at 50% 30%, rgba(201,168,124,0.15) 0%, rgba(5,5,5,0.95) 80%);
-      backdrop-filter:blur(30px);
-      display:flex;align-items:center;justify-content:center;padding:20px;
-    }
-    .auth-card{
-      background:var(--glass-bg);backdrop-filter:blur(var(--blur));
-      border:1px solid var(--glass-border);border-radius:var(--radius);
-      padding:40px 32px;max-width:420px;width:100%;
-      box-shadow:0 30px 60px rgba(0,0,0,0.6);
-      animation:authIn .5s ease;
-    }
-    @keyframes authIn{from{opacity:0;transform:translateY(20px) scale(0.98)}}
-    .auth-card h2{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:28px;text-align:center;color:var(--text)}
-    .auth-card input{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;color:var(--text);font-size:0.9rem;width:100%;margin-bottom:14px;outline:none;transition:border-color 0.2s}
+    .auth-overlay{position:fixed;inset:0;z-index:1000;background:radial-gradient(circle at 50% 30%, rgba(201,168,124,.15), var(--bg) 80%);backdrop-filter:blur(30px);display:flex;align-items:center;justify-content:center;padding:20px}
+    .auth-card{background:var(--glass-bg);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:var(--radius);padding:40px 32px;max-width:420px;width:100%;box-shadow:0 30px 60px rgba(0,0,0,.6);animation:authIn .5s ease}
+    @keyframes authIn{from{opacity:0;transform:translateY(20px) scale(.98)}}
+    .auth-card h2{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:28px;text-align:center}
+    .auth-card input{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;color:var(--text);font-size:.9rem;width:100%;margin-bottom:14px;outline:none}
     .auth-card input:focus{border-color:var(--accent)}
-    .auth-btn{width:100%;padding:14px;border-radius:var(--radius-full);background:var(--accent);color:#111;font-weight:600;font-size:0.95rem;border:none;cursor:pointer;transition:filter 0.2s}
-    .auth-btn:hover{filter:brightness(1.1)}
-    .auth-link{margin-top:20px;text-align:center;font-size:0.85rem;color:var(--text3)}
-    .auth-link a{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:500}
+    .auth-btn{width:100%;padding:14px;border-radius:var(--radius-full);background:var(--accent);color:#111;font-weight:600;font-size:.95rem;border:none;cursor:pointer}
+    .auth-link{margin-top:20px;text-align:center;font-size:.85rem;color:var(--text3)}
+    .auth-link a{color:var(--accent);cursor:pointer;font-weight:500}
 
-    /* 导航 */
     .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px}
-    .nav-logo{cursor:pointer;display:flex;align-items:center;margin-right:auto}
+    .nav-logo{cursor:pointer;display:flex;align-items:center}
     .nav-logo svg{width:28px;height:28px;stroke:var(--accent)}
     .nav-icons{display:flex;gap:2px;margin:0 auto}
-    .nav-icon{background:none;border:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;color:var(--text2);transition:all .2s;padding:0;position:relative}
+    .nav-icon{background:none;border:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;color:var(--text2);transition:.2s;position:relative}
     .nav-icon svg{width:20px;height:20px;stroke:currentColor}
     .nav-icon:hover{color:var(--text);background:rgba(255,255,255,.05)}
     .nav-icon.active{color:var(--accent);background:rgba(255,255,255,.03)}
@@ -78,29 +64,28 @@
     .mob-nav .nav-icon svg{width:22px;height:22px}
     .mob-nav .nav-icon.active{color:var(--accent)}
 
-    /* 英雄区 */
     .hero{position:relative;height:100vh;min-height:650px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;margin-top:-64px}
-    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.5);transition:opacity 1.5s}
+    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.5)}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 8%,transparent 55%);z-index:2}
     .hero-caption{position:relative;z-index:3;text-align:center;padding:0 24px 100px;will-change:transform,opacity}
     .hero-caption h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,6rem);font-weight:900;color:#fff;text-shadow:0 4px 60px rgba(0,0,0,.7)}
-    .hero-caption p{color:rgba(255,255,255,.55);font-size:1rem;font-weight:300;margin-top:8px;letter-spacing:.5px}
+    .hero-caption p{color:rgba(255,255,255,.55);font-size:1rem;font-weight:300;margin-top:8px}
 
     .main-wrap{max-width:1200px;margin:0 auto;padding:40px 24px 120px}
     .page{display:none;animation:fadeIn .35s ease}
     .page.active{display:block}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}}
 
     .sec-title{display:flex;align-items:center;gap:12px;margin-bottom:28px;font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700}
     .sec-title::after{content:'';flex:1;height:1px;background:var(--border-light)}
 
     .grid{columns:3 280px;column-gap:20px}
-    .card{break-inside:avoid;margin-bottom:20px;border-radius:var(--radius);overflow:hidden;background:var(--surface2);border:1px solid var(--border);transition:all .3s;cursor:pointer;position:relative}
+    .card{break-inside:avoid;margin-bottom:20px;border-radius:var(--radius);overflow:hidden;background:var(--surface2);border:1px solid var(--border);transition:.3s;cursor:pointer;position:relative}
     .card:hover{transform:translateY(-3px);border-color:var(--accent)}
     .card img{width:100%;display:block;background:var(--surface)}
     .card-body{padding:18px}
     .card-body h3{font-size:1rem;font-weight:600;margin-bottom:6px}
-    .card-delete{position:absolute;top:8px;right:8px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;line-height:1;opacity:0;transition:opacity .2s}
+    .card-delete{position:absolute;top:8px;right:8px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;opacity:0;transition:opacity .2s}
     .card:hover .card-delete{opacity:1}
 
     .chat-box{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;height:65vh;display:flex;flex-direction:column}
@@ -122,7 +107,7 @@
     .modal.show{display:flex}
     .modal-box{background:var(--surface2);border-radius:var(--radius);border:1px solid var(--border);padding:32px;max-width:440px;width:100%;animation:modalIn .3s;max-height:90vh;overflow-y:auto}
     @keyframes modalIn{from{opacity:0;transform:scale(.95)}}
-    input,textarea{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:inherit;font-size:.9rem;margin-bottom:14px;outline:none}
+    input,textarea{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:.9rem;margin-bottom:14px;outline:none}
     input:focus,textarea:focus{border-color:var(--accent)}
     button.main{background:var(--accent);border:none;color:#111;font-weight:600;padding:14px 28px;border-radius:var(--radius-full);cursor:pointer;width:100%;font-size:.9rem}
 
@@ -139,7 +124,7 @@
     <input type="email" id="loginEmail" placeholder="邮箱" autocomplete="email">
     <input type="password" id="loginPass" placeholder="密码">
     <button class="auth-btn" id="loginBtn">登 录</button>
-    <p id="loginHint" style="font-size:0.8rem;color:var(--danger);margin-top:8px;text-align:center;"></p>
+    <p id="loginHint" style="font-size:.8rem;color:var(--danger);margin-top:8px;text-align:center;"></p>
     <div class="auth-link">还没有账户？ <a onclick="showReg()">创建账户</a></div>
   </div>
   <div class="auth-card" id="regBox" style="display:none">
@@ -149,7 +134,7 @@
     <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer">获取</button></div>
     <input id="regPass" type="password" placeholder="密码">
     <input id="regNick" placeholder="昵称">
-    <label style="display:flex;gap:8px;font-size:0.8rem;color:var(--text2);margin:10px 0"><input type="checkbox" id="regAgree">同意协议</label>
+    <label style="display:flex;gap:8px;font-size:.8rem;color:var(--text2);margin:10px 0"><input type="checkbox" id="regAgree">同意协议</label>
     <button class="auth-btn" id="regBtn">注 册</button>
     <div class="auth-link">已有账户？ <a onclick="showLogin()">返回登录</a></div>
   </div>
@@ -158,20 +143,20 @@
 <!-- 主应用 -->
 <div id="app">
   <nav class="nav">
-    <div class="nav-logo" onclick="switchTab('about')" title="首页">
+    <div class="nav-logo" onclick="switchTab('about')">
       <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="4" ry="10" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h20" stroke="currentColor" stroke-width="1.5"/></svg>
     </div>
     <div class="nav-icons">
-      <button class="nav-icon active" data-tab="about" onclick="switchTab('about')" title="探索"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/></svg></button>
-      <button class="nav-icon" data-tab="discover" onclick="switchTab('discover')" title="发现"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><circle cx="11" cy="11" r="2"/></svg></button>
-      <button class="nav-icon" data-tab="study" onclick="switchTab('study')" title="学术"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/><path d="M8 7h8M8 11h6M8 15h7"/></svg></button>
-      <button class="nav-icon" data-tab="chat" onclick="switchTab('chat')" title="交流"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 01-8 8.5"/></svg></button>
-      <button class="nav-icon" data-tab="friends" onclick="switchTab('friends')" title="动态"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4"/></svg></button>
+      <button class="nav-icon active" data-tab="about" onclick="switchTab('about')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/></svg></button>
+      <button class="nav-icon" data-tab="discover" onclick="switchTab('discover')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><circle cx="11" cy="11" r="2"/></svg></button>
+      <button class="nav-icon" data-tab="study" onclick="switchTab('study')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/><path d="M8 7h8M8 11h6M8 15h7"/></svg></button>
+      <button class="nav-icon" data-tab="chat" onclick="switchTab('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 01-8 8.5"/></svg></button>
+      <button class="nav-icon" data-tab="friends" onclick="switchTab('friends')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4"/></svg></button>
     </div>
     <div class="nav-right">
-      <button class="nav-icon" id="notifBtn" onclick="showNotifs()" title="通知"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="badge" id="notifDot"></span></button>
-      <button class="nav-icon" onclick="toggleSettings()" title="设置"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg></button>
-      <div class="avatar" id="avatarBtn" onclick="switchTab('profile')" title="我的"><span id="avatarTxt">?</span></div>
+      <button class="nav-icon" id="notifBtn" onclick="showNotifs()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="badge" id="notifDot"></span></button>
+      <button class="nav-icon" onclick="toggleSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg></button>
+      <div class="avatar" id="avatarBtn" onclick="switchTab('profile')"><span id="avatarTxt">?</span></div>
     </div>
   </nav>
 
@@ -183,12 +168,9 @@
   </div>
 
   <section class="hero">
-    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山风景">
+    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山">
     <div class="hero-overlay"></div>
-    <div class="hero-caption" id="heroCaption">
-      <h1>探索无界</h1>
-      <p>OSKWK Platform</p>
-    </div>
+    <div class="hero-caption" id="heroCaption"><h1>探索无界</h1><p>OSKWK Platform</p></div>
   </section>
 
   <div class="main-wrap">
@@ -225,29 +207,9 @@ let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
 
-const mountainPhotos = [
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
-  'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
-  'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80',
-  'https://images.unsplash.com/photo-1434394354979-a235cd36269d?w=800&q=80',
-  'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80',
-  'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80',
-  'https://images.unsplash.com/photo-1520962880247-6e5a3c3c3e0a?w=800&q=80',
-  'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=800&q=80',
-  'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=800&q=80',
-  'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80'
-];
-function landscape() { return mountainPhotos[Math.floor(Math.random() * mountainPhotos.length)]; }
+const landscape = () => `https://picsum.photos/seed/${Date.now()+Math.random()}/800/500`;
 
-const heroPhotos = [
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
-  'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80',
-  'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1920&q=80',
-  'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80',
-  'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=1920&q=80'
-];
-function heroLandscape() { return heroPhotos[Math.floor(Math.random() * heroPhotos.length)]; }
-
+// 全局函数挂载
 window.setTheme = t => {
   document.documentElement.setAttribute('data-theme',t);
   document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));
@@ -257,20 +219,18 @@ window.updateFontSize = v => { document.documentElement.style.setProperty('--fon
 window.setAccent = el => { document.documentElement.style.setProperty('--accent',el.dataset.accent); localStorage.setItem('oskwk_accent',el.dataset.accent); };
 window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-(()=>{
-  const t=localStorage.getItem('oskwk_theme')||'dark'; setTheme(t);
-  const s=localStorage.getItem('oskwk_fontsize')||'16'; $('#fontSizeSlider').value=s; updateFontSize(s);
-  const a=localStorage.getItem('oskwk_accent')||'#b8956a'; document.documentElement.style.setProperty('--accent',a);
-})();
-
+// 视差
 window.addEventListener('scroll',()=>{
   const y=window.scrollY, cap=$('#heroCaption');
   if(cap){ cap.style.opacity=Math.max(0,1-y/500); cap.style.transform=`translateY(${y*0.3}px)`; }
 });
 
-setInterval(()=>{ const img=$('#heroBg'); if(img) img.src=heroLandscape(); },10000);
+// 背景切换
+setInterval(()=>{
+  const img=$('#heroBg'); if(img) img.src=`https://picsum.photos/seed/${Date.now()}/1920/1080`;
+},15000);
 
-// 切换标签
+// 标签切换
 window.switchTab = async tab => {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const page=$('#tab-'+tab); if(page) page.classList.add('active');
@@ -301,7 +261,7 @@ async function loadArticles(cat){
   `).join('')||'<p style="color:var(--text3)">暂无内容</p>';
 }
 
-// 管理员功能
+// 管理员文章管理
 window.openPublish = (cat) => {
   if(!isAdmin) return T('无权操作');
   let html = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="4"></textarea><input id="pubImage" placeholder="图片URL (可选)"><button class="main" onclick="publishArticle('${cat}')">发布</button>`;
@@ -340,15 +300,31 @@ window.postComment = async id => {
   T('已评论'); window.expandArticle(id);
 };
 
-// 聊天
-window.joinRoom = name => { if(!user) return T('请先登录'); room='oskwk-'+name; startChat(); };
-window.privateChat = () => { if(!user) return T('请先登录'); const p=prompt('对方邮箱'); if(p) room='private-'+[user.email,p].sort().join('_'); startChat(); };
+// 聊天室核心逻辑
+window.joinRoom = name => {
+  if(!user) return T('请先登录');
+  room = 'oskwk-'+name;
+  startChat();
+};
+window.privateChat = () => {
+  if(!user) return T('请先登录');
+  const p = prompt('对方邮箱'); if(!p) return;
+  room = 'private-'+[user.email,p].sort().join('_');
+  startChat();
+};
 async function startChat(){
-  $('#roomList').style.display='none'; $('#chatPanel').style.display='block'; $('#chatLog').innerHTML='';
+  $('#roomList').style.display='none';
+  $('#chatPanel').style.display='block';
+  $('#chatLog').innerHTML='';
   const {data} = await supabase.from('messages').select('*').eq('room',room).order('created_at',{ascending:true}).limit(50);
   data?.forEach(renderMsg);
   if(realtime) supabase.removeChannel(realtime);
-  realtime = supabase.channel('room-'+room).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${room}`},p=>renderMsg(p.new)).subscribe();
+  realtime = supabase.channel('room-'+room)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${room}`},payload=>renderMsg(payload.new))
+    .subscribe((status, err) => {
+      if (status === 'SUBSCRIBED') console.log('实时聊天已连接');
+      if (status === 'CHANNEL_ERROR') console.error('实时通道错误', err);
+    });
 }
 function renderMsg(m){
   const log=$('#chatLog'); if(!log) return;
@@ -366,7 +342,7 @@ window.sendMsg = async () => {
     if(error) throw error;
     renderMsg({room, nickname:user.nickname, message:txt, created_at:new Date().toISOString()});
     inp.value='';
-  } catch(e){ T('发送失败，请重试'); }
+  } catch(e){ T('发送失败'); }
 };
 window.uploadImg = async () => {
   const f=$('#imgUpload').files[0];
@@ -382,7 +358,10 @@ window.uploadImg = async () => {
   renderMsg({room, nickname:user.nickname, message:'', image_url:url, created_at:new Date().toISOString()});
   $('#imgUpload').value='';
 };
-window.leaveRoom = () => { if(realtime) supabase.removeChannel(realtime); room=null; $('#chatPanel').style.display='none'; $('#roomList').style.display='flex'; };
+window.leaveRoom = () => {
+  if(realtime) supabase.removeChannel(realtime);
+  room=null; $('#chatPanel').style.display='none'; $('#roomList').style.display='flex';
+};
 function renderRooms(){
   $('#chatPanel').style.display='none'; $('#roomList').style.display='flex';
   $('#roomList').innerHTML = `
@@ -394,7 +373,7 @@ function renderRooms(){
   `;
 }
 
-// 动态/好友
+// 动态与好友
 window.openPost = () => {
   $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`;
   $('#genericModal').classList.add('show');
@@ -428,7 +407,7 @@ window.showRequests = async () => {
 window.handleReq = async (id,status) => { await supabase.from('friendships').update({status}).eq('id',id); T('已处理'); window.showRequests(); };
 window.addFriend = () => { const email=prompt('对方邮箱'); if(email) supabase.from('friendships').insert([{from_email:user.email,to_email:email}]).then(()=>T('已发送')); };
 
-// 个人中心+管理员
+// 个人中心&管理员
 async function renderProfile(){
   if(!user) return;
   let html=`<div class="card" style="text-align:center;padding:24px"><div class="avatar" style="width:56px;height:56px;font-size:1.4rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div><h3>${user.nickname}</h3><p>${user.email}</p><button onclick="showRequests()">好友请求</button> <button onclick="addFriend()">添加好友</button>`;
@@ -467,45 +446,30 @@ function subNotifs(){
   notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
 }
 
-// 🔐 安全登录注册
+// 登录注册（安全）
 window.doLogin = async () => {
-  const email = $('#loginEmail').value.trim(), pwd = $('#loginPass').value.trim();
+  const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
   if(!email||!pwd) return T('请输入邮箱和密码');
-
-  // 使用数据库函数验证（管理员也通过此函数，因为数据库已存哈希）
-  const { data, error } = await supabase.rpc('verify_login', {
-    user_email: email,
-    user_password: pwd
-  });
+  const { data, error } = await supabase.rpc('verify_login', { user_email: email, user_password: pwd });
   if (error || !data || data.length === 0) return T('邮箱或密码错误');
   user = data[0];
   isAdmin = (user.email === ADMIN_EMAIL);
   localStorage.setItem('oskwk_user', JSON.stringify(user));
   enter();
 };
-
 window.doRegister = async () => {
-  const email = $('#regEmail').value.trim(), phone = $('#regPhone').value.trim(),
-        code = $('#regCode').value.trim(), pwd = $('#regPass').value.trim(),
-        nick = $('#regNick').value.trim();
+  const email=$('#regEmail').value.trim(), phone=$('#regPhone').value.trim(), code=$('#regCode').value.trim(), pwd=$('#regPass').value.trim(), nick=$('#regNick').value.trim();
   if(!email||!phone||!pwd||!nick) return T('请填写完整');
   if(code!=='123456') return T('验证码错误');
-
-  const { data, error } = await supabase.rpc('register_user', {
-    user_email: email,
-    user_nickname: nick,
-    user_phone: phone,
-    user_password: pwd
-  });
-  if (error) return T('注册失败：' + error.message);
+  const { data, error } = await supabase.rpc('register_user', { user_email: email, user_nickname: nick, user_phone: phone, user_password: pwd });
+  if (error) return T('注册失败');
   user = data[0];
   isAdmin = false;
   localStorage.setItem('oskwk_user', JSON.stringify(user));
   enter();
 };
-
-function enter() {
-  document.getElementById('authWrap').style.display = 'none';
+function enter(){
+  document.getElementById('authWrap').style.display='none';
   document.getElementById('app').classList.add('on');
   document.getElementById('avatarTxt').textContent = user?.nickname?.charAt(0)?.toUpperCase() || '?';
   subNotifs();
@@ -518,7 +482,7 @@ window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style
 window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
 window.sendCode = () => T('验证码：123456');
 
-// 绑定按钮
+// 绑定登录注册按钮
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('regBtn').addEventListener('click', doRegister);
 
