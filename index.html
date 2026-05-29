@@ -1,684 +1,474 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Oskwk</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#050505;--surface:#0a0a0a;--surface2:#111111;--text:#fafafa;--text2:#a1a1aa;--text3:#52525b;
-  --border:#222222;--border-light:#2a2a2a;--accent:#3b82f6;--accent-light:#60a5fa;
-  --danger:#ef4444;--success:#22c55e;--warning:#f59e0b;
-  --radius-sm:6px;--radius:10px;--radius-lg:14px;--radius-xl:20px;--radius-full:9999px;
-  --shadow:0 8px 30px rgba(0,0,0,0.5);--shadow-lg:0 20px 60px rgba(0,0,0,0.7);
-  --ease-out-expo:cubic-bezier(0.16,1,0.3,1);--ease-spring:cubic-bezier(0.34,1.56,0.64,1);
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body{min-height:100vh;overflow-x:hidden;background:var(--bg)}
-::selection{background:var(--accent);color:#fff}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:var(--radius-full)}
-::-webkit-scrollbar-thumb:hover{background:var(--text3)}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>OSKWK · 无界</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050505; --surface: #0a0a0a; --surface2: #111111;
+      --text: #f0f0f0; --text2: #a8a8a8; --text3: #606060;
+      --border: rgba(255,255,255,0.06); --border-light: rgba(255,255,255,0.12);
+      --accent: #c9a87c; --accent2: #e9c46a; --danger: #e76f51; --success: #2a9d8f;
+      --radius: 16px; --radius-sm: 10px; --radius-full: 9999px;
+      --glass-bg: rgba(10,10,10,0.7); --glass-border: rgba(255,255,255,0.08);
+      --blur: 24px; --font-size: 16px;
+    }
+    [data-theme="light"] {
+      --bg: #f5f2ed; --surface: #ffffff; --surface2: #ebe5db;
+      --text: #1a1a1a; --text2: #555; --text3: #999;
+      --border: rgba(0,0,0,0.06); --border-light: rgba(0,0,0,0.1);
+      --glass-bg: rgba(255,255,255,0.7); --glass-border: rgba(0,0,0,0.1);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;font-size:var(--font-size)}
+    body{background:var(--bg);overflow-x:hidden}
+    ::selection{background:var(--accent);color:#111}
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:4px}
 
-#loader{position:fixed;inset:0;z-index:100000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.6s var(--ease-out-expo),visibility 0.6s}
-#loader.done{opacity:0;visibility:hidden;pointer-events:none}
-.loader-spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+    #loader{position:fixed;inset:0;z-index:10000;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+    #loader.done{opacity:0;visibility:hidden;pointer-events:none}
+    .loader-spinner{width:48px;height:48px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-#authOverlay{position:fixed;inset:0;z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;background:var(--bg)}
-#authOverlay.show{display:flex}
-#authOverlay.hidden{display:none}
-.auth-card{width:100%;max-width:420px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2.5rem;box-shadow:var(--shadow-lg);animation:fadeUp 0.6s var(--ease-out-expo)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.auth-logo{font-size:1.8rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;text-align:center;color:var(--text)}
-.auth-sub{font-size:0.8rem;color:var(--text3);text-align:center;margin-bottom:2rem}
-.auth-input{width:100%;height:46px;padding:0 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:0.9rem;font-family:inherit;outline:none;margin-bottom:0.75rem;transition:border-color 0.2s}
-.auth-input:focus{border-color:var(--accent)}
-.auth-btn{width:100%;height:46px;border-radius:var(--radius);background:var(--accent);color:#fff;border:none;font-size:0.95rem;font-weight:600;cursor:pointer;margin-top:0.5rem;font-family:inherit;transition:background 0.2s,transform 0.1s}
-.auth-btn:active{transform:scale(0.98)}
-.auth-btn:disabled{opacity:0.5;cursor:not-allowed}
-.auth-hint{margin-top:0.75rem;font-size:0.85rem;color:var(--text2);text-align:center;min-height:1.2em}
-.auth-hint.err{color:var(--danger)}
-.auth-switch{margin-top:1.5rem;text-align:center;font-size:0.85rem;color:var(--text2)}
-.auth-switch a{color:var(--accent);text-decoration:none;cursor:pointer;font-weight:600}
+    #app{display:none;opacity:0;transition:opacity .6s;flex-direction:column;min-height:100vh}
+    #app.on{display:flex;opacity:1}
 
-#app{display:none}
-#app.on{display:block;animation:fadeIn 0.5s ease}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:72px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px}
+    .nav-brand{cursor:pointer;margin-right:auto}
+    .nav-links{display:flex;gap:4px;margin-left:auto}
+    .nav-btn{background:none;border:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;cursor:pointer;color:var(--text2);transition:all .25s;padding:0;position:relative}
+    .nav-btn svg{width:22px;height:22px;stroke:currentColor}
+    .nav-btn:hover{color:var(--text);background:rgba(255,255,255,.04)}
+    .nav-btn.active{color:var(--accent);background:rgba(255,255,255,.03)}
+    .badge{position:absolute;top:4px;right:4px;width:8px;height:8px;background:var(--danger);border-radius:50%;display:none}
+    .nav-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+    .avatar{width:38px;height:38px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#050505;font-weight:600;cursor:pointer;overflow:hidden;border:2px solid var(--border-light);font-size:0.9rem}
 
-.nav{position:fixed;top:0;left:0;right:0;z-index:90;height:60px;background:rgba(5,5,5,0.8);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.nav-inner{max-width:1400px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem}
-.nav-brand{font-size:1.1rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:0.5rem}
-.nav-brand svg{width:24px;height:24px}
-.nav-links{display:none;gap:0.25rem;align-items:center}
-.nav-links button{background:none;border:none;color:var(--text3);font-size:0.85rem;font-weight:500;padding:0.5rem 0.75rem;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;transition:color 0.2s,background 0.2s;display:flex;align-items:center;gap:0.35rem}
-.nav-links button svg{width:18px;height:18px}
-.nav-links button.on{color:var(--text);background:var(--surface2)}
-.nav-avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;font-weight:700;cursor:pointer;overflow:hidden}
-.nav-avatar img{width:100%;height:100%;object-fit:cover}
+    .mob-nav{position:fixed;bottom:0;left:0;right:0;background:var(--glass-bg);backdrop-filter:blur(var(--blur));border-top:1px solid var(--glass-border);display:none;justify-content:space-around;padding:8px 0;z-index:100}
+    .mob-nav .nav-btn{flex-direction:column;gap:2px;width:auto;height:auto;padding:6px 10px;font-size:0.6rem;color:var(--text3)}
+    .mob-nav .nav-btn svg{width:24px;height:24px}
+    .mob-nav .nav-btn.active{color:var(--accent)}
 
-.hero{position:relative;height:70vh;min-height:500px;display:flex;align-items:flex-end;padding-bottom:4rem;padding-top:60px;overflow:hidden;background:var(--bg)}
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.55;pointer-events:none}
-.hero-mask{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,0.4) 50%,var(--bg) 100%)}
-.hero-inner{position:relative;z-index:2;padding:0 1.5rem;max-width:1400px;margin:0 auto;width:100%}
-.hero-tag{display:inline-block;padding:0.3rem 0.8rem;border-radius:var(--radius-full);background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.25);color:var(--accent-light);font-size:0.7rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.5rem}
-.hero h1{font-size:clamp(2.5rem,6vw,4rem);font-weight:800;color:#fff;line-height:1.1;margin-bottom:1rem;text-shadow:0 2px 30px rgba(0,0,0,0.5)}
-.hero p{font-size:1rem;color:rgba(255,255,255,0.75);line-height:1.6;max-width:480px}
+    .hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;margin-top:-72px}
+    .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.35);pointer-events:none}
+    .hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 20%,var(--bg) 100%);z-index:2}
+    .hero-content{position:relative;z-index:3;max-width:900px;padding:0 32px;display:flex;flex-direction:column;align-items:center;gap:28px;will-change:transform,opacity}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(4rem,10vw,7rem);font-weight:900;color:#fff;text-shadow:0 4px 40px rgba(0,0,0,.6)}
+    .hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:3;color:rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;gap:8px;animation:float 2s infinite}
+    @keyframes float{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
 
-.main{padding:2rem 1.5rem 6rem;max-width:1400px;margin:0 auto}
-.sec-title{font-size:1.1rem;font-weight:600;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.6rem;color:var(--text)}
-.sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent)}
-.page{display:none}
-.page.active{display:block;animation:fadeIn 0.25s ease}
-.admin-bar{display:none;align-items:center;gap:0.8rem;margin-bottom:1.2rem;padding:0.8rem;background:rgba(59,130,246,0.05);border:1px dashed rgba(59,130,246,0.2);border-radius:var(--radius);font-size:0.85rem;color:var(--accent-light)}
-.admin-bar.vis{display:flex}
-.admin-bar button{padding:0.35rem 0.9rem;border-radius:var(--radius-sm);background:var(--accent);color:#fff;border:none;font-size:0.8rem;font-weight:500;cursor:pointer}
+    .main-content{flex:1;padding:48px 24px 120px;max-width:1300px;margin:0 auto;width:100%}
+    .page{display:none;opacity:0;transform:translateY(16px);transition:opacity .4s,transform .4s}
+    .page.active{display:block;opacity:1;transform:translateY(0)}
 
-.article-item{background:var(--surface2);border-radius:var(--radius-lg);padding:1.3rem;margin-bottom:0.8rem;border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,0.2);cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
-.article-item:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,0.4);border-color:var(--border-light)}
-.article-item h3{font-size:1.05rem;font-weight:600;margin-bottom:0.3rem;padding-right:3rem;color:var(--text)}
-.article-item .art-content{color:var(--text2);line-height:1.7;font-size:0.9rem;margin:0.5rem 0;display:none}
-.article-item.expanded .art-content{display:block}
-.article-item small{color:var(--text3);font-size:0.75rem}
-.art-del{position:absolute;top:1rem;right:1rem;background:rgba(239,68,68,0.1);color:var(--danger);border:1px solid rgba(239,68,68,0.2);border-radius:var(--radius-sm);padding:0.2rem 0.6rem;font-size:0.75rem;cursor:pointer;display:none;z-index:5}
-.art-del.show{display:block}
-.comment-sec{margin-top:0.7rem;padding-top:0.7rem;border-top:1px solid var(--border);display:none}
-.article-item.expanded .comment-sec{display:block}
-.comment-input-row{display:flex;gap:0.4rem;margin-top:0.5rem}
-.comment-input-row input{flex:1;padding:0.5rem 0.8rem;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);font-size:0.85rem;outline:none;color:var(--text);font-family:inherit}
-.comment-input-row button{padding:0.5rem 0.9rem;border-radius:var(--radius-sm);background:var(--accent);color:#fff;border:none;font-size:0.8rem;cursor:pointer}
+    .card-grid{display:grid;gap:24px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+    .photo-card{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--surface2);border:1px solid var(--border);transition:all .3s;cursor:pointer}
+    .photo-card:hover{transform:translateY(-4px);border-color:var(--accent)}
+    .photo-card img{width:100%;height:220px;object-fit:cover;display:block;background:var(--surface)}
+    .photo-card-body{padding:20px}
+    .photo-card-body h3{font-size:1.2rem;font-weight:600;margin-bottom:8px}
 
-.channel-grid{display:grid;gap:0.7rem;grid-template-columns:repeat(2,1fr)}
-.channel-card{background:var(--surface2);padding:1rem 0.8rem;border-radius:var(--radius-lg);text-align:center;border:1px solid var(--border);font-size:0.9rem;font-weight:500;cursor:pointer;transition:all 0.2s}
-.channel-card:hover{transform:translateY(-2px);border-color:var(--accent);color:var(--accent-light)}
-.chat-box{height:48vh;overflow-y:auto;background:var(--surface);border-radius:var(--radius-lg);padding:0.8rem;margin:0.8rem 0;border:1px solid var(--border);-webkit-overflow-scrolling:touch;contain:strict}
-.msg{max-width:82%;padding:0.6rem 0.9rem;border-radius:var(--radius);margin-bottom:0.5rem;font-size:0.9rem;line-height:1.5;word-break:break-word}
-.msg.mine{background:linear-gradient(135deg,var(--accent),#2563eb);color:#fff;margin-left:auto;border-bottom-right-radius:3px}
-.msg.other{background:var(--surface2);border:1px solid var(--border);margin-right:auto;border-bottom-left-radius:3px}
-.msg .time{font-size:0.65rem;opacity:0.5;display:block;text-align:right;margin-top:0.2rem}
-.msg img{max-width:180px;border-radius:var(--radius-sm);margin-top:0.3rem;display:block;cursor:pointer}
-.msg-avatar{width:22px;height:22px;border-radius:50%;object-fit:cover;margin-right:0.4rem;vertical-align:middle;border:1px solid var(--border)}
-.chat-input{display:flex;gap:0.4rem}
-.chat-input input{flex:1;padding:0.6rem 1rem;border-radius:var(--radius-full);background:var(--surface2);border:1px solid var(--border);font-size:0.9rem;outline:none;color:var(--text);font-family:inherit}
-.chat-input button{padding:0.6rem 1.1rem;border-radius:var(--radius-full);background:var(--accent);color:#fff;border:none;font-weight:600;font-size:0.85rem;cursor:pointer}
+    .chat-container{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column;height:60vh}
+    .chat-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+    .message{max-width:75%;padding:12px 16px;border-radius:20px;font-size:.9rem;word-break:break-word}
+    .message.mine{background:var(--accent);color:#111;align-self:flex-end}
+    .message.other{background:var(--surface2);border:1px solid var(--border);align-self:flex-start}
+    .message img{max-width:200px;border-radius:10px;margin-top:8px;cursor:pointer}
 
-.profile-card{background:var(--surface2);border-radius:var(--radius-lg);padding:1.3rem;border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,0.2)}
-.profile-header{display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem}
-.profile-avatar-lg{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;font-weight:700;cursor:pointer;overflow:hidden}
-.profile-avatar-lg img{width:100%;height:100%;object-fit:cover}
-.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin:1.2rem 0}
-.profile-stat{background:var(--surface);padding:0.7rem;border-radius:var(--radius);text-align:center}
-.profile-stat .num{font-size:1.2rem;font-weight:700;color:var(--accent)}
-.profile-stat .lab{font-size:0.7rem;color:var(--text3)}
-.btn-row{width:100%;padding:0.75rem;border-radius:var(--radius);border:none;font-size:0.9rem;font-weight:600;font-family:inherit;margin-top:0.5rem;cursor:pointer;transition:all 0.2s}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:var(--accent-light)}
-.btn-secondary{background:var(--surface);color:var(--text2);border:1px solid var(--border)}
-.btn-secondary:hover{background:var(--surface2);border-color:var(--border-light)}
-.btn-danger{background:rgba(239,68,68,0.1);color:var(--danger);border:1px solid rgba(239,68,68,0.2)}
+    .settings-panel{position:fixed;top:90px;right:24px;width:320px;background:var(--glass-bg);backdrop-filter:blur(40px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;z-index:200;display:none;flex-direction:column;gap:20px;box-shadow:0 24px 60px rgba(0,0,0,.5);max-height:80vh;overflow-y:auto}
+    .settings-panel.show{display:flex}
+    .theme-btn{padding:6px 18px;border-radius:var(--radius-full);background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;font-size:.8rem}
+    .theme-btn.active{background:var(--accent);border-color:var(--accent);color:#111}
+    .color-swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.2s}
+    .color-swatch.active{border-color:var(--text)}
 
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
-.modal-overlay.show{display:flex}
-.modal-box{background:var(--surface2);border-radius:var(--radius-xl);padding:1.5rem;max-width:440px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:var(--shadow-lg);border:1px solid var(--border);animation:modalSlide 0.25s ease}
-@keyframes modalSlide{from{opacity:0;transform:translateY(15px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-.modal-close{position:absolute;top:0.8rem;right:0.8rem;width:28px;height:28px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem}
-.modal-close:hover{background:var(--border);color:var(--text)}
-.inp{width:100%;padding:0.7rem 0.9rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);font-size:0.9rem;margin-bottom:0.6rem;outline:none;color:var(--text);font-family:inherit}
-
-.footer{text-align:center;color:var(--text3);font-size:0.8rem;padding:1.5rem 1rem;border-top:1px solid var(--border);margin-top:2rem}
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--surface2);color:#fff;padding:0.7rem 1.3rem;border-radius:var(--radius-full);z-index:9999;display:none;font-size:0.85rem;box-shadow:var(--shadow-lg);border:1px solid var(--border);opacity:0;transition:all 0.35s var(--ease-spring)}
-.toast.show{display:block;opacity:1;transform:translateX(-50%) translateY(0)}
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;padding:1rem;z-index:300}
-.lightbox.show{display:flex}
-.lightbox img{max-width:95vw;max-height:85vh;border-radius:var(--radius-lg)}
-.mob-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(5,5,5,0.9);backdrop-filter:blur(16px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:0.3rem 0;z-index:80}
-.mob-nav button{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:0.15rem;font-size:0.6rem;color:var(--text3);padding:0.3rem 0.5rem;font-family:inherit;transition:color 0.2s}
-.mob-nav button svg{width:22px;height:22px}
-.mob-nav button.on{color:var(--accent)}
-.friend-card{display:flex;align-items:center;justify-content:space-between;padding:0.7rem;background:var(--surface2);border-radius:var(--radius);margin-bottom:0.4rem;border:1px solid var(--border)}
-.post-card{background:var(--surface2);border-radius:var(--radius-lg);padding:1rem;margin-bottom:0.8rem;border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,0.2)}
-.post-header{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem}
-.post-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
-.post-content{margin:0.5rem 0;line-height:1.5;color:var(--text2)}
-.post-content img{max-width:100%;border-radius:var(--radius);margin-top:0.4rem;display:block;cursor:pointer}
-@media(min-width:768px){.channel-grid{grid-template-columns:repeat(4,1fr)}.nav-links{display:flex}}
-</style>
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(12px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+    .modal.show{display:flex}
+    .modal-content{background:var(--surface2);border-radius:var(--radius);border:1px solid var(--border);padding:32px;max-width:440px;width:100%;animation:modalIn .3s;max-height:90vh;overflow-y:auto}
+    @keyframes modalIn{from{opacity:0;transform:scale(.95)}}
+    input,textarea{width:100%;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:inherit;font-size:.9rem;margin-bottom:14px;outline:none}
+    input:focus,textarea:focus{border-color:var(--accent)}
+    button.primary{background:var(--accent);border:none;color:#111;font-weight:600;padding:14px 28px;border-radius:var(--radius-full);cursor:pointer;width:100%;font-size:.9rem}
+    @media(max-width:768px){.nav-links{display:none}.mob-nav{display:flex}.hero h1{font-size:3rem}.main-content{padding:24px 16px 100px}.card-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-
 <div id="loader"><div class="loader-spinner"></div></div>
 
-<div id="authOverlay">
-  <div class="auth-card" id="loginCard">
-    <div class="auth-logo">OSKWK</div><div class="auth-sub">World Class Platform</div>
-    <input type="email" id="loginEmail" class="auth-input" placeholder="邮箱" autocomplete="email">
-    <input type="password" id="loginPassword" class="auth-input" placeholder="密码" autocomplete="current-password">
-    <button class="auth-btn" id="loginBtn" onclick="doLogin()">登录</button>
-    <div class="auth-hint" id="loginHint"></div>
-    <div class="auth-switch"><span>还没有账户？</span><a onclick="showRegister()">创建账户</a></div>
-  </div>
-  <div class="auth-card" id="registerCard" style="display:none">
-    <div class="auth-logo">OSKWK</div><div class="auth-sub">Join the Community</div>
-    <input id="regPhone" class="auth-input" placeholder="手机号（11位）" type="tel">
-    <input id="regEmail" class="auth-input" placeholder="邮箱" type="email" autocomplete="email">
-    <div style="display:flex;gap:0.4rem">
-      <input id="regCode" class="auth-input" placeholder="验证码" style="flex:1">
-      <button onclick="sendCode()" style="padding:0 0.8rem;border-radius:var(--radius);background:var(--surface);color:var(--text);border:1px solid var(--border);font-size:0.8rem;white-space:nowrap;cursor:pointer;font-family:inherit">获取</button>
+<!-- 登录/注册 -->
+<div id="authOverlay" class="modal">
+  <div class="modal-content" id="loginCard">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><path d="M2 12h20"/></svg>
+      <span style="font-family:'Playfair Display';font-size:1.8rem;">OSKWK</span>
     </div>
-    <input id="regPassword" type="password" class="auth-input" placeholder="密码（至少6位）">
-    <input id="regNickname" class="auth-input" placeholder="昵称">
-    <label style="display:flex;align-items:center;gap:0.4rem;color:var(--text2);font-size:0.8rem;margin:0.4rem 0 0.8rem">
-      <input type="checkbox" id="regAgree"> 同意用户协议
-    </label>
-    <button class="auth-btn" id="regBtn" onclick="doRegister()">创建账户</button>
-    <div class="auth-switch"><span>已有账户？</span><a onclick="showLogin()">返回登录</a></div>
+    <input type="email" id="loginEmail" placeholder="邮箱">
+    <input type="password" id="loginPassword" placeholder="密码">
+    <button class="primary" id="loginBtn">登录</button>
+    <p id="loginHint" style="font-size:.8rem;color:var(--danger);margin-top:8px;"></p>
+    <p style="margin-top:20px;text-align:center;font-size:.85rem;color:var(--text3)"><a onclick="showRegister()" style="color:var(--accent);cursor:pointer">创建账户</a></p>
+  </div>
+  <div class="modal-content" id="registerCard" style="display:none">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10"/></svg>
+      <span style="font-family:'Playfair Display';font-size:1.8rem;">加入</span>
+    </div>
+    <input id="regPhone" placeholder="手机号" type="tel">
+    <input id="regEmail" placeholder="邮箱" type="email">
+    <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 18px;cursor:pointer">获取</button></div>
+    <input id="regPassword" type="password" placeholder="密码">
+    <input id="regNickname" placeholder="昵称">
+    <label style="display:flex;gap:8px;font-size:.8rem;color:var(--text2);margin:10px 0"><input type="checkbox" id="regAgree">同意协议</label>
+    <button class="primary" id="regBtn">创建账户</button>
   </div>
 </div>
 
+<!-- 主应用 -->
 <div id="app">
-  <nav class="nav"><div class="nav-inner">
-    <div class="nav-brand" onclick="switchTab('about')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10"/><path d="M2 12h20"/></svg>
-      OSKWK
+  <nav class="nav">
+    <div class="nav-brand" onclick="switchTab('about')" title="首页">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><path d="M2 12h20"/></svg>
     </div>
     <div class="nav-links">
-      <button class="on" onclick="switchTab('about')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>关于</button>
-      <button onclick="switchTab('discover')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>发现</button>
-      <button onclick="switchTab('study')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>学术</button>
-      <button onclick="switchTab('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>交流</button>
-      <button onclick="switchTab('friends')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>动态</button>
+      <button class="nav-btn active" data-tab="about" title="探索"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/></svg></button>
+      <button class="nav-btn" data-tab="discover" title="发现"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><circle cx="11" cy="11" r="2"/></svg></button>
+      <button class="nav-btn" data-tab="study" title="学术"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/><path d="M8 7h8M8 11h6M8 15h7"/></svg></button>
+      <button class="nav-btn" data-tab="chat" title="交流"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 01-8 8.5 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></button>
+      <button class="nav-btn" data-tab="friends" title="动态"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M16 3.13a4 4 0 010 7.75"/><path d="M21 21v-2a4 4 0 00-3-3.87"/></svg></button>
     </div>
-    <div class="nav-avatar" id="userAvatar" onclick="switchTab('profile')"><span id="avatarText">?</span></div>
-  </div></nav>
+    <div class="nav-actions">
+      <button class="nav-btn" id="notifBtn" onclick="showNotifications()" title="通知">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="badge" id="notifBadge"></span>
+      </button>
+      <button class="nav-btn" onclick="toggleSettings()" title="设置"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button>
+      <div class="avatar" id="userAvatar" onclick="switchTab('profile')" title="我的"><span id="avatarText">?</span></div>
+    </div>
+  </nav>
 
+  <!-- 设置面板 -->
+  <div class="settings-panel" id="settingsPanel">
+    <h3 style="font-family:'Playfair Display'">自定义</h3>
+    <div class="theme-toggle"><button class="theme-btn active" data-theme="dark" onclick="setTheme('dark')">暗</button><button class="theme-btn" data-theme="light" onclick="setTheme('light')">亮</button></div>
+    <div><label>字号</label><input type="range" min="14" max="20" value="16" id="fontSizeSlider" oninput="updateFontSize(this.value)"></div>
+    <div><label>主色调</label><div style="display:flex;gap:8px;margin-top:8px"><span class="color-swatch active" style="background:#c9a87c" data-accent="#c9a87c" onclick="setAccent(this)"></span><span class="color-swatch" style="background:#6c9ce0" data-accent="#6c9ce0" onclick="setAccent(this)"></span><span class="color-swatch" style="background:#a0c98a" data-accent="#a0c98a" onclick="setAccent(this)"></span></div></div>
+    <div><label><input type="checkbox" id="bgVideoToggle" checked onchange="toggleBgVideo()"> 背景视频</label></div>
+  </div>
+
+  <!-- 英雄区 -->
   <section class="hero">
-    <video class="hero-video" autoplay muted loop playsinline>
-      <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-mountain-3129/1080p.mp4" type="video/mp4">
-    </video>
-    <div class="hero-mask"></div>
-    <div class="hero-inner">
-      <div class="hero-tag">Global Community</div>
-      <h1>探索<br>无界</h1>
-      <p>连接全球创作者。以科技为翼，以自然为镜。</p>
-    </div>
+    <video class="hero-video" autoplay muted loop playsinline><source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-mountain-3129/1080p.mp4" type="video/mp4"></video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content" id="heroContent"><h1>探索无界</h1></div>
+    <div class="hero-scroll"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
   </section>
 
-  <div class="main">
-    <div class="page active" id="tab-about"><div class="admin-bar" id="admin-about"><span>Admin</span><button onclick="openPublish('about')">发布</button></div><div class="sec-title">关于 Oskwk</div><div id="article-about"><p style="color:var(--text3)">加载中...</p></div></div>
-    <div class="page" id="tab-discover"><div class="admin-bar" id="admin-discover"><span>Admin</span><button onclick="openPublish('discover')">发布</button></div><div class="sec-title">最新发现</div><div id="article-discover"><p style="color:var(--text3)">加载中...</p></div></div>
-    <div class="page" id="tab-study"><div class="admin-bar" id="admin-study"><span>Admin</span><button onclick="openPublish('study')">发布</button></div><div class="sec-title">学术学习</div><div id="article-study"><p style="color:var(--text3)">加载中...</p></div></div>
-    <div class="page" id="tab-chat"><div class="sec-title">交流中心</div>
-      <div id="channelSelector">
-        <div style="display:flex;gap:0.4rem;margin-bottom:0.8rem"><input id="roomSearchInput" placeholder="搜索房间..." oninput="filterRooms()" style="flex:1;padding:0.5rem 0.8rem;border-radius:var(--radius);background:var(--surface2);border:1px solid var(--border);font-size:0.85rem;outline:none;color:var(--text);font-family:inherit"></div>
-        <div class="channel-grid" id="channelGrid">
-          <div class="channel-card" onclick="joinPublicRoom('大厅')">大厅</div><div class="channel-card" onclick="joinPublicRoom('技术')">技术</div><div class="channel-card" onclick="joinPublicRoom('理论')">理论</div><div class="channel-card" onclick="joinPublicRoom('艺术')">艺术</div>
-        </div>
-        <div style="display:flex;gap:0.5rem;margin-top:0.8rem"><button class="btn-row btn-secondary" onclick="showCreateRoom()" style="flex:1">创建房间</button><button class="btn-row btn-primary" onclick="startPrivateChat()" style="flex:1">私信</button></div>
-      </div>
-      <div id="chatPanel" style="display:none">
-        <button onclick="leaveRoom()" style="margin-bottom:0.8rem;padding:0.35rem 0.8rem;border-radius:var(--radius-full);background:var(--surface2);border:1px solid var(--border);font-size:0.85rem;color:var(--text);cursor:pointer">返回</button>
-        <div class="chat-box" id="chatBox"></div>
-        <div class="chat-input"><input id="msgInput" placeholder="输入消息..." onkeydown="if(event.key==='Enter')sendMsg()"><button onclick="document.getElementById('imgUp').click()">图片</button><input type="file" id="imgUp" accept="image/*" style="display:none" onchange="uploadImg()"><button onclick="sendMsg()">发送</button></div>
-      </div>
+  <div class="main-content">
+    <div class="page active" id="tab-about"><div id="article-about" class="card-grid"></div></div>
+    <div class="page" id="tab-discover"><div id="article-discover" class="card-grid"></div></div>
+    <div class="page" id="tab-study"><div id="article-study" class="card-grid"></div></div>
+    <div class="page" id="tab-chat">
+      <div id="roomList" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px"></div>
+      <div id="chatPanel" style="display:none"><div class="chat-container"><div class="chat-messages" id="chatBox"></div><div style="display:flex;padding:12px;gap:8px;border-top:1px solid var(--border)"><input id="msgInput" placeholder="输入消息..." onkeydown="if(event.key==='Enter')sendMsg()"><button class="nav-btn" onclick="sendMsg()" id="sendBtn" title="发送"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button><button class="nav-btn" onclick="document.getElementById('imgUp').click()" title="图片"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button><input type="file" id="imgUp" accept="image/*" style="display:none" onchange="uploadImg()"></div></div><button class="nav-btn" style="margin-top:12px; width:auto; padding:8px 16px;" onclick="leaveRoom()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button></div>
     </div>
-    <div class="page" id="tab-friends"><div class="sec-title">朋友动态</div><div style="margin-bottom:1rem"><button class="btn-row btn-primary" onclick="openPostDialog()">发布动态</button></div><div id="friendsFeed"><p style="color:var(--text3)">加载中...</p></div></div>
-    <div class="page" id="tab-profile"><div class="sec-title">个人中心</div><div class="profile-card">
-      <div class="profile-header"><div class="profile-avatar-lg" id="profileAvatar" onclick="uploadAvatar()"><span id="profileAvatarText">?</span></div><div><h2 id="profileNick" style="font-size:1.1rem">--</h2><p id="profileMail" style="color:var(--text2);font-size:0.8rem">--</p></div></div>
-      <div class="profile-stats"><div class="profile-stat"><div class="num" id="joinDays">0</div><div class="lab">天数</div></div><div class="profile-stat"><div class="num">VIP</div><div class="lab">等级</div></div><div class="profile-stat"><div class="num">∞</div><div class="lab">潜力</div></div></div>
-      <button class="btn-row btn-secondary" onclick="openEdit()">编辑资料</button>
-      <button class="btn-row btn-secondary" onclick="showFriends()">好友列表</button>
-      <button class="btn-row btn-secondary" onclick="showFriendRequests()">好友请求</button>
-      <button class="btn-row btn-secondary" onclick="searchUser()">添加好友</button>
-      <div id="adminProfile" style="display:none;margin-top:0.4rem"><button class="btn-row btn-primary" onclick="showUsers()">用户管理</button></div>
-      <button class="btn-row btn-danger" onclick="doLogout()">退出登录</button>
-    </div></div>
+    <div class="page" id="tab-friends">
+      <button class="nav-btn" style="margin-bottom:24px; width:auto; padding:12px 24px;" onclick="openPostDialog()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+      <div id="friendsFeed"></div>
+    </div>
+    <div class="page" id="tab-profile"><div id="profileContent" style="max-width:400px;margin:0 auto"></div></div>
   </div>
-  <div class="footer">© 2026 Oskwk. All rights reserved.</div>
+
+  <div class="mob-nav">
+    <button class="nav-btn active" data-tab="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg></button>
+    <button class="nav-btn" data-tab="discover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></button>
+    <button class="nav-btn" data-tab="study"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/></svg></button>
+    <button class="nav-btn" data-tab="chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 01-8 8.5"/></svg></button>
+    <button class="nav-btn" data-tab="friends"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/></svg></button>
+    <button class="nav-btn" data-tab="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/></svg></button>
+  </div>
 </div>
 
-<div class="mob-nav" id="mobNav">
-  <button class="on" onclick="switchTab('about');setMob(0)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span>关于</span></button>
-  <button onclick="switchTab('discover');setMob(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>发现</span></button>
-  <button onclick="switchTab('study');setMob(2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>学术</span></button>
-  <button onclick="switchTab('chat');setMob(3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>交流</span></button>
-  <button onclick="switchTab('friends');setMob(4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span>动态</span></button>
-  <button onclick="switchTab('profile');setMob(5)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>我的</span></button>
-</div>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+const SUPABASE_URL = 'https://qnblruruefgbixbfgwkh.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const ADMIN_EMAIL = '279933264@qq.com';
 
-<div class="modal-overlay" id="createRoomModal" onclick="if(event.target===this)closeCreateRoom()"><div class="modal-box"><button class="modal-close" onclick="closeCreateRoom()">×</button><h3 style="margin-bottom:0.8rem">创建房间</h3><input id="newRoomName" class="inp" placeholder="房间名称"><input id="newRoomPassword" type="password" class="inp" placeholder="密码（可选）"><button class="btn-row btn-primary" onclick="createRoom()">创建</button></div></div>
-<div class="modal-overlay" id="passwordModal" onclick="if(event.target===this)closePasswordModal()"><div class="modal-box"><button class="modal-close" onclick="closePasswordModal()">×</button><h3 style="margin-bottom:0.8rem">房间已加密</h3><input id="roomPasswordInput" type="password" class="inp" placeholder="请输入房间密码"><button class="btn-row btn-primary" onclick="verifyRoomPassword()">进入</button></div></div>
-<div class="modal-overlay" id="postModal" onclick="if(event.target===this)closePostDialog()"><div class="modal-box"><button class="modal-close" onclick="closePostDialog()">×</button><h3 style="margin-bottom:0.8rem">发布动态</h3><textarea id="postContent" class="inp" placeholder="说点什么..." rows="3" style="resize:vertical"></textarea><div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.6rem"><button class="btn-row btn-secondary" style="width:auto;padding:0.4rem 0.9rem;margin:0" onclick="document.getElementById('postFile').click()">选择图片</button><span id="postFileName" style="font-size:0.8rem;color:var(--text2)">未选择</span><input type="file" id="postFile" accept="image/*" style="display:none" onchange="previewPostImg()"></div><button class="btn-row btn-primary" onclick="submitPost()">发布</button></div></div>
-<div class="modal-overlay" id="friendModal" onclick="if(event.target===this)closeFriendModal()"><div class="modal-box" style="max-width:480px"><button class="modal-close" onclick="closeFriendModal()">×</button><div id="friendModalContent"></div></div></div>
-<div class="modal-overlay" id="publishModal" onclick="if(event.target===this)closePublish()"><div class="modal-box"><button class="modal-close" onclick="closePublish()">×</button><h3 style="margin-bottom:0.8rem">发布文章</h3><input id="pubTitle" class="inp" placeholder="标题"><textarea id="pubContent" class="inp" placeholder="内容" rows="4" style="resize:vertical"></textarea><input id="pubImgUrl" class="inp" placeholder="图片URL（可选）"><button class="btn-row btn-primary" onclick="submitArticle()">发布</button></div></div>
-<div class="modal-overlay" id="editModal" onclick="if(event.target===this)closeEdit()"><div class="modal-box"><button class="modal-close" onclick="closeEdit()">×</button><h3 style="margin-bottom:0.8rem">编辑资料</h3><input id="editNickname" class="inp" placeholder="新昵称"><input id="editOldPwd" type="password" class="inp" placeholder="当前密码"><input id="editNewPwd" type="password" class="inp" placeholder="新密码（不修改留空）"><button class="btn-row btn-primary" onclick="saveProfile()">保存</button></div></div>
-<div class="modal-overlay" id="adminModal" onclick="if(event.target===this)closeAdmin()"><div class="modal-box" style="max-width:480px"><button class="modal-close" onclick="closeAdmin()">×</button><h3 style="margin-bottom:0.8rem">用户管理</h3><div id="adminUserList" style="max-height:60vh;overflow-y:auto"></div></div></div>
-<div class="lightbox" id="lightbox" onclick="closeLightbox()"><img id="lightboxImg" src=""></div>
-<div class="toast" id="toast"></div>
+let currentUser = null, currentRoom = null, realtimeSub = null, notifSub = null;
 
-<script>
-var SUPABASE_URL='https://qnblruruefgbixbfgwkh.supabase.co';
-var SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
-var ADMIN_EMAIL='279933264@qq.com';
-var API_URL=SUPABASE_URL+'/rest/v1';
-var STORAGE_URL=SUPABASE_URL+'/storage/v1/object';
-var currentUser=null,currentRoom=null,pubCategory=null,pollInterval=null,lastMsgTime=null;
-var pendingRoom=null,allRooms=[];
+const $ = s => document.querySelector(s);
+const toast = msg => alert(msg);
+const fastPhoto = (w=400,h=250) => `https://picsum.photos/seed/${Date.now()}/${w}/${h}`;
 
-function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
-function safeSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-function safeRemove(k){try{localStorage.removeItem(k)}catch(e){}}
-function showLogin(){document.getElementById('loginCard').style.display='block';document.getElementById('registerCard').style.display='none';}
-function showRegister(){document.getElementById('loginCard').style.display='none';document.getElementById('registerCard').style.display='block';}
-function hint(msg,isErr){var h=document.getElementById('loginHint');h.textContent=msg;h.className='auth-hint'+(isErr?' err':'');}
-function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500);}
-function escapeHtml(text){if(!text)return '';return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
-function apiHeaders(extra){var h={'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY};if(extra)for(var k in extra)h[k]=extra[k];return h;}
-function apiGet(table,query,cb){fetch(API_URL+'/'+table+'?'+query,{headers:apiHeaders()}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(d){cb(null,d);}).catch(function(e){cb(e,null);});}
-function apiPost(table,body,cb){fetch(API_URL+'/'+table,{method:'POST',headers:apiHeaders({'Content-Type':'application/json','Prefer':'return=representation'}),body:JSON.stringify(body)}).then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();}).then(function(d){cb(null,d);}).catch(function(e){cb(e,null);});}
-function apiPatch(table,query,body,cb){fetch(API_URL+'/'+table+'?'+query,{method:'PATCH',headers:apiHeaders({'Content-Type':'application/json'}),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);cb(null);}).catch(function(e){cb(e);});}
-function apiDelete(table,query,cb){fetch(API_URL+'/'+table+'?'+query,{method:'DELETE',headers:apiHeaders({'Prefer':'return=minimal'})}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);cb(null);}).catch(function(e){cb(e);});}
-function uploadFile(bucket,fileName,file,cb){var url=STORAGE_URL+'/'+bucket+'/'+fileName;var form=new FormData();form.append('file',file);fetch(url,{method:'POST',headers:{'Authorization':'Bearer '+SUPABASE_KEY},body:form}).then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(t);});return r.json();}).then(function(){var publicUrl=SUPABASE_URL+'/storage/v1/object/public/'+bucket+'/'+fileName;cb(null,publicUrl);}).catch(function(e){cb(e,null);});}
-
-function compressImage(file,maxW,quality,cb){
-  if(!file.type.match(/image\//)){cb(file);return;}
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var img=new Image();
-    img.onload=function(){
-      var w=img.width,h=img.height;
-      if(w>maxW){h=Math.round(h*(maxW/w));w=maxW;}
-      var canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
-      var ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,w,h);
-      canvas.toBlob(function(blob){if(blob){cb(new File([blob],file.name,{type:'image/jpeg'}));}else{cb(file);}},'image/jpeg',quality);
-    };img.src=e.target.result;
-  };reader.readAsDataURL(file);
-}
-
-// 启动
-setTimeout(function(){
-  document.getElementById('loader').classList.add('done');
-  setTimeout(function(){document.getElementById('loader').style.display='none';},600);
-  if(!tryAutoLogin()){document.getElementById('authOverlay').classList.add('show');showLogin();}
-},800);
-
-function tryAutoLogin(){
-  var saved=safeGet('oskwk_user');if(!saved)return false;
-  var user;try{user=JSON.parse(saved);}catch(e){safeRemove('oskwk_user');return false;}
-  if(!user||!user.email){safeRemove('oskwk_user');return false;}
-  currentUser=user;enterApp();
-  apiGet('profiles','email=eq.'+encodeURIComponent(user.email)+'&select=*',function(err,data){
-    if(err)return;if(!data||!data.length||data[0].is_banned){toast('账户状态异常，请重新登录');doLogout();return;}
-    currentUser=data[0];safeSet('oskwk_user',JSON.stringify(currentUser));updateProfile();
-  });
-  return true;
-}
-
-// 认证
-window.doLogin=function(){
-  var email=document.getElementById('loginEmail').value.trim();
-  var pwd=document.getElementById('loginPassword').value.trim();
-  if(!email||!pwd){hint('请输入邮箱和密码',true);return;}
-  var btn=document.getElementById('loginBtn');btn.disabled=true;btn.textContent='登录中...';
-  apiGet('profiles','email=eq.'+encodeURIComponent(email)+'&select=*',function(err,data){
-    btn.disabled=false;btn.textContent='登录';
-    if(err){hint('请求失败：'+(err.message||'网络错误'),true);return;}
-    if(!data||!data.length){hint('邮箱未注册',true);return;}
-    var user=data[0];
-    if(user.password_hash!==pwd){hint('密码错误',true);return;}
-    if(user.is_banned){hint('账号已被限制',true);return;}
-    currentUser=user;safeSet('oskwk_user',JSON.stringify(currentUser));enterApp();
-  });
+// 主题/字号/主色
+window.setTheme = t => {
+  document.documentElement.setAttribute('data-theme', t);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
+  localStorage.setItem('oskwk_theme', t);
 };
-window.sendCode=function(){toast('验证码：123456');};
-window.doRegister=function(){
-  var phone=document.getElementById('regPhone').value.trim();
-  var email=document.getElementById('regEmail').value.trim();
-  var code=document.getElementById('regCode').value.trim();
-  var pwd=document.getElementById('regPassword').value.trim();
-  var nick=document.getElementById('regNickname').value.trim();
-  if(!phone||!email||!pwd||!nick){hint('请填写所有必填项',true);return;}
-  if(!/^1[3-9]\d{9}$/.test(phone)){hint('手机号格式不正确',true);return;}
-  if(code!=='123456'){hint('验证码错误',true);return;}
-  if(pwd.length<6){hint('密码至少6位',true);return;}
-  if(!document.getElementById('regAgree').checked){hint('请同意协议',true);return;}
-  var btn=document.getElementById('regBtn');btn.disabled=true;btn.textContent='创建中...';
-  var obj={email:email,nickname:nick,phone:phone,password_hash:pwd,created_at:new Date().toISOString(),location:'Earth',is_banned:false};
-  apiPost('profiles',obj,function(err,data){
-    btn.disabled=false;btn.textContent='创建账户';
-    if(err){var msg=(err.message||'').toLowerCase();if(msg.indexOf('duplicate')>=0||msg.indexOf('unique')>=0)hint('邮箱已注册',true);else hint('注册失败：'+(err.message||'网络错误'),true);return;}
-    currentUser=data[0];safeSet('oskwk_user',JSON.stringify(currentUser));enterApp();
-  });
+window.updateFontSize = v => {
+  document.documentElement.style.setProperty('--font-size', v+'px');
+  localStorage.setItem('oskwk_fontsize', v);
 };
+window.setAccent = el => {
+  const c = el.dataset.accent;
+  document.documentElement.style.setProperty('--accent', c);
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  localStorage.setItem('oskwk_accent', c);
+};
+window.toggleBgVideo = () => {
+  const v = document.querySelector('.hero-video');
+  v.style.display = $('#bgVideoToggle').checked ? 'block' : 'none';
+};
+window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-// 主界面
-function enterApp(){
-  document.getElementById('authOverlay').classList.add('hidden');
-  var app=document.getElementById('app');app.style.display='block';setTimeout(function(){app.classList.add('on');},50);
-  updateProfile();
-  setTimeout(function(){loadArticles('about');loadArticles('discover');loadArticles('study');},100);
-  if(currentUser&&currentUser.email===ADMIN_EMAIL){
-    var bars=document.querySelectorAll('.admin-bar');for(var i=0;i<bars.length;i++)bars[i].classList.add('vis');
-    document.getElementById('adminProfile').style.display='block';
-  }
-  loadRoomList();
-}
-function updateProfile(){
-  if(!currentUser)return;
-  document.getElementById('profileNick').textContent=currentUser.nickname||'--';
-  document.getElementById('profileMail').textContent=currentUser.email||'--';
-  var days=Math.max(1,Math.floor((Date.now()-new Date(currentUser.created_at).getTime())/86400000));
-  document.getElementById('joinDays').textContent=days;
-  var initial=(currentUser.nickname?currentUser.nickname.charAt(0).toUpperCase():'?');
-  var avaHtml=currentUser.avatar_url?'<img src="'+currentUser.avatar_url+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':'<span>'+initial+'</span>';
-  document.getElementById('userAvatar').innerHTML=avaHtml;document.getElementById('profileAvatar').innerHTML=avaHtml;
-}
-window.doLogout=function(){if(confirm('确定退出登录？')){safeRemove('oskwk_user');location.reload();}};
+// 初始化设置
+(() => {
+  const t = localStorage.getItem('oskwk_theme')||'dark'; setTheme(t);
+  const s = localStorage.getItem('oskwk_fontsize')||'16'; $('#fontSizeSlider').value = s; updateFontSize(s);
+  const a = localStorage.getItem('oskwk_accent')||'#c9a87c';
+  document.documentElement.style.setProperty('--accent', a);
+  document.querySelector(`.color-swatch[data-accent="${a}"]`)?.classList.add('active');
+})();
 
-// 标签
-window.switchTab=function(cat){
-  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-  var el=document.getElementById('tab-'+cat);if(el)el.classList.add('active');
-  if(cat!=='chat'&&currentRoom)leaveRoom();
-  if(cat==='friends')loadFriendsFeed();
-  document.querySelectorAll('.nav-links button').forEach(function(b){b.classList.toggle('on',b.textContent.includes(cat==='about'?'关于':cat==='discover'?'发现':cat==='study'?'学术':cat==='chat'?'交流':cat==='friends'?'动态':''));});
+// 视差
+window.addEventListener('scroll', () => {
+  const s = window.scrollY, hero = document.getElementById('heroContent');
+  if(hero) { hero.style.opacity = Math.max(0,1 - s/500); hero.style.transform = `translateY(${s*0.4}px)`; }
+});
+
+// 标签切换
+window.switchTab = async tab => {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+tab)?.classList.add('active');
+  document.querySelectorAll('.nav-links .nav-btn, .mob-nav .nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   window.scrollTo({top:0,behavior:'smooth'});
+  if(tab==='about') loadArticles('about');
+  if(tab==='discover') loadArticles('discover');
+  if(tab==='study') loadArticles('study');
+  if(tab==='chat') renderChatRooms();
+  if(tab==='friends') loadFriendsFeed();
+  if(tab==='profile') renderProfile();
 };
-window.setMob=function(idx){var btns=document.querySelectorAll('.mob-nav button');for(var i=0;i<btns.length;i++)btns[i].classList.toggle('on',i===idx);};
 
-// 文章
-function loadArticles(cat){
-  var container=document.getElementById('article-'+cat);
-  container.innerHTML='<p style="color:var(--text3)">加载中...</p>';
-  apiGet('articles','category=eq.'+encodeURIComponent(cat)+'&order=created_at.desc&select=*',function(err,data){
-    if(err||!data||!data.length){container.innerHTML='<p style="color:var(--text3)">'+(err?'加载失败':'暂无文章')+'</p>';return;}
-    var html='';
-    for(var i=0;i<data.length;i++){
-      var a=data[i];
-      var imgHtml=a.image_url?'<br><img src="'+a.image_url+'" style="max-width:100%;border-radius:10px;margin:.4rem 0;display:block" loading="lazy" onclick="event.stopPropagation();openLightbox(\''+a.image_url+'\')">':'';
-      var delBtn=(currentUser&&currentUser.email===ADMIN_EMAIL)?'<button class="art-del show" onclick="event.stopPropagation();deleteArticle('+a.id+',\''+cat+'\')">删除</button>':'';
-      html+='<div class="article-item" onclick="toggleArticle(this)">'+delBtn+'<h3>'+escapeHtml(a.title)+'</h3>'+
-      '<div class="art-content">'+(a.content||'').replace(/\n/g,'<br>')+imgHtml+'</div>'+
-      '<small>'+escapeHtml(a.author||'匿名')+' · '+new Date(a.created_at).toLocaleString()+'</small>'+
-      '<div class="comment-sec"><strong>留言</strong><div id="commentList-'+a.id+'"></div>'+
-      '<div class="comment-input-row"><input id="commentInput-'+a.id+'" placeholder="写下想法..." onclick="event.stopPropagation()"><button onclick="event.stopPropagation();postComment('+a.id+')">发送</button></div></div></div>';
-    }
-    container.innerHTML=html;
-    for(var j=0;j<data.length;j++)loadComments(data[j].id);
-  });
+// 文章加载
+async function loadArticles(cat) {
+  const c = document.getElementById('article-'+cat); if(!c) return;
+  const {data} = await supabase.from('articles').select('*').eq('category',cat).order('created_at',{ascending:false});
+  c.innerHTML = (data||[]).map(a => `
+    <div class="photo-card" onclick="expandArticle(${a.id})">
+      <img src="${a.image_url||fastPhoto()}" loading="lazy" onerror="this.src='${fastPhoto()}'">
+      <div class="photo-card-body"><h3>${a.title}</h3><p>${a.content?.substring(0,100)||''}</p></div>
+    </div>`).join('')||'<p>暂无</p>';
 }
-window.toggleArticle=function(el){
-  if(event.target.closest('.art-del')||event.target.closest('button')||event.target.closest('input')||event.target.closest('textarea'))return;
-  el.classList.toggle('expanded');
+window.expandArticle = async id => {
+  const {data:a} = await supabase.from('articles').select('*').eq('id',id).single();
+  if(!a) return;
+  let html = `<h2>${a.title}</h2><p>${a.content}</p>`;
+  const {data:coms} = await supabase.from('comments').select('*').eq('article_id',id).order('created_at');
+  html += `<div>${(coms||[]).map(c=>`<p><b>${c.nickname}:</b> ${c.content}</p>`).join('')}</div>
+    <input id="commentInput" placeholder="评论..."><button onclick="postComment(${id})">发送</button>`;
+  const modal = document.getElementById('genericModal');
+  document.getElementById('genericContent').innerHTML = html;
+  modal.classList.add('show');
 };
-function loadComments(id){
-  apiGet('comments','article_id=eq.'+id+'&order=created_at&select=*',function(err,data){
-    var box=document.getElementById('commentList-'+id);if(!box)return;var html='';
-    if(data)for(var i=0;i<data.length;i++)html+='<p style="font-size:.85rem;color:var(--text2);margin-bottom:.3rem"><b>'+escapeHtml(data[i].nickname)+'</b>: '+escapeHtml(data[i].content)+' <small>'+new Date(data[i].created_at).toLocaleTimeString()+'</small></p>';
-    box.innerHTML=html;
-  });
-}
-window.postComment=function(id){
-  if(!currentUser){toast('请先登录');return;}
-  var input=document.getElementById('commentInput-'+id);if(!input||!input.value.trim())return;
-  apiPost('comments',{article_id:id,nickname:currentUser.nickname,content:input.value.trim()},function(err){
-    if(err){toast('发送失败');return;}input.value='';loadComments(id);
-  });
+window.postComment = async id => {
+  const input = document.getElementById('commentInput');
+  if(!input.value.trim()||!currentUser) return;
+  await supabase.from('comments').insert([{article_id:id, nickname:currentUser.nickname, content:input.value.trim()}]);
+  toast('评论成功'); expandArticle(id);
 };
-window.openPublish=function(cat){if(!currentUser||currentUser.email!==ADMIN_EMAIL)return;pubCategory=cat;document.getElementById('publishModal').classList.add('show');};
-window.closePublish=function(){document.getElementById('publishModal').classList.remove('show');};
-window.submitArticle=function(){
-  var title=document.getElementById('pubTitle').value.trim();
-  var content=document.getElementById('pubContent').value.trim();
-  var img=document.getElementById('pubImgUrl').value.trim();
-  if(!title||!content){toast('请填写标题和内容');return;}
-  apiPost('articles',{title:title,content:content,category:pubCategory,author:currentUser.nickname,image_url:img||null},function(err){
-    if(err){toast('发布失败');}else{toast('发布成功');closePublish();loadArticles(pubCategory);}
-  });
-};
-window.deleteArticle=function(id,cat){if(!confirm('确认删除？'))return;apiDelete('articles','id=eq.'+id,function(err){if(err){toast('删除失败');}else{toast('已删除');loadArticles(cat);}});};
 
 // 聊天
-window.joinPublicRoom=function(roomName){if(!currentUser)return;currentRoom='oskwk-'+roomName;startChatSession();};
-function loadRoomList(){
-  apiGet('rooms','order=created_at.desc&select=*',function(err,data){
-    if(err||!data)return;allRooms=data;
-    var grid=document.getElementById('channelGrid');
-    var cards=grid.querySelectorAll('.custom-room');cards.forEach(function(c){c.remove();});
-    data.forEach(function(room){
-      var card=document.createElement('div');card.className='channel-card custom-room';card.textContent='🔒 '+room.name;
-      card.onclick=function(){joinCustomRoom(room.name,room.password);};grid.appendChild(card);
-    });
-  });
+window.joinPublicRoom = name => { if(!currentUser) return toast('请登录'); currentRoom='oskwk-'+name; startChat(); };
+window.startPrivateChat = () => {
+  const peer = prompt('对方邮箱'); if(!peer) return;
+  currentRoom = 'private-'+[currentUser.email,peer].sort().join('_');
+  startChat();
+};
+async function startChat() {
+  $('#roomList').style.display='none'; $('#chatPanel').style.display='block'; $('#chatBox').innerHTML='';
+  const {data} = await supabase.from('messages').select('*').eq('room',currentRoom).order('created_at',{ascending:true}).limit(50);
+  data?.forEach(renderMsg);
+  if(realtimeSub) supabase.removeChannel(realtimeSub);
+  realtimeSub = supabase.channel('room-'+currentRoom).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${currentRoom}`},p=>renderMsg(p.new)).subscribe();
 }
-window.filterRooms=function(){
-  var kw=document.getElementById('roomSearchInput').value.trim().toLowerCase();
-  var cards=document.querySelectorAll('.channel-card');
-  cards.forEach(function(c){
-    if(!c.classList.contains('custom-room')){c.style.display='block';return;}
-    c.style.display=!kw||c.textContent.replace('🔒 ','').toLowerCase().includes(kw)?'block':'none';
-  });
-};
-window.joinCustomRoom=function(roomName,password){
-  if(password&&password.trim()!==''){pendingRoom={name:roomName,password:password};document.getElementById('passwordModal').classList.add('show');document.getElementById('roomPasswordInput').value='';}
-  else{currentRoom='oskwk-'+roomName;startChatSession();}
-};
-window.verifyRoomPassword=function(){
-  var pwd=document.getElementById('roomPasswordInput').value.trim();
-  if(pendingRoom&&pwd===pendingRoom.password){currentRoom='oskwk-'+pendingRoom.name;closePasswordModal();startChatSession();}else{toast('密码错误');}
-};
-window.closePasswordModal=function(){document.getElementById('passwordModal').classList.remove('show');};
-window.showCreateRoom=function(){document.getElementById('createRoomModal').classList.add('show');};
-window.closeCreateRoom=function(){document.getElementById('createRoomModal').classList.remove('show');};
-window.createRoom=function(){
-  var name=document.getElementById('newRoomName').value.trim(),pwd=document.getElementById('newRoomPassword').value.trim();
-  if(!name)return toast('请输入房间名称');if(['大厅','技术','理论','艺术'].includes(name))return toast('不能与公共房间重名');
-  apiPost('rooms',{name:name,password:pwd,created_by:currentUser.email},function(err){if(err)toast('创建失败');else{toast('房间已创建');closeCreateRoom();loadRoomList();}});
-};
-window.startPrivateChat=function(){
-  var peer=prompt('输入对方邮箱：');if(!peer||peer===currentUser.email)return;
-  apiGet('profiles','email=eq.'+encodeURIComponent(peer)+'&select=*',function(err,data){
-    if(err||!data||!data.length)return toast('用户不存在');
-    currentRoom='private-'+[currentUser.email,peer].sort().join('_');startChatSession();
-  });
-};
-function startChatSession(){document.getElementById('channelSelector').style.display='none';document.getElementById('chatPanel').style.display='block';document.getElementById('chatBox').innerHTML='';lastMsgTime=null;loadChat(function(){startPolling();});}
-window.leaveRoom=function(){stopPolling();currentRoom=null;document.getElementById('channelSelector').style.display='block';document.getElementById('chatPanel').style.display='none';};
-function startPolling(){if(pollInterval)clearInterval(pollInterval);pollInterval=setInterval(function(){if(currentRoom)loadChat();},3000);}
-function stopPolling(){if(pollInterval){clearInterval(pollInterval);pollInterval=null;}}
-function loadChat(cb){
-  if(!currentRoom)return;
-  apiGet('messages','room=eq.'+encodeURIComponent(currentRoom)+'&order=created_at&select=*',function(err,data){
-    if(err)return;var box=document.getElementById('chatBox');if(!box)return;
-    if(data&&data.length){
-      var recent=data.slice(-50);var lastTime=recent[recent.length-1].created_at;
-      if(lastTime===lastMsgTime){if(cb)cb();return;}
-      lastMsgTime=lastTime;
-      var fragment=document.createDocumentFragment();
-      for(var i=0;i<recent.length;i++){var div=renderMsgElement(recent[i]);fragment.appendChild(div);}
-      box.innerHTML='';box.appendChild(fragment);
-      box.scrollTop=box.scrollHeight;
-    }else{lastMsgTime=null;box.innerHTML='';}
-    if(cb)cb();
-  });
+function renderMsg(m) {
+  const box = $('#chatBox'); if(!box) return;
+  const d = document.createElement('div'); d.className='message '+(m.nickname===currentUser?.nickname?'mine':'other');
+  d.innerHTML = `<b>${m.nickname}</b><br>${m.message||''}${m.image_url?`<br><img src="${m.image_url}">`:''}`;
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
 }
-function renderMsgElement(msg){
-  var div=document.createElement('div'),isMine=msg.nickname===(currentUser?currentUser.nickname:'');
-  div.className='msg '+(isMine?'mine':'other');
-  var avatarHtml=msg.avatar_url?'<img src="'+msg.avatar_url+'" class="msg-avatar">':'';
-  var imgHtml=msg.image_url?'<br><img src="'+msg.image_url+'" style="max-width:180px;border-radius:8px;margin-top:.3rem;display:block;cursor:pointer" loading="lazy" onclick="openLightbox(\''+msg.image_url+'\')">':'';
-  div.innerHTML=avatarHtml+'<b>'+escapeHtml(msg.nickname)+'</b><br>'+escapeHtml(msg.message||'')+imgHtml+'<span class="time">'+new Date(msg.created_at).toLocaleTimeString()+'</span>';
-  return div;
+window.sendMsg = async () => {
+  const i = $('#msgInput'), btn = $('#sendBtn'); const t = i.value.trim();
+  if(!t||!currentRoom) return; btn.disabled=true; i.value='';
+  await supabase.from('messages').insert([{room:currentRoom, nickname:currentUser.nickname, message:t}]);
+  btn.disabled=false;
+};
+window.uploadImg = async () => {
+  const f = $('#imgUp').files[0]; if(!f||!currentRoom) return;
+  const c=document.createElement('canvas'),ctx=c.getContext('2d'),img=new Image(); img.src=URL.createObjectURL(f);
+  await new Promise(r=>img.onload=r); let w=img.width,h=img.height; if(w>800){h*=800/w;w=800;}
+  c.width=w;c.height=h;ctx.drawImage(img,0,0,w,h);
+  const blob = await new Promise(r=>c.toBlob(r,'image/jpeg',0.7));
+  const name = `chat_${Date.now()}.jpg`;
+  await supabase.storage.from('chat-images').upload(name,blob);
+  const url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
+  await supabase.from('messages').insert([{room:currentRoom, nickname:currentUser.nickname, image_url:url}]);
+  $('#imgUp').value='';
+};
+window.leaveRoom = () => { if(realtimeSub) supabase.removeChannel(realtimeSub); currentRoom=null; $('#chatPanel').style.display='none'; $('#roomList').style.display='flex'; };
+function renderChatRooms() {
+  $('#chatPanel').style.display='none'; $('#roomList').style.display='flex';
+  $('#roomList').innerHTML = `
+    <button class="nav-btn" onclick="joinPublicRoom('大厅')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button>
+    <button class="nav-btn" onclick="joinPublicRoom('技术')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></button>
+    <button class="nav-btn" onclick="joinPublicRoom('理论')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/></svg></button>
+    <button class="nav-btn" onclick="joinPublicRoom('艺术')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg></button>
+    <button class="nav-btn" onclick="startPrivateChat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
+  `;
 }
-function renderMsg(msg){var box=document.getElementById('chatBox');if(!box)return;var el=renderMsgElement(msg);box.appendChild(el);box.scrollTop=box.scrollHeight;}
-window.sendMsg=function(){
-  if(!currentUser||!currentRoom)return;
-  var text=document.getElementById('msgInput').value.trim();if(!text)return;
-  apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,message:text,avatar_url:currentUser.avatar_url||null},function(err){
-    if(err){toast('发送失败');}else{document.getElementById('msgInput').value='';loadChat();}
-  });
-};
-window.uploadImg=function(){
-  if(!currentUser||!currentRoom)return;
-  var file=document.getElementById('imgUp').files[0];if(!file)return;
-  if(file.size>5*1024*1024){toast('图片不能超过5MB');document.getElementById('imgUp').value='';return;}
-  compressImage(file,800,0.7,function(compressedFile){
-    var ext='jpg';var fileName='chat_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
-    uploadFile('chat-images',fileName,compressedFile,function(err,publicUrl){
-      if(err){toast('上传失败');document.getElementById('imgUp').value='';return;}
-      apiPost('messages',{room:currentRoom,nickname:currentUser.nickname,image_url:publicUrl,avatar_url:currentUser.avatar_url||null},function(err2){
-        if(err2){toast('发送失败');}else{toast('图片已发送');loadChat();}
-        document.getElementById('imgUp').value='';
-      });
-    });
-  });
-};
 
-// 好友系统
-window.showFriends=function(){
-  if(!currentUser)return;
-  var q='or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&status=eq.accepted&select=*';
-  apiGet('friendships',q,function(err,data){
-    if(err){toast('加载失败');return;}var html='<h3>我的好友</h3>';
-    if(!data||!data.length){html+='<p>暂无好友</p>';}
-    else{
-      var friendEmails=[];data.forEach(function(f){var email=f.from_email===currentUser.email?f.to_email:f.from_email;if(friendEmails.indexOf(email)===-1)friendEmails.push(email);});
-      friendEmails.forEach(function(email){
-        apiGet('profiles','email=eq.'+encodeURIComponent(email)+'&select=nickname,avatar_url',function(err2,profiles){
-          if(err2||!profiles||!profiles.length)return;var p=profiles[0];
-          var ava=p.avatar_url?'<img src="'+p.avatar_url+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover;margin-right:.5rem">':'<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;margin-right:.5rem;font-weight:700">'+p.nickname.charAt(0).toUpperCase()+'</div>';
-          document.getElementById('friendModalContent').innerHTML+='<div class="friend-card">'+ava+'<span>'+escapeHtml(p.nickname)+'</span><span style="color:var(--text3);font-size:.8rem">'+escapeHtml(email)+'</span></div>';
-        });
-      });
-    }
-    document.getElementById('friendModalContent').innerHTML=html;
-    document.getElementById('friendModal').classList.add('show');
-  });
+// 动态/好友
+window.openPostDialog = () => {
+  document.getElementById('genericContent').innerHTML = `<textarea id="postText" placeholder="说点什么..."></textarea><input type="file" id="postFile" accept="image/*"><button class="primary" onclick="submitPost()">发布</button>`;
+  document.getElementById('genericModal').classList.add('show');
 };
-window.showFriendRequests=function(){
-  if(!currentUser)return;
-  apiGet('friendships','to_email=eq.'+encodeURIComponent(currentUser.email)+'&status=eq.pending&select=*',function(err,data){
-    if(err){toast('加载失败');return;}var html='<h3>好友请求</h3>';
-    if(!data||!data.length){html+='<p>暂无请求</p>';}
-    else{data.forEach(function(f){html+='<div class="friend-card"><span>'+escapeHtml(f.from_email)+'</span><button class="btn-row btn-primary" style="width:auto;padding:.3rem .6rem;margin:0" onclick="handleRequest('+f.id+',\'accepted\')">接受</button><button class="btn-row btn-danger" style="width:auto;padding:.3rem .6rem;margin:0" onclick="handleRequest('+f.id+',\'rejected\')">拒绝</button></div>';});}
-    document.getElementById('friendModalContent').innerHTML=html;
-    document.getElementById('friendModal').classList.add('show');
-  });
-};
-window.handleRequest=function(id,status){
-  apiPatch('friendships','id=eq.'+id,{status:status},function(err){if(err)toast('操作失败');else{toast(status==='accepted'?'已接受':'已拒绝');showFriendRequests();}});
-};
-window.searchUser=function(){
-  var email=prompt('输入对方邮箱或昵称搜索：');if(!email)return;
-  apiGet('profiles','or=(email.eq.'+encodeURIComponent(email)+',nickname.eq.'+encodeURIComponent(email)+')&select=*',function(err,data){
-    if(err||!data||!data.length){toast('未找到用户');return;}var user=data[0];
-    if(user.email===currentUser.email){toast('不能添加自己');return;}
-    var checkQ='or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&or=(from_email.eq.'+encodeURIComponent(user.email)+',to_email.eq.'+encodeURIComponent(user.email)+')&select=*';
-    apiGet('friendships',checkQ,function(err2,rels){
-      if(err2)return;if(rels&&rels.length){toast('已经发送过请求或已是好友');return;}
-      apiPost('friendships',{from_email:currentUser.email,to_email:user.email},function(err3){if(err3){toast('发送失败');}else{toast('好友请求已发送');}});
-    });
-  });
-};
-window.closeFriendModal=function(){document.getElementById('friendModal').classList.remove('show');};
-
-// 朋友圈
-var pendingPostFile=null;
-window.previewPostImg=function(){var file=document.getElementById('postFile').files[0];if(!file)return;pendingPostFile=file;document.getElementById('postFileName').textContent=file.name;};
-window.openPostDialog=function(){document.getElementById('postContent').value='';document.getElementById('postFileName').textContent='未选择';pendingPostFile=null;document.getElementById('postModal').classList.add('show');};
-window.closePostDialog=function(){document.getElementById('postModal').classList.remove('show');};
-window.submitPost=function(){
-  var content=document.getElementById('postContent').value.trim();
-  if(!content&&!pendingPostFile){toast('请输入内容或选择图片');return;}
-  function doPost(imageUrl){
-    apiPost('posts',{email:currentUser.email,nickname:currentUser.nickname,avatar_url:currentUser.avatar_url||null,content:content,image_url:imageUrl||null},function(err){
-      if(err){toast('发布失败');}else{toast('发布成功');closePostDialog();loadFriendsFeed();}
-    });
+window.submitPost = async () => {
+  const txt = $('#postText')?.value.trim(), file = $('#postFile')?.files[0];
+  let url = null;
+  if(file) {
+    const c=document.createElement('canvas'),ctx=c.getContext('2d'),img=new Image(); img.src=URL.createObjectURL(file); await new Promise(r=>img.onload=r);
+    let w=img.width,h=img.height; if(w>800){h*=800/w;w=800;} c.width=w;c.height=h;ctx.drawImage(img,0,0,w,h);
+    const blob = await new Promise(r=>c.toBlob(r,'image/jpeg',0.7));
+    const name = `post_${Date.now()}.jpg`;
+    await supabase.storage.from('chat-images').upload(name,blob);
+    url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
   }
-  if(pendingPostFile){
-    var ext=(pendingPostFile.name.split('.').pop()||'jpg').toLowerCase();
-    var fileName='post_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
-    uploadFile('chat-images',fileName,pendingPostFile,function(err,publicUrl){if(err){toast('图片上传失败');return;}doPost(publicUrl);});
-  }else{doPost(null);}
+  await supabase.from('posts').insert([{email:currentUser.email, nickname:currentUser.nickname, content:txt||'', image_url:url}]);
+  toast('发布成功'); $('#genericModal').classList.remove('show'); loadFriendsFeed();
 };
-function loadFriendsFeed(){
-  if(!currentUser)return;
-  var q='or=(from_email.eq.'+encodeURIComponent(currentUser.email)+',to_email.eq.'+encodeURIComponent(currentUser.email)+')&status=eq.accepted&select=*';
-  apiGet('friendships',q,function(err,data){
-    if(err){document.getElementById('friendsFeed').innerHTML='<p style="color:var(--text3)">加载失败</p>';return;}
-    var friendEmails=[currentUser.email];
-    if(data)data.forEach(function(f){var email=f.from_email===currentUser.email?f.to_email:f.from_email;if(friendEmails.indexOf(email)===-1)friendEmails.push(email);});
-    var orConditions=friendEmails.map(function(e){return 'email.eq.'+encodeURIComponent(e);}).join(',');
-    apiGet('posts','or=('+orConditions+')&order=created_at.desc&select=*',function(err2,posts){
-      var box=document.getElementById('friendsFeed');
-      if(err2||!posts||!posts.length){box.innerHTML='<p style="color:var(--text3)">暂无动态</p>';return;}
-      var html='';
-      posts.forEach(function(p){
-        var ava=p.avatar_url?'<img src="'+p.avatar_url+'" class="post-avatar">':'<div class="post-avatar">'+p.nickname.charAt(0).toUpperCase()+'</div>';
-        var imgHtml=p.image_url?'<img src="'+p.image_url+'" style="max-width:100%;border-radius:var(--radius);margin-top:.4rem;cursor:pointer" onclick="openLightbox(\''+p.image_url+'\')">':'';
-        html+='<div class="post-card"><div class="post-header">'+ava+'<div><b>'+escapeHtml(p.nickname)+'</b><div style="font-size:.75rem;color:var(--text3)">'+new Date(p.created_at).toLocaleString()+'</div></div></div>';
-        if(p.content)html+='<div class="post-content">'+escapeHtml(p.content).replace(/\n/g,'<br>')+'</div>';
-        if(imgHtml)html+=imgHtml;html+='</div>';
-      });
-      box.innerHTML=html;
-    });
-  });
+async function loadFriendsFeed() {
+  if(!currentUser) return;
+  const {data:friends} = await supabase.from('friendships').select('*').or(`from_email.eq.${currentUser.email},to_email.eq.${currentUser.email}`).eq('status','accepted');
+  const emails = [currentUser.email, ...(friends||[]).map(f=>f.from_email===currentUser.email?f.to_email:f.from_email)];
+  const {data:posts} = await supabase.from('posts').select('*').in('email',emails).order('created_at',{ascending:false}).limit(30);
+  const feed = document.getElementById('friendsFeed');
+  feed.innerHTML = (posts||[]).map(p=>`<div class="photo-card"><p><b>${p.nickname}</b> ${p.content||''}</p>${p.image_url?`<img src="${p.image_url}">`:''}</div>`).join('')||'<p>暂无动态</p>';
 }
 
-// 管理员
-window.showUsers=function(){
-  if(!currentUser||currentUser.email!==ADMIN_EMAIL){toast('无权操作');return;}
-  apiGet('profiles','select=*&order=created_at.desc',function(err,data){
-    if(err||!data){toast('加载失败');return;}var list=document.getElementById('adminUserList'),html='';
-    for(var i=0;i<data.length;i++){
-      var u=data[i],tag=u.is_banned?'<span style="color:var(--danger);font-size:.7rem">[已拉黑]</span>':'';
-      html+='<div onclick="toggleBan(\''+u.email+'\','+(!u.is_banned)+')" style="padding:.7rem;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.4rem;cursor:pointer"><div style="display:flex;justify-content:space-between"><b>'+escapeHtml(u.nickname)+'</b>'+tag+'</div><div style="font-size:.75rem;color:var(--text3);margin-top:.15rem">'+escapeHtml(u.email)+'</div></div>';
-    }
-    list.innerHTML=html;document.getElementById('adminModal').classList.add('show');
-  });
+// 好友请求
+window.showFriendRequests = async () => {
+  const {data} = await supabase.from('friendships').select('*').eq('to_email',currentUser.email).eq('status','pending');
+  let html = '<h3>好友请求</h3>';
+  if(data?.length) data.forEach(r => html += `<p>${r.from_email} <button onclick="handleRequest(${r.id},'accepted')">接受</button> <button onclick="handleRequest(${r.id},'rejected')">拒绝</button></p>`);
+  else html += '<p>无</p>';
+  document.getElementById('genericContent').innerHTML = html;
+  document.getElementById('genericModal').classList.add('show');
 };
-window.toggleBan=function(email,ban){
-  apiPatch('profiles','email=eq.'+encodeURIComponent(email),{is_banned:ban},function(err){if(err){toast('操作失败');}else{toast(ban?'已拉黑':'已解除');showUsers();}});
+window.handleRequest = async (id, status) => {
+  await supabase.from('friendships').update({status}).eq('id',id);
+  toast('已处理'); showFriendRequests();
 };
-window.closeAdmin=function(){document.getElementById('adminModal').classList.remove('show');};
-
-// 个人资料
-window.openEdit=function(){if(!currentUser)return;document.getElementById('editNickname').value=currentUser.nickname||'';document.getElementById('editModal').classList.add('show');};
-window.closeEdit=function(){document.getElementById('editModal').classList.remove('show');};
-window.saveProfile=function(){
-  if(!currentUser)return;
-  var nick=document.getElementById('editNickname').value.trim();
-  var oldPwd=document.getElementById('editOldPwd').value.trim();
-  var newPwd=document.getElementById('editNewPwd').value.trim();
-  var updates={};
-  if(nick&&nick!==currentUser.nickname){updates.nickname=nick;currentUser.nickname=nick;}
-  if(newPwd){
-    if(!oldPwd){toast('请输入当前密码');return;}if(oldPwd!==currentUser.password_hash){toast('当前密码错误');return;}if(newPwd.length<6){toast('新密码至少6位');return;}
-    updates.password_hash=newPwd;currentUser.password_hash=newPwd;
-  }
-  if(Object.keys(updates).length===0){closeEdit();return;}
-  apiPatch('profiles','email=eq.'+encodeURIComponent(currentUser.email),updates,function(err){if(err){toast('保存失败');}else{safeSet('oskwk_user',JSON.stringify(currentUser));updateProfile();closeEdit();toast('已更新');}});
-};
-window.uploadAvatar=function(){
-  if(!currentUser)return;var input=document.createElement('input');input.type='file';input.accept='image/*';
-  input.onchange=function(){
-    var file=input.files[0];if(!file)return;
-    if(file.size>2*1024*1024){toast('头像不能超过2MB');return;}
-    var ext=(file.name.split('.').pop()||'jpg').toLowerCase();
-    var fileName='avatar_'+currentUser.email.replace(/[^a-zA-Z0-9]/g,'_')+'_'+Date.now()+'.'+ext;
-    uploadFile('chat-images','avatars/'+fileName,file,function(err,publicUrl){
-      if(err){toast('头像上传失败');return;}
-      apiPatch('profiles','email=eq.'+encodeURIComponent(currentUser.email),{avatar_url:publicUrl},function(err2){
-        if(err2){toast('保存失败');}else{currentUser.avatar_url=publicUrl;safeSet('oskwk_user',JSON.stringify(currentUser));updateProfile();toast('头像已更新');}
-      });
-    });
-  };input.click();
+window.searchUser = () => {
+  const email = prompt('对方邮箱'); if(!email) return;
+  supabase.from('friendships').insert([{from_email:currentUser.email, to_email:email}]).then(()=>toast('请求已发送'));
 };
 
-window.openLightbox=function(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('show');};
-window.closeLightbox=function(){document.getElementById('lightbox').classList.remove('show');};
+// 个人中心
+async function renderProfile() {
+  if(!currentUser) return;
+  let html = `<div class="photo-card" style="text-align:center"><div class="avatar" style="width:64px;height:64px;font-size:1.6rem;margin:0 auto">${currentUser.nickname?.charAt(0)}</div><h3>${currentUser.nickname}</h3><p>${currentUser.email}</p>
+    <button onclick="showFriendRequests()">好友请求</button> <button onclick="searchUser()">添加好友</button>`;
+  if(currentUser.email===ADMIN_EMAIL) html += '<button onclick="showAdmin()">用户管理</button>';
+  html += '<button onclick="doLogout()">退出</button></div>';
+  $('#profileContent').innerHTML = html;
+}
+window.showAdmin = async () => {
+  const {data} = await supabase.from('profiles').select('*');
+  let html = '<h3>用户管理</h3>';
+  data.forEach(u => html += `<p>${u.nickname} (${u.email}) ${u.is_banned?'[BANNED]':''} <button onclick="toggleBan('${u.email}',${!u.is_banned})">${u.is_banned?'解禁':'拉黑'}</button></p>`);
+  document.getElementById('genericContent').innerHTML = html;
+  document.getElementById('genericModal').classList.add('show');
+};
+window.toggleBan = async (email, ban) => {
+  await supabase.from('profiles').update({is_banned:ban}).eq('email',email);
+  toast('已更新'); showAdmin();
+};
+
+// 通知
+async function fetchNotifications() {
+  if(!currentUser) return;
+  const {data} = await supabase.from('notifications').select('*').eq('user_email',currentUser.email).order('created_at',{ascending:false}).limit(20);
+  const unread = data?.filter(n=>!n.read).length||0;
+  $('#notifBadge').style.display = unread?'block':'none';
+  return data;
+}
+window.showNotifications = async () => {
+  const data = await fetchNotifications();
+  let html = '<h3>通知</h3>';
+  if(data?.length) data.forEach(n => html += `<p>${n.content} <small>${new Date(n.created_at).toLocaleString()}</small></p>`);
+  else html += '<p>无</p>';
+  document.getElementById('genericContent').innerHTML = html;
+  document.getElementById('genericModal').classList.add('show');
+  // 标记已读
+  await supabase.from('notifications').update({read:true}).eq('user_email',currentUser.email).eq('read',false);
+};
+// 实时通知订阅
+function subscribeNotifications() {
+  if(!currentUser) return;
+  if(notifSub) supabase.removeChannel(notifSub);
+  notifSub = supabase.channel('notif-'+currentUser.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${currentUser.email}`},()=>{
+    fetchNotifications();
+  }).subscribe();
+}
+
+// 登录/注册
+window.doLogin = async () => {
+  const email = $('#loginEmail').value.trim(), pwd = $('#loginPassword').value.trim();
+  const {data,error} = await supabase.from('profiles').select('*').eq('email',email).single();
+  if(error||!data) return toast('账户不存在');
+  if(data.password_hash!==pwd) return toast('密码错误');
+  if(data.is_banned) return toast('账号已禁用');
+  currentUser=data; localStorage.setItem('oskwk_user',JSON.stringify(data)); enterApp();
+};
+window.doRegister = async () => {
+  const email=$('#regEmail').value.trim(), phone=$('#regPhone').value.trim(), code=$('#regCode').value.trim(), pwd=$('#regPassword').value.trim(), nick=$('#regNickname').value.trim();
+  if(!email||!phone||!pwd||!nick) return toast('请填写完整');
+  if(code!=='123456') return toast('验证码错误');
+  const {data,error} = await supabase.from('profiles').insert([{email,nickname:nick,phone,password_hash:pwd}]).select().single();
+  if(error) return toast('注册失败');
+  currentUser=data; localStorage.setItem('oskwk_user',JSON.stringify(data)); enterApp();
+};
+function enterApp() {
+  $('#authOverlay').classList.remove('show'); $('#app').classList.add('on');
+  $('#avatarText').textContent = currentUser?.nickname?.charAt(0)||'?';
+  subscribeNotifications(); fetchNotifications();
+  switchTab('about');
+}
+window.doLogout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
+window.showRegister = () => { $('#loginCard').style.display='none'; $('#registerCard').style.display='block'; };
+window.showLogin = () => { $('#loginCard').style.display='block'; $('#registerCard').style.display='none'; };
+window.sendCode = () => toast('验证码：123456');
+
+// 通用模态框
+document.body.insertAdjacentHTML('beforeend','<div id="genericModal" class="modal" onclick="if(event.target===this)this.classList.remove(\'show\')"><div class="modal-content" id="genericContent"></div></div>');
+
+// 自动登录
+(()=>{
+  const saved = localStorage.getItem('oskwk_user');
+  if(saved){ currentUser=JSON.parse(saved); enterApp(); }
+  else $('#authOverlay').classList.add('show');
+  setTimeout(()=>$('#loader').classList.add('done'),500);
+})();
 </script>
 </body>
 </html>
