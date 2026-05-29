@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>OSKWK Platform</title>
+  <title>OSKWK Platform · 自然之息</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #050505; --surface: #0a0a0a; --surface2: #111;
       --text: #f0f0f0; --text2: #a8a8a8; --text3: #606060;
       --border: rgba(255,255,255,0.06); --border-light: rgba(255,255,255,0.12);
-      --accent: #b8956a; --danger: #e76f51; --success: #2a9d8f;
+      --accent: #c9a87c; --danger: #e76f51; --success: #2a9d8f;
       --radius: 16px; --radius-sm: 10px; --radius-full: 9999px;
       --glass-bg: rgba(10,10,10,0.7); --glass-border: rgba(255,255,255,0.08);
       --blur: 24px; --font-size: 16px;
@@ -65,7 +65,7 @@
     .mob-nav .nav-icon.active{color:var(--accent)}
 
     .hero{position:relative;height:100vh;min-height:650px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;margin-top:-64px}
-    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.5)}
+    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.45)}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 8%,transparent 55%);z-index:2}
     .hero-caption{position:relative;z-index:3;text-align:center;padding:0 24px 100px;will-change:transform,opacity}
     .hero-caption h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,6rem);font-weight:900;color:#fff;text-shadow:0 4px 60px rgba(0,0,0,.7)}
@@ -164,22 +164,60 @@
     <h3 style="font-family:'Playfair Display'">自定义</h3>
     <div><label>主题</label><div style="display:flex;gap:8px;margin-top:8px"><button class="theme-btn active" data-theme="dark" onclick="setTheme('dark')">暗</button><button class="theme-btn" data-theme="light" onclick="setTheme('light')">亮</button></div></div>
     <div><label>字号</label><input type="range" min="14" max="20" value="16" id="fontSizeSlider" oninput="updateFontSize(this.value)"></div>
-    <div><label>主色</label><div style="display:flex;gap:8px;margin-top:8px"><span class="theme-btn" style="background:#b8956a" data-accent="#b8956a" onclick="setAccent(this)"></span><span class="theme-btn" style="background:#6c9ce0" data-accent="#6c9ce0" onclick="setAccent(this)"></span><span class="theme-btn" style="background:#a0c98a" data-accent="#a0c98a" onclick="setAccent(this)"></span></div></div>
+    <div><label>主色</label><div style="display:flex;gap:8px;margin-top:8px"><span class="theme-btn" style="background:#c9a87c" data-accent="#c9a87c" onclick="setAccent(this)"></span><span class="theme-btn" style="background:#6c9ce0" data-accent="#6c9ce0" onclick="setAccent(this)"></span><span class="theme-btn" style="background:#a0c98a" data-accent="#a0c98a" onclick="setAccent(this)"></span></div></div>
   </div>
 
   <section class="hero">
-    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山">
+    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山日出">
     <div class="hero-overlay"></div>
     <div class="hero-caption" id="heroCaption"><h1>探索无界</h1><p>OSKWK Platform</p></div>
   </section>
 
   <div class="main-wrap">
-    <div class="page active" id="tab-about"><div class="sec-title">探索</div><div id="adminBarAbout" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('about')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="article-about" class="grid"></div></div>
-    <div class="page" id="tab-discover"><div class="sec-title">发现</div><div id="adminBarDiscover" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('discover')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="article-discover" class="grid"></div></div>
-    <div class="page" id="tab-study"><div class="sec-title">学术</div><div id="adminBarStudy" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('study')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="article-study" class="grid"></div></div>
-    <div class="page" id="tab-chat"><div class="sec-title">交流</div><div id="roomList" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px"></div><div id="chatPanel" style="display:none"><div class="chat-box"><div class="chat-log" id="chatLog"></div><div class="chat-bar"><input id="msgInput" placeholder="输入消息..."><button onclick="sendMsg()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button><button onclick="document.getElementById('imgUpload').click()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button><input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="uploadImg()"></div></div><button class="nav-icon" style="margin-top:12px;width:auto;padding:8px 16px" onclick="leaveRoom()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button></div></div>
-    <div class="page" id="tab-friends"><div class="sec-title">动态</div><button class="nav-icon" style="margin-bottom:20px;width:auto;padding:12px 20px" onclick="openPost()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button><div id="friendsFeed"></div></div>
-    <div class="page" id="tab-profile"><div class="sec-title">个人</div><div id="profileArea" style="max-width:400px;margin:0 auto"></div></div>
+    <div class="page active" id="tab-about">
+      <div class="sec-title">探索</div>
+      <div id="adminBarAbout" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('about')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
+      <div id="article-about" class="grid"></div>
+    </div>
+    <div class="page" id="tab-discover">
+      <div class="sec-title">发现</div>
+      <div id="adminBarDiscover" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('discover')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
+      <div id="article-discover" class="grid"></div>
+    </div>
+    <div class="page" id="tab-study">
+      <div class="sec-title">学术</div>
+      <div id="adminBarStudy" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('study')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
+      <div id="article-study" class="grid"></div>
+    </div>
+    <div class="page" id="tab-chat">
+      <div class="sec-title">交流</div>
+      <!-- 房间搜索与创建 -->
+      <div id="roomTools" style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
+        <input id="roomSearch" placeholder="搜索房间..." style="flex:1;min-width:150px">
+        <button class="nav-icon" style="width:auto;padding:8px 16px" onclick="showCreateRoom()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+      </div>
+      <div id="roomList" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px"></div>
+      <div id="chatPanel" style="display:none">
+        <div class="chat-box"><div class="chat-log" id="chatLog"></div>
+          <div class="chat-bar">
+            <input id="msgInput" placeholder="输入消息...">
+            <button onclick="sendMsg()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+            <button onclick="document.getElementById('imgUpload').click()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
+            <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="uploadImg()">
+          </div>
+        </div>
+        <button class="nav-icon" style="margin-top:12px;width:auto;padding:8px 16px" onclick="leaveRoom()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      </div>
+    </div>
+    <div class="page" id="tab-friends">
+      <div class="sec-title">动态</div>
+      <button class="nav-icon" style="margin-bottom:20px;width:auto;padding:12px 20px" onclick="openPost()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+      <div id="friendsFeed"></div>
+    </div>
+    <div class="page" id="tab-profile">
+      <div class="sec-title">个人</div>
+      <div id="profileArea" style="max-width:400px;margin:0 auto"></div>
+    </div>
   </div>
 
   <div class="mob-nav">
@@ -201,15 +239,38 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = 'https://qnblruruefgbixbfgwkh.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
 const ADMIN_EMAIL = '279933264@qq.com';
 let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
 
-const landscape = () => `https://picsum.photos/seed/${Date.now()+Math.random()}/800/500`;
+// 自然风景图片集合（高山、日出等）
+const naturePhotos = [
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+  'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
+  'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80',
+  'https://images.unsplash.com/photo-1434394354979-a235cd36269d?w=800&q=80',
+  'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80',
+  'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80',
+  'https://images.unsplash.com/photo-1520962880247-6e5a3c3c3e0a?w=800&q=80',
+  'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=800&q=80',
+  'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=800&q=80',
+  'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80',
+  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80',
+  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80'
+];
+function landscape() { return naturePhotos[Math.floor(Math.random() * naturePhotos.length)]; }
 
-// 全局函数挂载
+const heroPhotos = [
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
+  'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80',
+  'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1920&q=80',
+  'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80',
+  'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=1920&q=80'
+];
+function heroLandscape() { return heroPhotos[Math.floor(Math.random() * heroPhotos.length)]; }
+
+// 全局设置
 window.setTheme = t => {
   document.documentElement.setAttribute('data-theme',t);
   document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));
@@ -225,12 +286,8 @@ window.addEventListener('scroll',()=>{
   if(cap){ cap.style.opacity=Math.max(0,1-y/500); cap.style.transform=`translateY(${y*0.3}px)`; }
 });
 
-// 背景切换
-setInterval(()=>{
-  const img=$('#heroBg'); if(img) img.src=`https://picsum.photos/seed/${Date.now()}/1920/1080`;
-},15000);
+setInterval(()=>{ const img=$('#heroBg'); if(img) img.src=heroLandscape(); },12000);
 
-// 标签切换
 window.switchTab = async tab => {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const page=$('#tab-'+tab); if(page) page.classList.add('active');
@@ -239,7 +296,7 @@ window.switchTab = async tab => {
   if(tab==='about') { loadArticles('about'); updateAdminBar('about'); }
   if(tab==='discover') { loadArticles('discover'); updateAdminBar('discover'); }
   if(tab==='study') { loadArticles('study'); updateAdminBar('study'); }
-  if(tab==='chat') renderRooms();
+  if(tab==='chat') renderRoomList();
   if(tab==='friends') loadFeed();
   if(tab==='profile') renderProfile();
 };
@@ -300,18 +357,84 @@ window.postComment = async id => {
   T('已评论'); window.expandArticle(id);
 };
 
-// 聊天室核心逻辑
-window.joinRoom = name => {
+// ---- 聊天增强 ----
+let allRooms = [];
+async function renderRoomList() {
+  $('#chatPanel').style.display='none';
+  $('#roomList').style.display='flex';
+  // 加载房间
+  const {data} = await supabase.from('rooms').select('*').order('created_at',{ascending:false});
+  allRooms = data || [];
+  filterRooms();
+  // 搜索框绑定事件
+  $('#roomSearch').oninput = filterRooms;
+}
+function filterRooms(){
+  const kw = $('#roomSearch').value.trim().toLowerCase();
+  const list = $('#roomList');
+  let html = '';
+  // 默认公共房间
+  const publicRooms = ['大厅','技术','理论','艺术'];
+  for(const name of publicRooms){
+    if(!kw || name.includes(kw)){
+      html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinPublicRoom('${name}')"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> ${name}</button>`;
+    }
+  }
+  // 自定义房间
+  for(const r of allRooms){
+    if(!kw || r.name.toLowerCase().includes(kw)){
+      html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinCustomRoom('${r.name.replace(/'/g,"\\'")}', '${r.password?1:0}')"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> ${r.name}${r.password?' 🔒':''}</button>`;
+    }
+  }
+  html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="startPrivateChat()"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> 私信</button>`;
+  list.innerHTML = html || '<p style="color:var(--text3)">没有匹配的房间</p>';
+}
+
+window.showCreateRoom = () => {
+  let html = `<h3>创建房间</h3><input id="newRoomName" placeholder="房间名称"><input id="newRoomPass" type="password" placeholder="密码（可选）"><button class="main" onclick="createRoom()">创建</button>`;
+  $('#genericContent').innerHTML = html;
+  $('#genericModal').classList.add('show');
+};
+window.createRoom = async () => {
+  const name = $('#newRoomName')?.value.trim(), pass = $('#newRoomPass')?.value.trim();
+  if(!name) return T('请输入房间名称');
+  if(['大厅','技术','理论','艺术'].includes(name)) return T('不能与公共房间重名');
+  const {error} = await supabase.from('rooms').insert([{name, password:pass||'', created_by:user.email}]);
+  if(error) return T('创建失败');
+  T('房间已创建');
+  $('#genericModal').classList.remove('show');
+  renderRoomList();
+};
+
+window.joinPublicRoom = name => { if(!user) return T('请登录'); room='oskwk-'+name; startChat(); };
+window.joinCustomRoom = (name, hasPass) => {
+  if(!user) return T('请登录');
+  if(hasPass){
+    let pass = prompt('请输入房间密码：');
+    if(pass === null) return;
+    // 简单验证（直接通过 rooms 表检查）
+    supabase.from('rooms').select('password').eq('name',name).single().then(({data})=>{
+      if(data && data.password === pass){
+        room = 'oskwk-'+name;
+        startChat();
+      } else {
+        T('密码错误');
+      }
+    });
+  } else {
+    room = 'oskwk-'+name;
+    startChat();
+  }
+};
+
+window.startPrivateChat = () => {
   if(!user) return T('请先登录');
-  room = 'oskwk-'+name;
+  const peer = prompt('对方邮箱');
+  if(!peer) return;
+  room = 'private-'+[user.email,peer].sort().join('_');
   startChat();
 };
-window.privateChat = () => {
-  if(!user) return T('请先登录');
-  const p = prompt('对方邮箱'); if(!p) return;
-  room = 'private-'+[user.email,p].sort().join('_');
-  startChat();
-};
+
 async function startChat(){
   $('#roomList').style.display='none';
   $('#chatPanel').style.display='block';
@@ -323,7 +446,7 @@ async function startChat(){
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${room}`},payload=>renderMsg(payload.new))
     .subscribe((status, err) => {
       if (status === 'SUBSCRIBED') console.log('实时聊天已连接');
-      if (status === 'CHANNEL_ERROR') console.error('实时通道错误', err);
+      if (status === 'CHANNEL_ERROR') console.error(err);
     });
 }
 function renderMsg(m){
@@ -360,20 +483,10 @@ window.uploadImg = async () => {
 };
 window.leaveRoom = () => {
   if(realtime) supabase.removeChannel(realtime);
-  room=null; $('#chatPanel').style.display='none'; $('#roomList').style.display='flex';
+  room=null; $('#chatPanel').style.display='none'; renderRoomList();
 };
-function renderRooms(){
-  $('#chatPanel').style.display='none'; $('#roomList').style.display='flex';
-  $('#roomList').innerHTML = `
-    <button class="nav-icon" onclick="joinRoom('大厅')" title="大厅"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
-    <button class="nav-icon" onclick="joinRoom('技术')" title="技术"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></button>
-    <button class="nav-icon" onclick="joinRoom('理论')" title="理论"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></button>
-    <button class="nav-icon" onclick="joinRoom('艺术')" title="艺术"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg></button>
-    <button class="nav-icon" onclick="privateChat()" title="私信"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
-  `;
-}
 
-// 动态与好友
+// 动态/好友
 window.openPost = () => {
   $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`;
   $('#genericModal').classList.add('show');
@@ -446,7 +559,7 @@ function subNotifs(){
   notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
 }
 
-// 登录注册（安全）
+// 登录注册（安全 bcrypt）
 window.doLogin = async () => {
   const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
   if(!email||!pwd) return T('请输入邮箱和密码');
@@ -476,13 +589,11 @@ function enter(){
   fetchNotifs();
   switchTab('about');
 }
-
 window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
 window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
 window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
 window.sendCode = () => T('验证码：123456');
 
-// 绑定登录注册按钮
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('regBtn').addEventListener('click', doRegister);
 
