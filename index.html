@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>OSKWK · 无界</title>
+  <title>OSKWK · 山岳之息</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
       --bg: #050505; --surface: #0a0a0a; --surface2: #111111;
       --text: #f0f0f0; --text2: #a8a8a8; --text3: #606060;
       --border: rgba(255,255,255,0.06); --border-light: rgba(255,255,255,0.12);
-      --accent: #c9a87c; --danger: #e76f51; --success: #2a9d8f;
+      --accent: #b8956a; --danger: #e76f51; --success: #2a9d8f;
       --radius: 16px; --radius-sm: 10px; --radius-full: 9999px;
       --glass-bg: rgba(10,10,10,0.7); --glass-border: rgba(255,255,255,0.08);
       --blur: 24px; --font-size: 16px;
@@ -39,6 +39,7 @@
     #app { display:none; opacity:0; transition:opacity .6s; flex-direction:column; min-height:100vh; }
     #app.on { display:flex; opacity:1; }
 
+    /* 导航栏 */
     .nav { position:fixed; top:0; left:0; right:0; z-index:100; height:72px; background:var(--glass-bg); backdrop-filter:blur(var(--blur)); border-bottom:1px solid var(--glass-border); display:flex; align-items:center; padding:0 24px; }
     .nav-brand { cursor:pointer; margin-right:auto; }
     .nav-links { display:flex; gap:4px; margin-left:auto; }
@@ -55,8 +56,9 @@
     .mob-nav .nav-btn svg { width:24px; height:24px; }
     .mob-nav .nav-btn.active { color:var(--accent); }
 
+    /* 英雄区 - 高山视频背景 */
     .hero { position:relative; height:100vh; min-height:700px; display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden; margin-top:-72px; }
-    .hero-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.35); pointer-events:none; }
+    .hero-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.4); pointer-events:none; }
     .hero-overlay { position:absolute; inset:0; background:radial-gradient(ellipse at center,transparent 20%,var(--bg) 100%); z-index:2; }
     .hero-content { position:relative; z-index:3; max-width:900px; padding:0 32px; display:flex; flex-direction:column; align-items:center; gap:28px; will-change:transform,opacity; }
     .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(4rem,10vw,7rem); font-weight:900; color:#fff; text-shadow:0 4px 40px rgba(0,0,0,.6); }
@@ -67,10 +69,10 @@
     .page { display:none; opacity:0; transform:translateY(16px); transition:opacity .4s,transform .4s; }
     .page.active { display:block; opacity:1; transform:translateY(0); }
 
-    .card-grid { display:grid; gap:24px; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
+    .card-grid { display:grid; gap:24px; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); }
     .photo-card { position:relative; border-radius:var(--radius); overflow:hidden; background:var(--surface2); border:1px solid var(--border); transition:all .3s; cursor:pointer; }
     .photo-card:hover { transform:translateY(-4px); border-color:var(--accent); }
-    .photo-card img { width:100%; height:220px; object-fit:cover; display:block; background:var(--surface); }
+    .photo-card img { width:100%; height:260px; object-fit:cover; display:block; background:var(--surface); }
     .photo-card-body { padding:20px; }
     .photo-card-body h3 { font-size:1.2rem; font-weight:600; margin-bottom:8px; }
 
@@ -109,7 +111,7 @@
     </div>
     <input type="email" id="loginEmail" placeholder="邮箱">
     <input type="password" id="loginPassword" placeholder="密码">
-    <button class="primary" id="loginBtn">登录</button>
+    <button class="primary" onclick="doLogin()">登录</button>
     <p id="loginHint" style="font-size:.8rem;color:var(--danger);margin-top:8px;"></p>
     <p style="margin-top:20px;text-align:center;font-size:.85rem;color:var(--text3)"><a onclick="showRegister()" style="color:var(--accent);cursor:pointer">创建账户</a></p>
   </div>
@@ -124,13 +126,13 @@
     <input id="regPassword" type="password" placeholder="密码">
     <input id="regNickname" placeholder="昵称">
     <label style="display:flex;gap:8px;font-size:.8rem;color:var(--text2);margin:10px 0"><input type="checkbox" id="regAgree">同意协议</label>
-    <button class="primary" id="regBtn">创建账户</button>
+    <button class="primary" onclick="doRegister()">创建账户</button>
   </div>
 </div>
 
 <!-- 主应用 -->
 <div id="app">
-  <!-- 纯SVG导航栏 -->
+  <!-- 纯SVG导航 -->
   <nav class="nav">
     <div class="nav-brand" onclick="switchTab('about')" title="首页">
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><path d="M2 12h20"/></svg>
@@ -161,18 +163,21 @@
     </div>
     <div><label>字号</label><input type="range" min="14" max="20" value="16" id="fontSizeSlider" oninput="updateFontSize(this.value)"></div>
     <div><label>主色调</label><div style="display:flex;gap:8px;margin-top:8px">
-      <span class="theme-btn" style="background:#c9a87c" data-accent="#c9a87c" onclick="setAccent(this)"></span>
+      <span class="theme-btn" style="background:#b8956a" data-accent="#b8956a" onclick="setAccent(this)"></span>
       <span class="theme-btn" style="background:#6c9ce0" data-accent="#6c9ce0" onclick="setAccent(this)"></span>
       <span class="theme-btn" style="background:#a0c98a" data-accent="#a0c98a" onclick="setAccent(this)"></span>
     </div></div>
-    <div><label><input type="checkbox" id="bgVideoToggle" checked onchange="toggleBgVideo()"> 背景视频</label></div>
   </div>
 
-  <!-- 英雄区 -->
+  <!-- 英雄区 - 高山背景 -->
   <section class="hero">
-    <video class="hero-video" autoplay muted loop playsinline><source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-mountain-3129/1080p.mp4" type="video/mp4"></video>
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="https://cdn.coverr.co/videos/coverr-mountain-view-5077/1080p.mp4" type="video/mp4">
+    </video>
     <div class="hero-overlay"></div>
-    <div class="hero-content" id="heroContent"><h1>探索无界</h1></div>
+    <div class="hero-content" id="heroContent">
+      <h1>山岳之息</h1>
+    </div>
     <div class="hero-scroll"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
   </section>
 
@@ -212,271 +217,337 @@
 </div>
 
 <script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-const SUPABASE_URL = 'https://qnblruruefgbixbfgwkh.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-const ADMIN_EMAIL = '279933264@qq.com';
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-let currentUser = null, currentRoom = null, realtimeSub = null, notifSub = null;
-const $ = s => document.querySelector(s);
-const toast = msg => alert(msg);
-const fastPhoto = (w=400,h=250) => `https://picsum.photos/seed/${Date.now()+Math.random()}/${w}/${h}`;
+  const SUPABASE_URL = 'https://qnblruruefgbixbfgwkh.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  const ADMIN_EMAIL = '279933264@qq.com';
 
-// 主题/字号/主色/视频
-window.setTheme = t => {
-  document.documentElement.setAttribute('data-theme', t);
-  document.querySelectorAll('.theme-btn[data-theme]').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
-  localStorage.setItem('oskwk_theme', t);
-};
-window.updateFontSize = v => {
-  document.documentElement.style.setProperty('--font-size', v+'px');
-  localStorage.setItem('oskwk_fontsize', v);
-};
-window.setAccent = el => {
-  document.documentElement.style.setProperty('--accent', el.dataset.accent);
-  localStorage.setItem('oskwk_accent', el.dataset.accent);
-};
-window.toggleBgVideo = () => document.querySelector('.hero-video').style.display = $('#bgVideoToggle').checked ? 'block' : 'none';
-window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
+  let currentUser = null, currentRoom = null, realtimeSub = null, notifSub = null;
 
-// 初始化偏好
-(() => {
-  const t = localStorage.getItem('oskwk_theme')||'dark'; setTheme(t);
-  const s = localStorage.getItem('oskwk_fontsize')||'16'; $('#fontSizeSlider').value = s; updateFontSize(s);
-  const a = localStorage.getItem('oskwk_accent')||'#c9a87c'; document.documentElement.style.setProperty('--accent', a);
-})();
+  const $ = s => document.querySelector(s);
+  const toast = msg => alert(msg);
+  // 高质量风景图源（picsum快速、高分辨率）
+  const landscapeImg = (w = 800, h = 400) => `https://picsum.photos/seed/${Date.now() + Math.random()}/${w}/${h}`;
 
-// 触屏视差
-window.addEventListener('scroll', () => {
-  const y = window.scrollY, hero = document.getElementById('heroContent');
-  if(hero) { hero.style.opacity = Math.max(0, 1 - y/500); hero.style.transform = `translateY(${y*0.4}px)`; }
-});
+  // 主题/字号/主色
+  window.setTheme = t => {
+    document.documentElement.setAttribute('data-theme', t);
+    document.querySelectorAll('.theme-btn[data-theme]').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
+    localStorage.setItem('oskwk_theme', t);
+  };
+  window.updateFontSize = v => {
+    document.documentElement.style.setProperty('--font-size', v + 'px');
+    localStorage.setItem('oskwk_fontsize', v);
+  };
+  window.setAccent = el => {
+    document.documentElement.style.setProperty('--accent', el.dataset.accent);
+    localStorage.setItem('oskwk_accent', el.dataset.accent);
+  };
+  window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-// 标签切换
-window.switchTab = async tab => {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-'+tab)?.classList.add('active');
-  document.querySelectorAll('.nav-links .nav-btn, .mob-nav .nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(tab === 'about') loadArticles('about');
-  if(tab === 'discover') loadArticles('discover');
-  if(tab === 'study') loadArticles('study');
-  if(tab === 'chat') renderChatRooms();
-  if(tab === 'friends') loadFriendsFeed();
-  if(tab === 'profile') renderProfile();
-};
+  // 初始化设置
+  (() => {
+    const t = localStorage.getItem('oskwk_theme') || 'dark';
+    window.setTheme(t);
+    const s = localStorage.getItem('oskwk_fontsize') || '16';
+    $('#fontSizeSlider').value = s;
+    window.updateFontSize(s);
+    const a = localStorage.getItem('oskwk_accent') || '#b8956a';
+    document.documentElement.style.setProperty('--accent', a);
+  })();
 
-// 文章加载与评论
-async function loadArticles(cat) {
-  const c = document.getElementById('article-'+cat); if(!c) return;
-  const {data} = await supabase.from('articles').select('*').eq('category',cat).order('created_at',{ascending:false});
-  c.innerHTML = (data||[]).map(a => `
-    <div class="photo-card" onclick="expandArticle(${a.id})">
-      <img src="${a.image_url||fastPhoto()}" loading="lazy" onerror="this.src='${fastPhoto()}'">
-      <div class="photo-card-body"><h3>${a.title}</h3><p>${a.content?.substring(0,100)||''}</p></div>
-    </div>`).join('') || '<p>暂无内容</p>';
-}
-window.expandArticle = async id => {
-  const {data:a} = await supabase.from('articles').select('*').eq('id',id).single();
-  if(!a) return;
-  let html = `<h2>${a.title}</h2><p>${a.content}</p><hr>`;
-  const {data:coms} = await supabase.from('comments').select('*').eq('article_id',id).order('created_at');
-  html += `<div>${(coms||[]).map(c=>`<p><b>${c.nickname}:</b> ${c.content}</p>`).join('')}</div>
-    <input id="commentInput" placeholder="评论..."><button onclick="postComment(${id})">发送</button>`;
-  document.getElementById('genericContent').innerHTML = html;
-  document.getElementById('genericModal').classList.add('show');
-};
-window.postComment = async id => {
-  const input = document.getElementById('commentInput');
-  if(!input?.value.trim()||!currentUser) return;
-  await supabase.from('comments').insert([{article_id:id, nickname:currentUser.nickname, content:input.value.trim()}]);
-  toast('评论成功'); expandArticle(id);
-};
+  // 视差滚动
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY, hero = document.getElementById('heroContent');
+    if (hero) {
+      hero.style.opacity = Math.max(0, 1 - y / 500);
+      hero.style.transform = `translateY(${y * 0.4}px)`;
+    }
+  });
 
-// 聊天（公共房间+私信）
-window.joinPublicRoom = name => { if(!currentUser) return toast('请登录'); currentRoom = 'oskwk-'+name; startChat(); };
-window.startPrivateChat = () => {
-  const peer = prompt('对方邮箱'); if(!peer) return;
-  currentRoom = 'private-'+[currentUser.email,peer].sort().join('_');
-  startChat();
-};
-async function startChat() {
-  $('#roomList').style.display='none'; $('#chatPanel').style.display='block'; $('#chatBox').innerHTML='';
-  const {data} = await supabase.from('messages').select('*').eq('room',currentRoom).order('created_at',{ascending:true}).limit(50);
-  data?.forEach(renderMsg);
-  if(realtimeSub) supabase.removeChannel(realtimeSub);
-  realtimeSub = supabase.channel('room-'+currentRoom).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${currentRoom}`},p=>renderMsg(p.new)).subscribe();
-}
-function renderMsg(m) {
-  const box = $('#chatBox'); if(!box) return;
-  const d = document.createElement('div'); d.className = 'message '+(m.nickname===currentUser?.nickname?'mine':'other');
-  d.innerHTML = `<b>${m.nickname}</b><br>${m.message||''}${m.image_url?`<br><img src="${m.image_url}">`:''}`;
-  box.appendChild(d); box.scrollTop = box.scrollHeight;
-}
-window.sendMsg = async () => {
-  const input = $('#msgInput'), btn = $('#sendBtn'), text = input.value.trim();
-  if(!text||!currentRoom) return; btn.disabled = true; input.value = '';
-  await supabase.from('messages').insert([{room:currentRoom, nickname:currentUser.nickname, message:text}]);
-  btn.disabled = false;
-};
-window.uploadImg = async () => {
-  const file = $('#imgUp').files[0]; if(!file||!currentRoom) return;
-  const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image();
-  img.src = URL.createObjectURL(file); await new Promise(r=>img.onload=r);
-  let w=img.width, h=img.height; if(w>800){h*=800/w; w=800;}
-  canvas.width=w; canvas.height=h; ctx.drawImage(img,0,0,w,h);
-  const blob = await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.7));
-  const name = `chat_${Date.now()}.jpg`;
-  await supabase.storage.from('chat-images').upload(name,blob);
-  const url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
-  await supabase.from('messages').insert([{room:currentRoom, nickname:currentUser.nickname, image_url:url}]);
-  $('#imgUp').value = '';
-};
-window.leaveRoom = () => { if(realtimeSub) supabase.removeChannel(realtimeSub); currentRoom=null; $('#chatPanel').style.display='none'; $('#roomList').style.display='flex'; };
-function renderChatRooms() {
-  $('#chatPanel').style.display='none'; $('#roomList').style.display='flex';
-  $('#roomList').innerHTML = `
-    <button class="nav-btn" onclick="joinPublicRoom('大厅')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button>
-    <button class="nav-btn" onclick="joinPublicRoom('技术')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></button>
-    <button class="nav-btn" onclick="joinPublicRoom('理论')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/></svg></button>
-    <button class="nav-btn" onclick="joinPublicRoom('艺术')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg></button>
-    <button class="nav-btn" onclick="startPrivateChat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
-  `;
-}
+  // 标签切换
+  window.switchTab = async tab => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById('tab-' + tab);
+    if (page) page.classList.add('active');
+    document.querySelectorAll('.nav-links .nav-btn, .mob-nav .nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (tab === 'about') loadArticles('about');
+    if (tab === 'discover') loadArticles('discover');
+    if (tab === 'study') loadArticles('study');
+    if (tab === 'chat') renderChatRooms();
+    if (tab === 'friends') loadFriendsFeed();
+    if (tab === 'profile') renderProfile();
+  };
 
-// 动态发布
-window.openPostDialog = () => {
-  document.getElementById('genericContent').innerHTML = `<textarea id="postText" placeholder="说点什么..."></textarea><input type="file" id="postFile" accept="image/*"><button class="primary" onclick="submitPost()">发布</button>`;
-  document.getElementById('genericModal').classList.add('show');
-};
-window.submitPost = async () => {
-  const txt = $('#postText')?.value.trim(), file = $('#postFile')?.files[0];
-  let url = null;
-  if(file) {
-    const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image();
-    img.src = URL.createObjectURL(file); await new Promise(r=>img.onload=r);
-    let w=img.width, h=img.height; if(w>800){h*=800/w; w=800;}
-    canvas.width=w; canvas.height=h; ctx.drawImage(img,0,0,w,h);
-    const blob = await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.7));
-    const name = `post_${Date.now()}.jpg`;
-    await supabase.storage.from('chat-images').upload(name,blob);
-    url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
+  // 文章加载（风景大图优先）
+  async function loadArticles(cat) {
+    const container = document.getElementById('article-' + cat);
+    if (!container) return;
+    try {
+      const { data, error } = await supabase.from('articles').select('*').eq('category', cat).order('created_at', { ascending: false });
+      if (error) throw error;
+      container.innerHTML = (data || []).map(a => `
+        <div class="photo-card" onclick="expandArticle(${a.id})">
+          <img src="${a.image_url || landscapeImg()}" loading="lazy" onerror="this.src='${landscapeImg()}'">
+          <div class="photo-card-body"><h3>${a.title}</h3><p>${a.content?.substring(0, 120) || ''}</p></div>
+        </div>`).join('') || '<p style="color:var(--text3)">暂无内容，等待探索</p>';
+    } catch (e) { container.innerHTML = '<p>加载失败</p>'; }
   }
-  await supabase.from('posts').insert([{email:currentUser.email, nickname:currentUser.nickname, content:txt||'', image_url:url}]);
-  toast('发布成功'); $('#genericModal').classList.remove('show'); loadFriendsFeed();
-};
-async function loadFriendsFeed() {
-  if(!currentUser) return;
-  const {data:friends} = await supabase.from('friendships').select('*').or(`from_email.eq.${currentUser.email},to_email.eq.${currentUser.email}`).eq('status','accepted');
-  const emails = [currentUser.email, ...(friends||[]).map(f=>f.from_email===currentUser.email?f.to_email:f.from_email)];
-  const {data:posts} = await supabase.from('posts').select('*').in('email',emails).order('created_at',{ascending:false}).limit(30);
-  const feed = document.getElementById('friendsFeed');
-  feed.innerHTML = (posts||[]).map(p=>`<div class="photo-card"><p><b>${p.nickname}</b> ${p.content||''}</p>${p.image_url?`<img src="${p.image_url}">`:''}</div>`).join('')||'<p>暂无动态</p>';
-}
 
-// 好友请求
-window.showFriendRequests = async () => {
-  const {data} = await supabase.from('friendships').select('*').eq('to_email',currentUser.email).eq('status','pending');
-  let html = '<h3>好友请求</h3>';
-  if(data?.length) data.forEach(r => html += `<p>${r.from_email} <button onclick="handleRequest(${r.id},'accepted')">接受</button> <button onclick="handleRequest(${r.id},'rejected')">拒绝</button></p>`);
-  else html += '<p>无</p>';
-  document.getElementById('genericContent').innerHTML = html;
-  document.getElementById('genericModal').classList.add('show');
-};
-window.handleRequest = async (id, status) => {
-  await supabase.from('friendships').update({status}).eq('id',id);
-  toast('已处理'); showFriendRequests();
-};
-window.searchUser = () => {
-  const email = prompt('对方邮箱'); if(!email) return;
-  supabase.from('friendships').insert([{from_email:currentUser.email, to_email:email}]).then(()=>toast('请求已发送'));
-};
+  window.expandArticle = async id => {
+    const { data: a } = await supabase.from('articles').select('*').eq('id', id).single();
+    if (!a) return;
+    let html = `<h2>${a.title}</h2><p>${a.content}</p><hr><h4>评论</h4>`;
+    const { data: coms } = await supabase.from('comments').select('*').eq('article_id', id).order('created_at');
+    html += (coms || []).map(c => `<p><b>${c.nickname}:</b> ${c.content}</p>`).join('');
+    html += `<input id="commentInput" placeholder="写下你的想法..."><button onclick="postComment(${id})">发送</button>`;
+    $('#genericContent').innerHTML = html;
+    $('#genericModal').classList.add('show');
+  };
+  window.postComment = async id => {
+    const input = document.getElementById('commentInput');
+    if (!input?.value.trim() || !currentUser) return;
+    await supabase.from('comments').insert([{ article_id: id, nickname: currentUser.nickname, content: input.value.trim() }]);
+    toast('评论成功');
+    window.expandArticle(id);
+  };
 
-// 个人中心/管理员
-async function renderProfile() {
-  if(!currentUser) return;
-  let html = `<div class="photo-card" style="text-align:center"><div class="avatar" style="width:64px;height:64px;font-size:1.6rem;margin:0 auto">${currentUser.nickname?.charAt(0)}</div><h3>${currentUser.nickname}</h3><p>${currentUser.email}</p>
-    <button onclick="showFriendRequests()">好友请求</button> <button onclick="searchUser()">添加好友</button>`;
-  if(currentUser.email === ADMIN_EMAIL) html += '<button onclick="showAdmin()">用户管理</button>';
-  html += '<button onclick="doLogout()">退出</button></div>';
-  $('#profileContent').innerHTML = html;
-}
-window.showAdmin = async () => {
-  const {data} = await supabase.from('profiles').select('*');
-  let html = '<h3>用户管理</h3>';
-  data.forEach(u => html += `<p>${u.nickname} (${u.email}) ${u.is_banned?'[BANNED]':''} <button onclick="toggleBan('${u.email}',${!u.is_banned})">${u.is_banned?'解禁':'拉黑'}</button></p>`);
-  document.getElementById('genericContent').innerHTML = html;
-  document.getElementById('genericModal').classList.add('show');
-};
-window.toggleBan = async (email, ban) => {
-  await supabase.from('profiles').update({is_banned:ban}).eq('email',email);
-  toast('已更新'); showAdmin();
-};
+  // 聊天
+  window.joinPublicRoom = name => {
+    if (!currentUser) return toast('请先登录');
+    currentRoom = 'oskwk-' + name;
+    startChat();
+  };
+  window.startPrivateChat = () => {
+    const peer = prompt('对方邮箱');
+    if (!peer) return;
+    currentRoom = 'private-' + [currentUser.email, peer].sort().join('_');
+    startChat();
+  };
+  async function startChat() {
+    $('#roomList').style.display = 'none';
+    $('#chatPanel').style.display = 'block';
+    $('#chatBox').innerHTML = '';
+    const { data } = await supabase.from('messages').select('*').eq('room', currentRoom).order('created_at', { ascending: true }).limit(50);
+    if (data) data.forEach(renderMsg);
+    if (realtimeSub) supabase.removeChannel(realtimeSub);
+    realtimeSub = supabase.channel('room-' + currentRoom)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `room=eq.${currentRoom}` }, payload => renderMsg(payload.new))
+      .subscribe();
+  }
+  function renderMsg(m) {
+    const box = $('#chatBox');
+    if (!box) return;
+    const div = document.createElement('div');
+    div.className = 'message ' + (m.nickname === currentUser?.nickname ? 'mine' : 'other');
+    div.innerHTML = `<b>${m.nickname}</b><br>${m.message || ''}${m.image_url ? `<br><img src="${m.image_url}" style="max-width:200px;border-radius:10px">` : ''}`;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  }
+  window.sendMsg = async () => {
+    const input = $('#msgInput'), btn = $('#sendBtn'), text = input.value.trim();
+    if (!text || !currentRoom) return;
+    btn.disabled = true;
+    input.value = '';
+    await supabase.from('messages').insert([{ room: currentRoom, nickname: currentUser.nickname, message: text }]);
+    btn.disabled = false;
+  };
+  window.uploadImg = async () => {
+    const file = $('#imgUp').files[0];
+    if (!file || !currentRoom) return;
+    const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image();
+    img.src = URL.createObjectURL(file);
+    await new Promise(r => img.onload = r);
+    let w = img.width, h = img.height;
+    if (w > 800) { h *= 800 / w; w = 800; }
+    canvas.width = w; canvas.height = h;
+    ctx.drawImage(img, 0, 0, w, h);
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.7));
+    const name = `chat_${Date.now()}.jpg`;
+    await supabase.storage.from('chat-images').upload(name, blob);
+    const url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
+    await supabase.from('messages').insert([{ room: currentRoom, nickname: currentUser.nickname, image_url: url }]);
+    $('#imgUp').value = '';
+  };
+  window.leaveRoom = () => {
+    if (realtimeSub) supabase.removeChannel(realtimeSub);
+    currentRoom = null;
+    $('#chatPanel').style.display = 'none';
+    $('#roomList').style.display = 'flex';
+  };
+  function renderChatRooms() {
+    $('#chatPanel').style.display = 'none';
+    $('#roomList').style.display = 'flex';
+    $('#roomList').innerHTML = `
+      <button class="nav-btn" onclick="joinPublicRoom('大厅')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button>
+      <button class="nav-btn" onclick="joinPublicRoom('技术')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></button>
+      <button class="nav-btn" onclick="joinPublicRoom('理论')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/></svg></button>
+      <button class="nav-btn" onclick="joinPublicRoom('艺术')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg></button>
+      <button class="nav-btn" onclick="startPrivateChat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
+    `;
+  }
 
-// 通知系统
-async function fetchNotifications() {
-  if(!currentUser) return;
-  const {data} = await supabase.from('notifications').select('*').eq('user_email',currentUser.email).order('created_at',{ascending:false}).limit(20);
-  const unread = data?.filter(n=>!n.read).length || 0;
-  const badge = $('#notifBadge');
-  if(badge) badge.style.display = unread ? 'block' : 'none';
-  return data;
-}
-window.showNotifications = async () => {
-  const data = await fetchNotifications();
-  let html = '<h3>通知</h3>';
-  if(data?.length) data.forEach(n => html += `<p>${n.content} <small>${new Date(n.created_at).toLocaleString()}</small></p>`);
-  else html += '<p>无</p>';
-  document.getElementById('genericContent').innerHTML = html;
-  document.getElementById('genericModal').classList.add('show');
-  await supabase.from('notifications').update({read:true}).eq('user_email',currentUser.email).eq('read',false);
-};
-function subscribeNotifications() {
-  if(!currentUser) return;
-  if(notifSub) supabase.removeChannel(notifSub);
-  notifSub = supabase.channel('notif-'+currentUser.email)
-    .on('postgres_changes', {event:'INSERT', schema:'public', table:'notifications', filter:`user_email=eq.${currentUser.email}`}, () => {
-      fetchNotifications();
-    }).subscribe();
-}
+  // 动态发布
+  window.openPostDialog = () => {
+    $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享你眼中的风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="primary" onclick="submitPost()">发布动态</button>`;
+    $('#genericModal').classList.add('show');
+  };
+  window.submitPost = async () => {
+    const txt = $('#postText')?.value.trim(), file = $('#postFile')?.files[0];
+    let url = null;
+    if (file) {
+      const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image();
+      img.src = URL.createObjectURL(file);
+      await new Promise(r => img.onload = r);
+      let w = img.width, h = img.height;
+      if (w > 800) { h *= 800 / w; w = 800; }
+      canvas.width = w; canvas.height = h;
+      ctx.drawImage(img, 0, 0, w, h);
+      const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.7));
+      const name = `post_${Date.now()}.jpg`;
+      await supabase.storage.from('chat-images').upload(name, blob);
+      url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
+    }
+    await supabase.from('posts').insert([{ email: currentUser.email, nickname: currentUser.nickname, content: txt || '', image_url: url }]);
+    toast('发布成功');
+    $('#genericModal').classList.remove('show');
+    loadFriendsFeed();
+  };
+  async function loadFriendsFeed() {
+    if (!currentUser) return;
+    const { data: friends } = await supabase.from('friendships').select('*').or(`from_email.eq.${currentUser.email},to_email.eq.${currentUser.email}`).eq('status', 'accepted');
+    const emails = [currentUser.email, ...(friends || []).map(f => f.from_email === currentUser.email ? f.to_email : f.from_email)];
+    const { data: posts } = await supabase.from('posts').select('*').in('email', emails).order('created_at', { ascending: false }).limit(30);
+    const feed = $('#friendsFeed');
+    feed.innerHTML = (posts || []).map(p => `
+      <div class="photo-card">
+        <div class="photo-card-body"><b>${p.nickname}</b> ${p.content || ''}</div>
+        ${p.image_url ? `<img src="${p.image_url}" style="width:100%;max-height:300px;object-fit:cover">` : ''}
+      </div>`).join('') || '<p style="color:var(--text3)">暂无动态，去发布第一条风景吧</p>';
+  }
 
-// 登录/注册
-window.doLogin = async () => {
-  const email = $('#loginEmail').value.trim(), pwd = $('#loginPassword').value.trim();
-  const {data, error} = await supabase.from('profiles').select('*').eq('email',email).single();
-  if(error || !data) return toast('账户不存在');
-  if(data.password_hash !== pwd) return toast('密码错误');
-  if(data.is_banned) return toast('账号已禁用');
-  currentUser = data; localStorage.setItem('oskwk_user', JSON.stringify(data)); enterApp();
-};
-window.doRegister = async () => {
-  const email = $('#regEmail').value.trim(), phone = $('#regPhone').value.trim(), code = $('#regCode').value.trim(),
-        pwd = $('#regPassword').value.trim(), nick = $('#regNickname').value.trim();
-  if(!email||!phone||!pwd||!nick) return toast('请填写完整');
-  if(code !== '123456') return toast('验证码错误');
-  const {data, error} = await supabase.from('profiles').insert([{email, nickname:nick, phone, password_hash:pwd}]).select().single();
-  if(error) return toast('注册失败');
-  currentUser = data; localStorage.setItem('oskwk_user', JSON.stringify(data)); enterApp();
-};
-function enterApp() {
-  $('#authOverlay').classList.remove('show'); $('#app').classList.add('on');
-  $('#avatarText').textContent = currentUser?.nickname?.charAt(0)||'?';
-  subscribeNotifications(); fetchNotifications();
-  switchTab('about');
-}
-window.doLogout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
-window.showRegister = () => { $('#loginCard').style.display='none'; $('#registerCard').style.display='block'; };
-window.showLogin = () => { $('#loginCard').style.display='block'; $('#registerCard').style.display='none'; };
-window.sendCode = () => toast('验证码：123456');
+  // 好友请求
+  window.showFriendRequests = async () => {
+    const { data } = await supabase.from('friendships').select('*').eq('to_email', currentUser.email).eq('status', 'pending');
+    let html = '<h3>好友请求</h3>';
+    if (data && data.length) {
+      data.forEach(r => html += `<p>${r.from_email} <button onclick="handleRequest(${r.id},'accepted')">接受</button> <button onclick="handleRequest(${r.id},'rejected')">拒绝</button></p>`);
+    } else html += '<p>暂无请求</p>';
+    $('#genericContent').innerHTML = html;
+    $('#genericModal').classList.add('show');
+  };
+  window.handleRequest = async (id, status) => {
+    await supabase.from('friendships').update({ status }).eq('id', id);
+    toast('已处理');
+    window.showFriendRequests();
+  };
+  window.searchUser = () => {
+    const email = prompt('输入对方邮箱');
+    if (!email) return;
+    supabase.from('friendships').insert([{ from_email: currentUser.email, to_email: email }]).then(() => toast('请求已发送'));
+  };
 
-// 自动登录
-(() => {
-  const saved = localStorage.getItem('oskwk_user');
-  if(saved) { currentUser = JSON.parse(saved); enterApp(); }
-  else { $('#authOverlay').classList.add('show'); }
-  setTimeout(() => $('#loader').classList.add('done'), 500);
-})();
+  // 个人中心 & 管理员
+  async function renderProfile() {
+    if (!currentUser) return;
+    let html = `<div class="photo-card" style="text-align:center;padding:24px">
+      <div class="avatar" style="width:64px;height:64px;font-size:1.6rem;margin:0 auto 16px">${currentUser.nickname?.charAt(0)}</div>
+      <h3>${currentUser.nickname}</h3><p>${currentUser.email}</p>
+      <button onclick="showFriendRequests()">好友请求</button>
+      <button onclick="searchUser()">添加好友</button>`;
+    if (currentUser.email === ADMIN_EMAIL) html += '<button onclick="showAdmin()">用户管理</button>';
+    html += '<button onclick="doLogout()">退出</button></div>';
+    $('#profileContent').innerHTML = html;
+  }
+  window.showAdmin = async () => {
+    const { data } = await supabase.from('profiles').select('*');
+    let html = '<h3>用户管理</h3>';
+    data.forEach(u => html += `<p>${u.nickname} (${u.email}) ${u.is_banned ? '[BANNED]' : ''} <button onclick="toggleBan('${u.email}',${!u.is_banned})">${u.is_banned ? '解禁' : '拉黑'}</button></p>`);
+    $('#genericContent').innerHTML = html;
+    $('#genericModal').classList.add('show');
+  };
+  window.toggleBan = async (email, ban) => {
+    await supabase.from('profiles').update({ is_banned: ban }).eq('email', email);
+    toast('已更新');
+    window.showAdmin();
+  };
+
+  // 通知
+  async function fetchNotifications() {
+    if (!currentUser) return;
+    const { data } = await supabase.from('notifications').select('*').eq('user_email', currentUser.email).order('created_at', { ascending: false }).limit(20);
+    const unread = data?.filter(n => !n.read).length || 0;
+    const badge = $('#notifBadge');
+    if (badge) badge.style.display = unread ? 'block' : 'none';
+    return data;
+  }
+  window.showNotifications = async () => {
+    const data = await fetchNotifications();
+    let html = '<h3>通知</h3>';
+    if (data && data.length) data.forEach(n => html += `<p>${n.content} <small>${new Date(n.created_at).toLocaleString()}</small></p>`);
+    else html += '<p>暂无通知</p>';
+    $('#genericContent').innerHTML = html;
+    $('#genericModal').classList.add('show');
+    await supabase.from('notifications').update({ read: true }).eq('user_email', currentUser.email).eq('read', false);
+  };
+  function subscribeNotifications() {
+    if (!currentUser) return;
+    if (notifSub) supabase.removeChannel(notifSub);
+    notifSub = supabase.channel('notif-' + currentUser.email)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_email=eq.${currentUser.email}` }, () => {
+        fetchNotifications();
+      }).subscribe();
+  }
+
+  // 登录 / 注册
+  window.doLogin = async () => {
+    const email = $('#loginEmail').value.trim(), pwd = $('#loginPassword').value.trim();
+    const { data, error } = await supabase.from('profiles').select('*').eq('email', email).single();
+    if (error || !data) return toast('账户不存在');
+    if (data.password_hash !== pwd) return toast('密码错误');
+    if (data.is_banned) return toast('账号已被禁用');
+    currentUser = data;
+    localStorage.setItem('oskwk_user', JSON.stringify(data));
+    enterApp();
+  };
+  window.doRegister = async () => {
+    const email = $('#regEmail').value.trim(), phone = $('#regPhone').value.trim(), code = $('#regCode').value.trim(),
+          pwd = $('#regPassword').value.trim(), nick = $('#regNickname').value.trim();
+    if (!email || !phone || !pwd || !nick) return toast('请填写完整');
+    if (code !== '123456') return toast('验证码错误');
+    const { data, error } = await supabase.from('profiles').insert([{ email, nickname: nick, phone, password_hash: pwd }]).select().single();
+    if (error) return toast('注册失败');
+    currentUser = data;
+    localStorage.setItem('oskwk_user', JSON.stringify(data));
+    enterApp();
+  };
+  function enterApp() {
+    $('#authOverlay').classList.remove('show');
+    $('#app').classList.add('on');
+    $('#avatarText').textContent = currentUser?.nickname?.charAt(0)?.toUpperCase() || '?';
+    subscribeNotifications();
+    fetchNotifications();
+    window.switchTab('about');
+  }
+  window.doLogout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
+  window.showRegister = () => { $('#loginCard').style.display = 'none'; $('#registerCard').style.display = 'block'; };
+  window.showLogin = () => { $('#loginCard').style.display = 'block'; $('#registerCard').style.display = 'none'; };
+  window.sendCode = () => toast('验证码：123456');
+
+  // 启动
+  (() => {
+    const saved = localStorage.getItem('oskwk_user');
+    if (saved) {
+      currentUser = JSON.parse(saved);
+      enterApp();
+    } else {
+      $('#authOverlay').classList.add('show');
+    }
+    setTimeout(() => $('#loader').classList.add('done'), 500);
+  })();
 </script>
 </body>
 </html>
