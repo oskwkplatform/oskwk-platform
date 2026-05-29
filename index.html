@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>OSKWK Platform · 自然之息</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #050505; --surface: #0a0a0a; --surface2: #111;
@@ -14,6 +16,7 @@
       --radius: 16px; --radius-sm: 10px; --radius-full: 9999px;
       --glass-bg: rgba(10,10,10,0.7); --glass-border: rgba(255,255,255,0.08);
       --blur: 24px; --font-size: 16px;
+      --font-serif: 'Cormorant Garamond', 'Playfair Display', serif;
     }
     [data-theme="light"] {
       --bg: #f5f2ed; --surface: #fff; --surface2: #ebe5db;
@@ -40,10 +43,10 @@
     .auth-overlay{position:fixed;inset:0;z-index:1000;background:radial-gradient(circle at 50% 30%, rgba(201,168,124,.15), var(--bg) 80%);backdrop-filter:blur(30px);display:flex;align-items:center;justify-content:center;padding:20px}
     .auth-card{background:var(--glass-bg);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:var(--radius);padding:40px 32px;max-width:420px;width:100%;box-shadow:0 30px 60px rgba(0,0,0,.6);animation:authIn .5s ease}
     @keyframes authIn{from{opacity:0;transform:translateY(20px) scale(.98)}}
-    .auth-card h2{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:28px;text-align:center}
+    .auth-card h2{font-family:var(--font-serif);font-size:2.4rem;margin-bottom:28px;text-align:center;font-weight:700;letter-spacing:1px}
     .auth-card input{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;color:var(--text);font-size:.9rem;width:100%;margin-bottom:14px;outline:none}
     .auth-card input:focus{border-color:var(--accent)}
-    .auth-btn{width:100%;padding:14px;border-radius:var(--radius-full);background:var(--accent);color:#111;font-weight:600;font-size:.95rem;border:none;cursor:pointer}
+    .auth-btn{width:100%;padding:14px;border-radius:var(--radius-full);background:var(--accent);color:#111;font-weight:600;font-size:.95rem;border:none;cursor:pointer;letter-spacing:2px;text-transform:uppercase}
     .auth-link{margin-top:20px;text-align:center;font-size:.85rem;color:var(--text3)}
     .auth-link a{color:var(--accent);cursor:pointer;font-weight:500}
 
@@ -68,15 +71,15 @@
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.45)}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 8%,transparent 55%);z-index:2}
     .hero-caption{position:relative;z-index:3;text-align:center;padding:0 24px 100px;will-change:transform,opacity}
-    .hero-caption h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,6rem);font-weight:900;color:#fff;text-shadow:0 4px 60px rgba(0,0,0,.7)}
-    .hero-caption p{color:rgba(255,255,255,.55);font-size:1rem;font-weight:300;margin-top:8px}
+    .hero-caption h1{font-family:var(--font-serif);font-size:clamp(3.5rem,10vw,7rem);font-weight:900;color:#fff;text-shadow:0 4px 60px rgba(0,0,0,.7);letter-spacing:4px}
+    .hero-caption p{color:rgba(255,255,255,.55);font-size:1.2rem;font-weight:300;margin-top:12px;font-style:italic}
 
     .main-wrap{max-width:1200px;margin:0 auto;padding:40px 24px 120px}
     .page{display:none;animation:fadeIn .35s ease}
     .page.active{display:block}
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}}
 
-    .sec-title{display:flex;align-items:center;gap:12px;margin-bottom:28px;font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700}
+    .sec-title{display:flex;align-items:center;gap:12px;margin-bottom:28px;font-family:var(--font-serif);font-size:1.8rem;font-weight:700}
     .sec-title::after{content:'';flex:1;height:1px;background:var(--border-light)}
 
     .grid{columns:3 280px;column-gap:20px}
@@ -84,8 +87,8 @@
     .card:hover{transform:translateY(-3px);border-color:var(--accent)}
     .card img{width:100%;display:block;background:var(--surface)}
     .card-body{padding:18px}
-    .card-body h3{font-size:1rem;font-weight:600;margin-bottom:6px}
-    .card-delete{position:absolute;top:8px;right:8px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;opacity:0;transition:opacity .2s}
+    .card-body h3{font-size:1.1rem;font-weight:600;margin-bottom:6px;font-family:var(--font-serif)}
+    .card-delete{position:absolute;top:8px;right:8px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;opacity:0;transition:opacity .2s;z-index:2}
     .card:hover .card-delete{opacity:1}
 
     .chat-box{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;height:65vh;display:flex;flex-direction:column}
@@ -109,7 +112,7 @@
     @keyframes modalIn{from{opacity:0;transform:scale(.95)}}
     input,textarea{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:.9rem;margin-bottom:14px;outline:none}
     input:focus,textarea:focus{border-color:var(--accent)}
-    button.main{background:var(--accent);border:none;color:#111;font-weight:600;padding:14px 28px;border-radius:var(--radius-full);cursor:pointer;width:100%;font-size:.9rem}
+    button.main{background:var(--accent);border:none;color:#111;font-weight:600;padding:14px 28px;border-radius:var(--radius-full);cursor:pointer;width:100%;font-size:.9rem;letter-spacing:2px;text-transform:uppercase}
 
     @media(max-width:768px){.nav-icons{display:none}.mob-nav{display:flex}.hero h1{font-size:2.8rem}.main-wrap{padding:24px 16px 100px}.grid{columns:1}}
   </style>
@@ -120,22 +123,22 @@
 <!-- 登录/注册 -->
 <div id="authWrap" class="auth-overlay">
   <div class="auth-card" id="loginBox">
-    <h2>OSKWK Platform</h2>
+    <h2>OSKWK</h2>
     <input type="email" id="loginEmail" placeholder="邮箱" autocomplete="email">
     <input type="password" id="loginPass" placeholder="密码">
-    <button class="auth-btn" id="loginBtn">登 录</button>
+    <button class="auth-btn" id="loginBtn">进入</button>
     <p id="loginHint" style="font-size:.8rem;color:var(--danger);margin-top:8px;text-align:center;"></p>
-    <div class="auth-link">还没有账户？ <a onclick="showReg()">创建账户</a></div>
+    <div class="auth-link">没有账户？ <a onclick="showReg()">创建账户</a></div>
   </div>
   <div class="auth-card" id="regBox" style="display:none">
-    <h2>加入 OSKWK</h2>
+    <h2>加入</h2>
     <input id="regPhone" placeholder="手机号" type="tel">
     <input id="regEmail" placeholder="邮箱" type="email">
     <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer">获取</button></div>
     <input id="regPass" type="password" placeholder="密码">
     <input id="regNick" placeholder="昵称">
     <label style="display:flex;gap:8px;font-size:.8rem;color:var(--text2);margin:10px 0"><input type="checkbox" id="regAgree">同意协议</label>
-    <button class="auth-btn" id="regBtn">注 册</button>
+    <button class="auth-btn" id="regBtn">注册</button>
     <div class="auth-link">已有账户？ <a onclick="showLogin()">返回登录</a></div>
   </div>
 </div>
@@ -161,14 +164,14 @@
   </nav>
 
   <div class="settings" id="settingsPanel">
-    <h3 style="font-family:'Playfair Display'">自定义</h3>
+    <h3 style="font-family:var(--font-serif)">自定义</h3>
     <div><label>主题</label><div style="display:flex;gap:8px;margin-top:8px"><button class="theme-btn active" data-theme="dark" onclick="setTheme('dark')">暗</button><button class="theme-btn" data-theme="light" onclick="setTheme('light')">亮</button></div></div>
     <div><label>字号</label><input type="range" min="14" max="20" value="16" id="fontSizeSlider" oninput="updateFontSize(this.value)"></div>
     <div><label>主色</label><div style="display:flex;gap:8px;margin-top:8px"><span class="theme-btn" style="background:#c9a87c" data-accent="#c9a87c" onclick="setAccent(this)"></span><span class="theme-btn" style="background:#6c9ce0" data-accent="#6c9ce0" onclick="setAccent(this)"></span><span class="theme-btn" style="background:#a0c98a" data-accent="#a0c98a" onclick="setAccent(this)"></span></div></div>
   </div>
 
   <section class="hero">
-    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山日出">
+    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山">
     <div class="hero-overlay"></div>
     <div class="hero-caption" id="heroCaption"><h1>探索无界</h1><p>OSKWK Platform</p></div>
   </section>
@@ -191,7 +194,6 @@
     </div>
     <div class="page" id="tab-chat">
       <div class="sec-title">交流</div>
-      <!-- 房间搜索与创建 -->
       <div id="roomTools" style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
         <input id="roomSearch" placeholder="搜索房间..." style="flex:1;min-width:150px">
         <button class="nav-icon" style="width:auto;padding:8px 16px" onclick="showCreateRoom()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -244,7 +246,7 @@ let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
 
-// 自然风景图片集合（高山、日出等）
+// 自然风景图片集（高山、日出等）
 const naturePhotos = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
@@ -280,12 +282,10 @@ window.updateFontSize = v => { document.documentElement.style.setProperty('--fon
 window.setAccent = el => { document.documentElement.style.setProperty('--accent',el.dataset.accent); localStorage.setItem('oskwk_accent',el.dataset.accent); };
 window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-// 视差
 window.addEventListener('scroll',()=>{
   const y=window.scrollY, cap=$('#heroCaption');
   if(cap){ cap.style.opacity=Math.max(0,1-y/500); cap.style.transform=`translateY(${y*0.3}px)`; }
 });
-
 setInterval(()=>{ const img=$('#heroBg'); if(img) img.src=heroLandscape(); },12000);
 
 window.switchTab = async tab => {
@@ -310,7 +310,7 @@ async function loadArticles(cat){
   const c=$('#article-'+cat); if(!c) return;
   const {data} = await supabase.from('articles').select('*').eq('category',cat).order('created_at',{ascending:false});
   c.innerHTML = (data||[]).map(a=>`
-    <div class="card" onclick="${isAdmin?'':`expandArticle(${a.id})`}" style="${isAdmin?'cursor:default':''}">
+    <div class="card" onclick="expandArticle(${a.id})">
       ${isAdmin ? `<button class="card-delete" onclick="event.stopPropagation();deleteArticle(${a.id},'${cat}')">×</button>` : ''}
       <img src="${a.image_url||landscape()}" loading="lazy" onerror="this.src='${landscape()}'">
       <div class="card-body"><h3>${a.title}</h3><p>${a.content?.slice(0,100)||''}</p></div>
@@ -318,7 +318,6 @@ async function loadArticles(cat){
   `).join('')||'<p style="color:var(--text3)">暂无内容</p>';
 }
 
-// 管理员文章管理
 window.openPublish = (cat) => {
   if(!isAdmin) return T('无权操作');
   let html = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="4"></textarea><input id="pubImage" placeholder="图片URL (可选)"><button class="main" onclick="publishArticle('${cat}')">发布</button>`;
@@ -339,48 +338,45 @@ window.deleteArticle = async (id,cat) => {
   T('已删除'); loadArticles(cat);
 };
 
-// 文章详情
 window.expandArticle = async id => {
   try {
     const {data:a,error} = await supabase.from('articles').select('*').eq('id',id).single();
     if(error||!a) return T('文章加载失败');
-    let html=`<h2>${a.title}</h2><img src="${a.image_url||landscape()}" style="width:100%;border-radius:8px;margin:12px 0"><p>${a.content}</p><hr><h4>评论</h4>`;
+    let html=`<h2 style="font-family:var(--font-serif)">${a.title}</h2><img src="${a.image_url||landscape()}" style="width:100%;border-radius:8px;margin:12px 0"><p>${a.content}</p><hr><h4>评论</h4>`;
     const {data:coms} = await supabase.from('comments').select('*').eq('article_id',id).order('created_at');
     html+=(coms||[]).map(c=>`<p><b>${c.nickname}:</b> ${c.content}</p>`).join('');
-    html+=`<input id="commentInput" placeholder="评论..."><button onclick="postComment(${id})">发送</button>`;
-    $('#genericContent').innerHTML=html; $('#genericModal').classList.add('show');
+    html+=`<input id="commentInput" placeholder="写下评论..."><button onclick="postComment(${id})">发送</button>`;
+    $('#genericContent').innerHTML=html;
+    $('#genericModal').classList.add('show');
   } catch(e){ T('无法打开文章'); }
 };
 window.postComment = async id => {
   const inp=$('#commentInput'); if(!inp?.value.trim()||!user) return;
   await supabase.from('comments').insert([{article_id:id, nickname:user.nickname, content:inp.value.trim()}]);
-  T('已评论'); window.expandArticle(id);
+  T('评论成功');
+  window.expandArticle(id);
 };
 
-// ---- 聊天增强 ----
+// 聊天增强（消息存储修复）
 let allRooms = [];
 async function renderRoomList() {
   $('#chatPanel').style.display='none';
   $('#roomList').style.display='flex';
-  // 加载房间
   const {data} = await supabase.from('rooms').select('*').order('created_at',{ascending:false});
   allRooms = data || [];
   filterRooms();
-  // 搜索框绑定事件
   $('#roomSearch').oninput = filterRooms;
 }
 function filterRooms(){
   const kw = $('#roomSearch').value.trim().toLowerCase();
   const list = $('#roomList');
   let html = '';
-  // 默认公共房间
   const publicRooms = ['大厅','技术','理论','艺术'];
   for(const name of publicRooms){
     if(!kw || name.includes(kw)){
       html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinPublicRoom('${name}')"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> ${name}</button>`;
     }
   }
-  // 自定义房间
   for(const r of allRooms){
     if(!kw || r.name.toLowerCase().includes(kw)){
       html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinCustomRoom('${r.name.replace(/'/g,"\\'")}', '${r.password?1:0}')"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> ${r.name}${r.password?' 🔒':''}</button>`;
@@ -412,7 +408,6 @@ window.joinCustomRoom = (name, hasPass) => {
   if(hasPass){
     let pass = prompt('请输入房间密码：');
     if(pass === null) return;
-    // 简单验证（直接通过 rooms 表检查）
     supabase.from('rooms').select('password').eq('name',name).single().then(({data})=>{
       if(data && data.password === pass){
         room = 'oskwk-'+name;
@@ -446,7 +441,7 @@ async function startChat(){
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${room}`},payload=>renderMsg(payload.new))
     .subscribe((status, err) => {
       if (status === 'SUBSCRIBED') console.log('实时聊天已连接');
-      if (status === 'CHANNEL_ERROR') console.error(err);
+      if (status === 'CHANNEL_ERROR') console.error('实时通道错误', err);
     });
 }
 function renderMsg(m){
@@ -455,6 +450,7 @@ function renderMsg(m){
   div.innerHTML=`<b>${m.nickname}</b><br>${m.message||''}${m.image_url?`<br><img src="${m.image_url}">`:''}`;
   log.appendChild(div); log.scrollTop=log.scrollHeight;
 }
+// 消息发送修复（确保存入数据库）
 window.sendMsg = async () => {
   const inp=$('#msgInput'), txt=inp.value.trim();
   if(!user) return T('请先登录');
@@ -463,9 +459,10 @@ window.sendMsg = async () => {
   try {
     const {error} = await supabase.from('messages').insert([{room, nickname:user.nickname, message:txt}]);
     if(error) throw error;
+    // 本地即时渲染
     renderMsg({room, nickname:user.nickname, message:txt, created_at:new Date().toISOString()});
     inp.value='';
-  } catch(e){ T('发送失败'); }
+  } catch(e){ T('发送失败，请稍后重试'); }
 };
 window.uploadImg = async () => {
   const f=$('#imgUpload').files[0];
@@ -520,7 +517,6 @@ window.showRequests = async () => {
 window.handleReq = async (id,status) => { await supabase.from('friendships').update({status}).eq('id',id); T('已处理'); window.showRequests(); };
 window.addFriend = () => { const email=prompt('对方邮箱'); if(email) supabase.from('friendships').insert([{from_email:user.email,to_email:email}]).then(()=>T('已发送')); };
 
-// 个人中心&管理员
 async function renderProfile(){
   if(!user) return;
   let html=`<div class="card" style="text-align:center;padding:24px"><div class="avatar" style="width:56px;height:56px;font-size:1.4rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div><h3>${user.nickname}</h3><p>${user.email}</p><button onclick="showRequests()">好友请求</button> <button onclick="addFriend()">添加好友</button>`;
@@ -537,7 +533,6 @@ window.showAdmin = async () => {
 };
 window.toggleBan = async (email,ban) => { if(!isAdmin) return; await supabase.from('profiles').update({is_banned:ban}).eq('email',email); T('已更新'); window.showAdmin(); };
 
-// 通知
 async function fetchNotifs(){
   if(!user) return;
   const {data} = await supabase.from('notifications').select('*').eq('user_email',user.email).order('created_at',{ascending:false}).limit(20);
@@ -559,7 +554,7 @@ function subNotifs(){
   notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
 }
 
-// 登录注册（安全 bcrypt）
+// 安全登录/注册
 window.doLogin = async () => {
   const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
   if(!email||!pwd) return T('请输入邮箱和密码');
@@ -597,7 +592,6 @@ window.sendCode = () => T('验证码：123456');
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('regBtn').addEventListener('click', doRegister);
 
-// 自动登录
 (()=>{
   const saved = localStorage.getItem('oskwk_user');
   if (saved) {
