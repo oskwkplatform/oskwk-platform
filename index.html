@@ -39,9 +39,8 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 导航栏 */
     .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px}
-    .nav-logo{cursor:pointer;display:flex;align-items:center;gap:8px;margin-right:auto}
+    .nav-logo{cursor:pointer;display:flex;align-items:center;margin-right:auto}
     .nav-logo svg{width:28px;height:28px;stroke:var(--accent)}
     .nav-icons{display:flex;gap:2px;margin:0 auto}
     .nav-icon{background:none;border:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;color:var(--text2);transition:all .2s;padding:0;position:relative}
@@ -57,7 +56,6 @@
     .mob-nav .nav-icon svg{width:22px;height:22px}
     .mob-nav .nav-icon.active{color:var(--accent)}
 
-    /* 英雄区 */
     .hero{position:relative;height:100vh;min-height:650px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;margin-top:-64px}
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.5);transition:opacity 1.5s}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 8%,transparent 55%);z-index:2}
@@ -65,7 +63,6 @@
     .hero-caption h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,6rem);font-weight:900;color:#fff;text-shadow:0 4px 60px rgba(0,0,0,.7)}
     .hero-caption p{color:rgba(255,255,255,.55);font-size:1rem;font-weight:300;margin-top:8px;letter-spacing:.5px}
 
-    /* 主内容 */
     .main-wrap{max-width:1200px;margin:0 auto;padding:40px 24px 120px}
     .page{display:none;animation:fadeIn .35s ease}
     .page.active{display:block}
@@ -74,15 +71,15 @@
     .sec-title{display:flex;align-items:center;gap:12px;margin-bottom:28px;font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700}
     .sec-title::after{content:'';flex:1;height:1px;background:var(--border-light)}
 
-    /* 网格 */
     .grid{columns:3 280px;column-gap:20px}
-    .card{break-inside:avoid;margin-bottom:20px;border-radius:var(--radius);overflow:hidden;background:var(--surface2);border:1px solid var(--border);transition:all .3s;cursor:pointer}
+    .card{break-inside:avoid;margin-bottom:20px;border-radius:var(--radius);overflow:hidden;background:var(--surface2);border:1px solid var(--border);transition:all .3s;cursor:pointer;position:relative}
     .card:hover{transform:translateY(-3px);border-color:var(--accent)}
     .card img{width:100%;display:block;background:var(--surface)}
     .card-body{padding:18px}
     .card-body h3{font-size:1rem;font-weight:600;margin-bottom:6px}
+    .card-delete{position:absolute;top:8px;right:8px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;line-height:1;opacity:0;transition:opacity .2s}
+    .card:hover .card-delete{opacity:1}
 
-    /* 聊天 */
     .chat-box{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;height:65vh;display:flex;flex-direction:column}
     .chat-log{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
     .msg{max-width:78%;padding:10px 14px;border-radius:18px;font-size:.88rem;word-break:break-word}
@@ -93,7 +90,6 @@
     .chat-bar input{flex:1;padding:12px 16px;border-radius:var(--radius-full);background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.88rem;outline:none}
     .chat-bar button{background:var(--accent);border:none;border-radius:var(--radius-full);padding:0 16px;cursor:pointer;color:#111;font-weight:600}
 
-    /* 设置 */
     .settings{position:fixed;top:80px;right:24px;width:280px;background:var(--glass-bg);backdrop-filter:blur(40px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;z-index:200;display:none;flex-direction:column;gap:20px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
     .settings.show{display:flex}
     .theme-btn{padding:6px 16px;border-radius:var(--radius-full);background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;font-size:.8rem}
@@ -117,7 +113,7 @@
 <div id="authWrap" class="modal">
   <div class="modal-box" id="loginBox">
     <h2 style="font-family:'Playfair Display';margin-bottom:20px;">OSKWK Platform</h2>
-    <input type="email" id="loginEmail" placeholder="邮箱">
+    <input type="email" id="loginEmail" placeholder="邮箱" autocomplete="email">
     <input type="password" id="loginPass" placeholder="密码">
     <button class="main" id="loginBtn">登 录</button>
     <p id="loginHint" style="font-size:.8rem;color:var(--danger);margin-top:8px;"></p>
@@ -125,8 +121,8 @@
   </div>
   <div class="modal-box" id="regBox" style="display:none">
     <h2 style="font-family:'Playfair Display';margin-bottom:20px;">加入 OSKWK</h2>
-    <input id="regPhone" placeholder="手机号">
-    <input id="regEmail" placeholder="邮箱">
+    <input id="regPhone" placeholder="手机号" type="tel">
+    <input id="regEmail" placeholder="邮箱" type="email">
     <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer">获取</button></div>
     <input id="regPass" type="password" placeholder="密码">
     <input id="regNick" placeholder="昵称">
@@ -143,11 +139,11 @@
       <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="4" ry="10" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h20" stroke="currentColor" stroke-width="1.5"/></svg>
     </div>
     <div class="nav-icons">
-      <button class="nav-icon active" data-tab="about" title="探索"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/></svg></button>
-      <button class="nav-icon" data-tab="discover" title="发现"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><circle cx="11" cy="11" r="2"/></svg></button>
-      <button class="nav-icon" data-tab="study" title="学术"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/><path d="M8 7h8M8 11h6M8 15h7"/></svg></button>
-      <button class="nav-icon" data-tab="chat" title="交流"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 01-8 8.5"/></svg></button>
-      <button class="nav-icon" data-tab="friends" title="动态"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4"/></svg></button>
+      <button class="nav-icon active" data-tab="about" onclick="switchTab('about')" title="探索"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/></svg></button>
+      <button class="nav-icon" data-tab="discover" onclick="switchTab('discover')" title="发现"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><circle cx="11" cy="11" r="2"/></svg></button>
+      <button class="nav-icon" data-tab="study" onclick="switchTab('study')" title="学术"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/><path d="M8 7h8M8 11h6M8 15h7"/></svg></button>
+      <button class="nav-icon" data-tab="chat" onclick="switchTab('chat')" title="交流"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 01-8 8.5"/></svg></button>
+      <button class="nav-icon" data-tab="friends" onclick="switchTab('friends')" title="动态"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4"/></svg></button>
     </div>
     <div class="nav-right">
       <button class="nav-icon" id="notifBtn" onclick="showNotifs()" title="通知"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="badge" id="notifDot"></span></button>
@@ -156,7 +152,7 @@
     </div>
   </nav>
 
-  <!-- 设置 -->
+  <!-- 设置面板 -->
   <div class="settings" id="settingsPanel">
     <h3 style="font-family:'Playfair Display'">自定义</h3>
     <div><label>主题</label><div style="display:flex;gap:8px;margin-top:8px"><button class="theme-btn active" data-theme="dark" onclick="setTheme('dark')">暗</button><button class="theme-btn" data-theme="light" onclick="setTheme('light')">亮</button></div></div>
@@ -169,15 +165,33 @@
     <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山风景">
     <div class="hero-overlay"></div>
     <div class="hero-caption" id="heroCaption">
-      <h1>山岳之息</h1>
-      <p>OSKWK Platform · 探索无界</p>
+      <h1>探索无界</h1>
+      <p>OSKWK Platform</p>
     </div>
   </section>
 
   <div class="main-wrap">
-    <div class="page active" id="tab-about"><div class="sec-title">探索</div><div id="article-about" class="grid"></div></div>
-    <div class="page" id="tab-discover"><div class="sec-title">发现</div><div id="article-discover" class="grid"></div></div>
-    <div class="page" id="tab-study"><div class="sec-title">学术</div><div id="article-study" class="grid"></div></div>
+    <div class="page active" id="tab-about">
+      <div class="sec-title">探索</div>
+      <div id="adminBarAbout" class="admin-bar" style="display:none;margin-bottom:16px;gap:8px;">
+        <button class="nav-icon" style="width:auto;padding:8px 16px;" onclick="openPublish('about')">+ 发布文章</button>
+      </div>
+      <div id="article-about" class="grid"></div>
+    </div>
+    <div class="page" id="tab-discover">
+      <div class="sec-title">发现</div>
+      <div id="adminBarDiscover" class="admin-bar" style="display:none;margin-bottom:16px;">
+        <button class="nav-icon" style="width:auto;padding:8px 16px;" onclick="openPublish('discover')">+ 发布文章</button>
+      </div>
+      <div id="article-discover" class="grid"></div>
+    </div>
+    <div class="page" id="tab-study">
+      <div class="sec-title">学术</div>
+      <div id="adminBarStudy" class="admin-bar" style="display:none;margin-bottom:16px;">
+        <button class="nav-icon" style="width:auto;padding:8px 16px;" onclick="openPublish('study')">+ 发布文章</button>
+      </div>
+      <div id="article-study" class="grid"></div>
+    </div>
     <div class="page" id="tab-chat">
       <div class="sec-title">交流</div>
       <div id="roomList" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px"></div>
@@ -197,13 +211,14 @@
     </div>
   </div>
 
+  <!-- 移动端导航 -->
   <div class="mob-nav">
-    <button class="nav-icon active" data-tab="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg></button>
-    <button class="nav-icon" data-tab="discover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></button>
-    <button class="nav-icon" data-tab="study"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/></svg></button>
-    <button class="nav-icon" data-tab="chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 01-8 8.5"/></svg></button>
-    <button class="nav-icon" data-tab="friends"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/></svg></button>
-    <button class="nav-icon" data-tab="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/></svg></button>
+    <button class="nav-icon active" data-tab="about" onclick="switchTab('about')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg></button>
+    <button class="nav-icon" data-tab="discover" onclick="switchTab('discover')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></button>
+    <button class="nav-icon" data-tab="study" onclick="switchTab('study')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/></svg></button>
+    <button class="nav-icon" data-tab="chat" onclick="switchTab('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 01-8 8.5"/></svg></button>
+    <button class="nav-icon" data-tab="friends" onclick="switchTab('friends')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/></svg></button>
+    <button class="nav-icon" data-tab="profile" onclick="switchTab('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/></svg></button>
   </div>
 </div>
 
@@ -217,12 +232,19 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = 'https://qnblruruefgbixbfgwkh.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-const ADMIN = '279933264@qq.com';
-let user = null, room = null, realtime = null, notifSub = null;
+
+// 管理员凭据
+const ADMIN_EMAIL = '279933264@qq.com';
+const ADMIN_PASS = '20120302';
+let user = null;
+let isAdmin = false;
+let room = null;
+let realtime = null;
+let notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
 
-// Unsplash 高质量真实风景图集合
+// 真实高山风景图集合
 const mountainPhotos = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
@@ -235,9 +257,7 @@ const mountainPhotos = [
   'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=800&q=80',
   'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80'
 ];
-function landscape() {
-  return mountainPhotos[Math.floor(Math.random() * mountainPhotos.length)];
-}
+function landscape() { return mountainPhotos[Math.floor(Math.random() * mountainPhotos.length)]; }
 
 const heroPhotos = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
@@ -246,10 +266,9 @@ const heroPhotos = [
   'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80',
   'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=1920&q=80'
 ];
-function heroLandscape() {
-  return heroPhotos[Math.floor(Math.random() * heroPhotos.length)];
-}
+function heroLandscape() { return heroPhotos[Math.floor(Math.random() * heroPhotos.length)]; }
 
+// 设置
 window.setTheme = t => {
   document.documentElement.setAttribute('data-theme',t);
   document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));
@@ -276,28 +295,77 @@ setInterval(()=>{
   const img=$('#heroBg'); if(img) img.src=heroLandscape();
 },10000);
 
+// 切换标签
 window.switchTab = async tab => {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const page=$('#tab-'+tab); if(page) page.classList.add('active');
   document.querySelectorAll('.nav-icon[data-tab], .mob-nav .nav-icon[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   window.scrollTo({top:0,behavior:'smooth'});
-  if(tab==='about') loadArticles('about');
-  if(tab==='discover') loadArticles('discover');
-  if(tab==='study') loadArticles('study');
+  if(tab==='about'||tab==='discover'||tab==='study') {
+    if(tab==='about') loadArticles('about');
+    if(tab==='discover') loadArticles('discover');
+    if(tab==='study') loadArticles('study');
+    updateAdminBar(tab);
+  }
   if(tab==='chat') renderRooms();
   if(tab==='friends') loadFeed();
   if(tab==='profile') renderProfile();
 };
 
+// 管理员工具栏显示
+function updateAdminBar(cat) {
+  const bar = document.getElementById(`adminBar${cat.charAt(0).toUpperCase()+cat.slice(1)}`);
+  if (bar) bar.style.display = isAdmin ? 'flex' : 'none';
+}
+
+// 加载文章（带删除按钮当管理员）
 async function loadArticles(cat){
   const c=$('#article-'+cat); if(!c) return;
   const {data} = await supabase.from('articles').select('*').eq('category',cat).order('created_at',{ascending:false});
   c.innerHTML = (data||[]).map(a=>`
-    <div class="card" onclick="expandArticle(${a.id})">
+    <div class="card" onclick="${isAdmin?'':`expandArticle(${a.id})`}" style="${isAdmin?'cursor:default':''}">
+      ${isAdmin ? `<button class="card-delete" onclick="event.stopPropagation();deleteArticle(${a.id},'${cat}')">×</button>` : ''}
       <img src="${a.image_url||landscape()}" loading="lazy" onerror="this.src='${landscape()}'">
       <div class="card-body"><h3>${a.title}</h3><p>${a.content?.slice(0,100)||''}</p></div>
-    </div>`).join('')||'<p style="color:var(--text3)">暂无内容</p>';
+    </div>
+  `).join('')||'<p style="color:var(--text3)">暂无内容</p>';
 }
+
+// 管理员：发布文章
+window.openPublish = (cat) => {
+  if (!isAdmin) return T('无权操作');
+  let html = `<h3>发布文章到 ${cat}</h3>
+    <input id="pubTitle" placeholder="标题">
+    <textarea id="pubContent" placeholder="内容" rows="4"></textarea>
+    <input id="pubImage" placeholder="图片URL (可选)">
+    <button class="main" onclick="publishArticle('${cat}')">发布</button>`;
+  $('#genericContent').innerHTML = html;
+  $('#genericModal').classList.add('show');
+};
+window.publishArticle = async (cat) => {
+  const title = $('#pubTitle')?.value.trim();
+  const content = $('#pubContent')?.value.trim();
+  const image_url = $('#pubImage')?.value.trim() || null;
+  if (!title || !content) return T('标题和内容不能为空');
+  const { error } = await supabase.from('articles').insert([{ 
+    title, content, category: cat, author: user.nickname, image_url 
+  }]);
+  if (error) return T('发布失败');
+  T('发布成功');
+  $('#genericModal').classList.remove('show');
+  loadArticles(cat);
+};
+
+// 管理员：删除文章
+window.deleteArticle = async (id, cat) => {
+  if (!confirm('确认删除这篇文章？')) return;
+  const { error } = await supabase.from('articles').delete().eq('id', id);
+  if (error) return T('删除失败');
+  T('已删除');
+  loadArticles(cat);
+};
+
+// 普通用户查看文章详情
 window.expandArticle = async id => {
   const {data:a} = await supabase.from('articles').select('*').eq('id',id).single();
   if(!a) return;
@@ -313,6 +381,7 @@ window.postComment = async id => {
   T('已评论'); window.expandArticle(id);
 };
 
+// 聊天功能（保持不变）
 window.joinRoom = name => { if(!user) return T('请登录'); room='oskwk-'+name; startChat(); };
 window.privateChat = () => { const p=prompt('对方邮箱'); if(p) room='private-'+[user.email,p].sort().join('_'); startChat(); };
 async function startChat(){
@@ -353,6 +422,7 @@ function renderRooms(){
     <button class="nav-icon" onclick="privateChat()">✉️</button>`;
 }
 
+// 动态/好友
 window.openPost = () => {
   $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`;
   $('#genericModal').classList.add('show');
@@ -392,24 +462,32 @@ window.addFriend = () => {
   const email=prompt('对方邮箱'); if(email) supabase.from('friendships').insert([{from_email:user.email,to_email:email}]).then(()=>T('已发送'));
 };
 
+// 个人中心 + 管理员用户管理
 async function renderProfile(){
   if(!user) return;
-  let html=`<div class="card" style="text-align:center;padding:24px"><div class="avatar" style="width:56px;height:56px;font-size:1.4rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div><h3>${user.nickname}</h3><p>${user.email}</p>
+  let html=`<div class="card" style="text-align:center;padding:24px">
+    <div class="avatar" style="width:56px;height:56px;font-size:1.4rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div>
+    <h3>${user.nickname}</h3><p>${user.email}</p>
     <button onclick="showRequests()">好友请求</button> <button onclick="addFriend()">添加好友</button>`;
-  if(user.email===ADMIN) html+='<button onclick="showAdmin()">管理</button>';
-  html+='<button onclick="logout()">退出</button></div>';
+  if (isAdmin) {
+    html += '<button onclick="showAdmin()">用户管理</button>';
+  }
+  html += '<button onclick="logout()">退出</button></div>';
   $('#profileArea').innerHTML=html;
 }
 window.showAdmin = async () => {
+  if (!isAdmin) return T('无权操作');
   const {data} = await supabase.from('profiles').select('*');
-  let html='<h3>用户</h3>';
+  let html='<h3>用户管理</h3>';
   data.forEach(u=>html+=`<p>${u.nickname} (${u.email}) ${u.is_banned?'[BANNED]':''} <button onclick="toggleBan('${u.email}',${!u.is_banned})">${u.is_banned?'解禁':'拉黑'}</button></p>`);
   $('#genericContent').innerHTML=html; $('#genericModal').classList.add('show');
 };
 window.toggleBan = async (email,ban) => {
+  if (!isAdmin) return;
   await supabase.from('profiles').update({is_banned:ban}).eq('email',email); T('已更新'); window.showAdmin();
 };
 
+// 通知
 async function fetchNotifs(){
   if(!user) return;
   const {data} = await supabase.from('notifications').select('*').eq('user_email',user.email).order('created_at',{ascending:false}).limit(20);
@@ -431,13 +509,28 @@ function subNotifs(){
   notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
 }
 
+// 登录/注册（含管理员判断）
 window.doLogin = async () => {
   const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
+  if (!email || !pwd) return T('请输入邮箱和密码');
+  // 检查管理员凭据
+  if (email === ADMIN_EMAIL && pwd === ADMIN_PASS) {
+    // 直接以管理员身份登录，无需检查数据库（也可检查数据库，这里简单模拟）
+    isAdmin = true;
+    user = { email: ADMIN_EMAIL, nickname: '管理员', phone: '', password_hash: pwd, is_banned: false };
+    localStorage.setItem('oskwk_user', JSON.stringify(user));
+    enter();
+    return;
+  }
+  // 普通用户登录
   const {data,error}=await supabase.from('profiles').select('*').eq('email',email).single();
   if(error||!data) return T('账户不存在');
   if(data.password_hash!==pwd) return T('密码错误');
   if(data.is_banned) return T('已禁用');
-  user=data; localStorage.setItem('oskwk_user',JSON.stringify(data)); enter();
+  user=data;
+  isAdmin = false;
+  localStorage.setItem('oskwk_user',JSON.stringify(data));
+  enter();
 };
 window.doRegister = async () => {
   const email=$('#regEmail').value.trim(), phone=$('#regPhone').value.trim(), code=$('#regCode').value.trim(), pwd=$('#regPass').value.trim(), nick=$('#regNick').value.trim();
@@ -445,27 +538,43 @@ window.doRegister = async () => {
   if(code!=='123456') return T('验证码错误');
   const {data,error}=await supabase.from('profiles').insert([{email,nickname:nick,phone,password_hash:pwd}]).select().single();
   if(error) return T('注册失败');
-  user=data; localStorage.setItem('oskwk_user',JSON.stringify(data)); enter();
+  user=data;
+  isAdmin = false;
+  localStorage.setItem('oskwk_user',JSON.stringify(data));
+  enter();
 };
 function enter(){
   $('#authWrap').classList.remove('show'); $('#app').classList.add('on');
   $('#avatarTxt').textContent=user?.nickname?.charAt(0)?.toUpperCase()||'?';
-  subNotifs(); fetchNotifs(); switchTab('about');
+  subNotifs(); fetchNotifs();
+  switchTab('about');
 }
 window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
 window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
 window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
 window.sendCode = () => T('验证码：123456');
 
-// 按钮绑定
+// 绑定登录/注册按钮
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('regBtn').addEventListener('click', doRegister);
 
 // 自动登录
 (()=>{
   const saved=localStorage.getItem('oskwk_user');
-  if(saved){ user=JSON.parse(saved); enter(); }
-  else { $('#authWrap').classList.add('show'); }
+  if(saved){
+    const u = JSON.parse(saved);
+    if (u.email === ADMIN_EMAIL && u.password_hash === ADMIN_PASS) {
+      isAdmin = true;
+      user = u;
+    } else {
+      // 需要重新验证或信任存储，为简单起见假设存储的用户就是当前用户，且非管理员（除非已验证）
+      user = u;
+      isAdmin = false;
+    }
+    enter();
+  } else {
+    $('#authWrap').classList.add('show');
+  }
   setTimeout(()=>$('#loader').classList.add('done'),500);
 })();
 </script>
