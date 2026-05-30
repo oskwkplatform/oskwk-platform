@@ -40,8 +40,22 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    .auth-overlay{position:fixed;inset:0;z-index:1000;background:radial-gradient(circle at 50% 30%, rgba(201,168,124,.15), var(--bg) 80%);backdrop-filter:blur(30px);display:flex;align-items:center;justify-content:center;padding:20px}
-    .auth-card{background:var(--glass-bg);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:var(--radius);padding:40px 32px;max-width:420px;width:100%;box-shadow:0 30px 60px rgba(0,0,0,.6);animation:authIn .5s ease}
+    /* 登录覆盖层 - 视频背景 */
+    .auth-overlay{
+      position:fixed;inset:0;z-index:1000;
+      display:flex;align-items:center;justify-content:center;padding:20px;
+    }
+    .auth-video{
+      position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.4);
+    }
+    .auth-card{
+      position:relative;z-index:10;
+      background:var(--glass-bg);backdrop-filter:blur(var(--blur));
+      border:1px solid var(--glass-border);border-radius:var(--radius);
+      padding:40px 32px;max-width:420px;width:100%;
+      box-shadow:0 30px 60px rgba(0,0,0,.6);
+      animation:authIn .5s ease;
+    }
     @keyframes authIn{from{opacity:0;transform:translateY(20px) scale(.98)}}
     .auth-card h2{font-family:var(--font-serif);font-size:2.4rem;margin-bottom:28px;text-align:center;font-weight:700;letter-spacing:1px}
     .auth-card input{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;color:var(--text);font-size:.9rem;width:100%;margin-bottom:14px;outline:none}
@@ -120,8 +134,11 @@
 <body>
 <div id="loader"><div class="loader-ring"></div></div>
 
-<!-- 登录/注册 -->
+<!-- 登录/注册（视频背景） -->
 <div id="authWrap" class="auth-overlay">
+  <video class="auth-video" autoplay muted loop playsinline>
+    <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-mountain-3129/1080p.mp4" type="video/mp4">
+  </video>
   <div class="auth-card" id="loginBox">
     <h2>OSKWK</h2>
     <input type="email" id="loginEmail" placeholder="邮箱" autocomplete="email">
@@ -246,7 +263,7 @@ let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
 
-// 自然风景图片集（高山、日出等）
+// 自然风景图片集
 const naturePhotos = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
@@ -357,7 +374,7 @@ window.postComment = async id => {
   window.expandArticle(id);
 };
 
-// 聊天增强（消息存储修复）
+// 聊天功能（增强稳定性）
 let allRooms = [];
 async function renderRoomList() {
   $('#chatPanel').style.display='none';
@@ -439,10 +456,7 @@ async function startChat(){
   if(realtime) supabase.removeChannel(realtime);
   realtime = supabase.channel('room-'+room)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${room}`},payload=>renderMsg(payload.new))
-    .subscribe((status, err) => {
-      if (status === 'SUBSCRIBED') console.log('实时聊天已连接');
-      if (status === 'CHANNEL_ERROR') console.error('实时通道错误', err);
-    });
+    .subscribe();
 }
 function renderMsg(m){
   const log=$('#chatLog'); if(!log) return;
@@ -450,7 +464,6 @@ function renderMsg(m){
   div.innerHTML=`<b>${m.nickname}</b><br>${m.message||''}${m.image_url?`<br><img src="${m.image_url}">`:''}`;
   log.appendChild(div); log.scrollTop=log.scrollHeight;
 }
-// 消息发送修复（确保存入数据库）
 window.sendMsg = async () => {
   const inp=$('#msgInput'), txt=inp.value.trim();
   if(!user) return T('请先登录');
@@ -459,10 +472,9 @@ window.sendMsg = async () => {
   try {
     const {error} = await supabase.from('messages').insert([{room, nickname:user.nickname, message:txt}]);
     if(error) throw error;
-    // 本地即时渲染
     renderMsg({room, nickname:user.nickname, message:txt, created_at:new Date().toISOString()});
     inp.value='';
-  } catch(e){ T('发送失败，请稍后重试'); }
+  } catch(e){ T('发送失败'); }
 };
 window.uploadImg = async () => {
   const f=$('#imgUpload').files[0];
@@ -517,13 +529,78 @@ window.showRequests = async () => {
 window.handleReq = async (id,status) => { await supabase.from('friendships').update({status}).eq('id',id); T('已处理'); window.showRequests(); };
 window.addFriend = () => { const email=prompt('对方邮箱'); if(email) supabase.from('friendships').insert([{from_email:user.email,to_email:email}]).then(()=>T('已发送')); };
 
+// 个人中心新增编辑资料、搜索用户
 async function renderProfile(){
   if(!user) return;
-  let html=`<div class="card" style="text-align:center;padding:24px"><div class="avatar" style="width:56px;height:56px;font-size:1.4rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div><h3>${user.nickname}</h3><p>${user.email}</p><button onclick="showRequests()">好友请求</button> <button onclick="addFriend()">添加好友</button>`;
+  let html=`<div class="card" style="text-align:center;padding:24px">
+    <div class="avatar" style="width:56px;height:56px;font-size:1.4rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div>
+    <h3>${user.nickname}</h3><p>${user.email}</p>
+    <button onclick="showRequests()">好友请求</button>
+    <button onclick="addFriend()">添加好友</button>
+    <button onclick="showEditProfile()">编辑资料</button>
+    <button onclick="searchUser()">搜索用户</button>`;
   if(isAdmin) html+='<button onclick="showAdmin()">用户管理</button>';
   html+='<button onclick="logout()">退出</button></div>';
   $('#profileArea').innerHTML=html;
 }
+
+// 编辑个人资料
+window.showEditProfile = () => {
+  let html = `<h3>编辑资料</h3>
+    <input id="editNick" placeholder="新昵称" value="${user.nickname||''}">
+    <input id="editPass" type="password" placeholder="新密码（留空不变）">
+    <input id="editAvatar" placeholder="头像URL（可选）">
+    <button class="main" onclick="saveProfile()">保存</button>`;
+  $('#genericContent').innerHTML = html;
+  $('#genericModal').classList.add('show');
+};
+window.saveProfile = async () => {
+  const nick = $('#editNick')?.value.trim();
+  const pass = $('#editPass')?.value.trim();
+  const avatar = $('#editAvatar')?.value.trim();
+  if(!nick) return T('昵称不能为空');
+  const {data, error} = await supabase.rpc('update_profile', {
+    user_email: user.email,
+    new_nickname: nick || null,
+    new_password: pass || null,
+    new_avatar_url: avatar || null
+  });
+  if(error) return T('更新失败');
+  user = data[0];
+  localStorage.setItem('oskwk_user', JSON.stringify(user));
+  T('资料已更新');
+  $('#genericModal').classList.remove('show');
+  renderProfile();
+  document.getElementById('avatarTxt').textContent = user.nickname?.charAt(0)?.toUpperCase() || '?';
+};
+
+// 搜索用户
+window.searchUser = () => {
+  let html = `<h3>搜索用户</h3><input id="searchKeyword" placeholder="邮箱或昵称"><button class="main" onclick="doSearch()">搜索</button><div id="searchResult"></div>`;
+  $('#genericContent').innerHTML = html;
+  $('#genericModal').classList.add('show');
+};
+window.doSearch = async () => {
+  const kw = $('#searchKeyword')?.value.trim();
+  if(!kw) return T('请输入关键词');
+  const {data, error} = await supabase.from('profiles')
+    .select('email, nickname, avatar_url')
+    .or(`email.ilike.%${kw}%,nickname.ilike.%${kw}%`)
+    .limit(10);
+  if(error) return T('搜索失败');
+  const list = $('#searchResult');
+  if(data && data.length){
+    list.innerHTML = data.map(u=>`<p><b>${u.nickname}</b> (${u.email}) <button onclick="addFriendByEmail('${u.email}')">加好友</button></p>`).join('');
+  } else {
+    list.innerHTML = '<p>未找到用户</p>';
+  }
+};
+window.addFriendByEmail = (email) => {
+  if(email === user.email) return T('不能添加自己');
+  supabase.from('friendships').insert([{from_email:user.email, to_email:email}]).then(()=>T('请求已发送'));
+};
+
+// 管理员功能
 window.showAdmin = async () => {
   if(!isAdmin) return T('无权操作');
   const {data} = await supabase.from('profiles').select('*');
@@ -533,6 +610,7 @@ window.showAdmin = async () => {
 };
 window.toggleBan = async (email,ban) => { if(!isAdmin) return; await supabase.from('profiles').update({is_banned:ban}).eq('email',email); T('已更新'); window.showAdmin(); };
 
+// 通知
 async function fetchNotifs(){
   if(!user) return;
   const {data} = await supabase.from('notifications').select('*').eq('user_email',user.email).order('created_at',{ascending:false}).limit(20);
@@ -554,12 +632,19 @@ function subNotifs(){
   notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
 }
 
-// 安全登录/注册
+// 安全登录注册（修复登录错误）
 window.doLogin = async () => {
   const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
   if(!email||!pwd) return T('请输入邮箱和密码');
-  const { data, error } = await supabase.rpc('verify_login', { user_email: email, user_password: pwd });
-  if (error || !data || data.length === 0) return T('邮箱或密码错误');
+  const { data, error } = await supabase.rpc('verify_login', {
+    user_email: email,
+    user_password: pwd
+  });
+  if (error) {
+    console.error('RPC error:', error);
+    return T('登录服务异常，请稍后重试');
+  }
+  if (!data || data.length === 0) return T('邮箱或密码错误');
   user = data[0];
   isAdmin = (user.email === ADMIN_EMAIL);
   localStorage.setItem('oskwk_user', JSON.stringify(user));
@@ -569,8 +654,13 @@ window.doRegister = async () => {
   const email=$('#regEmail').value.trim(), phone=$('#regPhone').value.trim(), code=$('#regCode').value.trim(), pwd=$('#regPass').value.trim(), nick=$('#regNick').value.trim();
   if(!email||!phone||!pwd||!nick) return T('请填写完整');
   if(code!=='123456') return T('验证码错误');
-  const { data, error } = await supabase.rpc('register_user', { user_email: email, user_nickname: nick, user_phone: phone, user_password: pwd });
-  if (error) return T('注册失败');
+  const { data, error } = await supabase.rpc('register_user', {
+    user_email: email,
+    user_nickname: nick,
+    user_phone: phone,
+    user_password: pwd
+  });
+  if (error) return T('注册失败：'+error.message);
   user = data[0];
   isAdmin = false;
   localStorage.setItem('oskwk_user', JSON.stringify(user));
@@ -601,7 +691,7 @@ document.getElementById('regBtn').addEventListener('click', doRegister);
       enter();
     } catch(e){ localStorage.removeItem('oskwk_user'); }
   } else {
-    document.getElementById('authWrap').style.display = 'flex';
+    document.getElementById('authWrap').style.display='flex';
   }
   setTimeout(() => $('#loader').classList.add('done'), 500);
 })();
