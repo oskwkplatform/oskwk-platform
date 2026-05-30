@@ -40,47 +40,27 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 登录页 - 视频背景 + 高级玻璃质感 */
+    /* 登录页 */
     .auth-overlay{
-      position:fixed;inset:0;z-index:1000;
-      display:flex;align-items:center;justify-content:center;padding:20px;
+      position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;
     }
     .auth-video{
       position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.35);
     }
     .auth-card{
-      position:relative;z-index:10;
-      background: rgba(20,20,20,0.75); backdrop-filter: blur(40px);
-      border:1px solid rgba(255,255,255,0.1); border-radius:24px;
-      padding:50px 40px; max-width:400px; width:100%;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05) inset;
-      animation: authIn 0.6s ease;
-      text-align:center;
+      position:relative;z-index:10;background:rgba(20,20,20,0.75);backdrop-filter:blur(40px);
+      border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:50px 40px;max-width:400px;width:100%;
+      box-shadow:0 40px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.05) inset;
+      animation:authIn 0.6s ease;text-align:center;
     }
     @keyframes authIn{from{opacity:0;transform:translateY(30px) scale(0.98)}}
-    .auth-card h2{
-      font-family:var(--font-serif); font-size:2.2rem; margin-bottom:32px;
-      font-weight:700; letter-spacing:2px; color:#fff;
-      text-shadow:0 2px 10px rgba(0,0,0,0.5);
-    }
-    .auth-card input{
-      background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
-      border-radius:14px; padding:16px 20px; color:#fff; font-size:1rem;
-      width:100%; margin-bottom:16px; outline:none; transition:all 0.3s;
-    }
-    .auth-card input:focus{
-      border-color:var(--accent); background:rgba(255,255,255,0.12);
-      box-shadow:0 0 0 3px rgba(201,168,124,0.2);
-    }
-    .auth-btn{
-      width:100%; padding:16px; border-radius:14px;
-      background:var(--accent); color:#111; font-weight:600; font-size:1rem;
-      border:none; cursor:pointer; letter-spacing:1px; margin-top:8px;
-      transition:all 0.2s;
-    }
+    .auth-card h2{font-family:var(--font-serif);font-size:2.2rem;margin-bottom:32px;font-weight:700;letter-spacing:2px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.5);}
+    .auth-card input{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:16px 20px;color:#fff;font-size:1rem;width:100%;margin-bottom:16px;outline:none;transition:all 0.3s;}
+    .auth-card input:focus{border-color:var(--accent);background:rgba(255,255,255,0.12);box-shadow:0 0 0 3px rgba(201,168,124,0.2);}
+    .auth-btn{width:100%;padding:16px;border-radius:14px;background:var(--accent);color:#111;font-weight:600;font-size:1rem;border:none;cursor:pointer;letter-spacing:1px;margin-top:8px;transition:all 0.2s;}
     .auth-btn:hover{filter:brightness(1.1);}
-    .auth-link{margin-top:24px; font-size:0.9rem; color:rgba(255,255,255,0.6);}
-    .auth-link a{color:var(--accent); cursor:pointer; font-weight:500;}
+    .auth-link{margin-top:24px;font-size:0.9rem;color:rgba(255,255,255,0.6);}
+    .auth-link a{color:var(--accent);cursor:pointer;font-weight:500;}
 
     /* 导航 */
     .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px}
@@ -100,6 +80,7 @@
     .mob-nav .nav-icon svg{width:22px;height:22px}
     .mob-nav .nav-icon.active{color:var(--accent)}
 
+    /* 英雄区 */
     .hero{position:relative;height:100vh;min-height:650px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;margin-top:-64px}
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.45)}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 8%,transparent 55%);z-index:2}
@@ -146,14 +127,12 @@
     input,textarea{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:.9rem;margin-bottom:14px;outline:none}
     input:focus,textarea:focus{border-color:var(--accent)}
     button.main{background:var(--accent);border:none;color:#111;font-weight:600;padding:14px 28px;border-radius:var(--radius-full);cursor:pointer;width:100%;font-size:.9rem;letter-spacing:2px;text-transform:uppercase}
-
     @media(max-width:768px){.nav-icons{display:none}.mob-nav{display:flex}.hero h1{font-size:2.8rem}.main-wrap{padding:24px 16px 100px}.grid{columns:1}}
   </style>
 </head>
 <body>
 <div id="loader"><div class="loader-ring"></div></div>
 
-<!-- 登录/注册（视频背景 + Apple/HP 风格） -->
 <div id="authWrap" class="auth-overlay">
   <video class="auth-video" autoplay muted loop playsinline>
     <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-mountain-3129/1080p.mp4" type="video/mp4">
@@ -179,7 +158,6 @@
   </div>
 </div>
 
-<!-- 主应用 -->
 <div id="app">
   <nav class="nav">
     <div class="nav-logo" onclick="switchTab('about')">
@@ -207,7 +185,7 @@
   </div>
 
   <section class="hero">
-    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山日出">
+    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山">
     <div class="hero-overlay"></div>
     <div class="hero-caption" id="heroCaption"><h1>探索无界</h1><p>OSKWK Platform</p></div>
   </section>
@@ -282,7 +260,6 @@ let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
 
-// 自然风景图片集
 const naturePhotos = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
@@ -308,7 +285,6 @@ const heroPhotos = [
 ];
 function heroLandscape() { return heroPhotos[Math.floor(Math.random() * heroPhotos.length)]; }
 
-// 全局设置
 window.setTheme = t => {
   document.documentElement.setAttribute('data-theme',t);
   document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));
@@ -393,7 +369,6 @@ window.postComment = async id => {
   window.expandArticle(id);
 };
 
-// 聊天功能（消息持久化）
 let allRooms = [];
 async function renderRoomList() {
   $('#chatPanel').style.display='none';
@@ -445,17 +420,10 @@ window.joinCustomRoom = (name, hasPass) => {
     let pass = prompt('请输入房间密码：');
     if(pass === null) return;
     supabase.from('rooms').select('password').eq('name',name).single().then(({data})=>{
-      if(data && data.password === pass){
-        room = 'oskwk-'+name;
-        startChat();
-      } else {
-        T('密码错误');
-      }
+      if(data && data.password === pass){ room = 'oskwk-'+name; startChat(); }
+      else T('密码错误');
     });
-  } else {
-    room = 'oskwk-'+name;
-    startChat();
-  }
+  } else { room = 'oskwk-'+name; startChat(); }
 };
 
 window.startPrivateChat = () => {
@@ -469,11 +437,9 @@ window.startPrivateChat = () => {
 async function startChat(){
   $('#roomList').style.display='none';
   $('#chatPanel').style.display='block';
-  // 每次进入聊天室都从数据库加载最新的50条消息，保证消息不丢失
-  const {data} = await supabase.from('messages').select('*').eq('room',room).order('created_at',{ascending:true}).limit(50);
-  const log = $('#chatLog');
-  log.innerHTML = '';
-  data?.forEach(renderMsg);
+  const {data} = await supabase.from('messages').select('*').eq('room',room).order('created_at',{ascending:true}).limit(100);
+  const log = $('#chatLog'); log.innerHTML = '';
+  if(data) data.forEach(renderMsg);
   if(realtime) supabase.removeChannel(realtime);
   realtime = supabase.channel('room-'+room)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${room}`},payload=>renderMsg(payload.new))
@@ -481,7 +447,9 @@ async function startChat(){
 }
 function renderMsg(m){
   const log=$('#chatLog'); if(!log) return;
+  if(log.querySelector(`[data-id="${m.id}"]`)) return;
   const div=document.createElement('div'); div.className='msg '+(m.nickname===user?.nickname?'mine':'peer');
+  div.setAttribute('data-id', m.id || 'local-'+Date.now());
   div.innerHTML=`<b>${m.nickname}</b><br>${m.message||''}${m.image_url?`<br><img src="${m.image_url}">`:''}`;
   log.appendChild(div); log.scrollTop=log.scrollHeight;
 }
@@ -493,8 +461,7 @@ window.sendMsg = async () => {
   const {error} = await supabase.from('messages').insert([{room, nickname:user.nickname, message:txt}]);
   if(error) return T('发送失败');
   inp.value='';
-  // 本地立即渲染
-  renderMsg({room, nickname:user.nickname, message:txt, created_at:new Date().toISOString()});
+  renderMsg({id:'local-'+Date.now(), room, nickname:user.nickname, message:txt, created_at:new Date().toISOString()});
 };
 window.uploadImg = async () => {
   const f=$('#imgUpload').files[0];
@@ -507,17 +474,11 @@ window.uploadImg = async () => {
   if(uploadError) return T('图片上传失败');
   const url=`${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
   await supabase.from('messages').insert([{room, nickname:user.nickname, image_url:url}]);
-  renderMsg({room, nickname:user.nickname, message:'', image_url:url, created_at:new Date().toISOString()});
+  renderMsg({id:'img-'+Date.now(), room, nickname:user.nickname, message:'', image_url:url, created_at:new Date().toISOString()});
   $('#imgUpload').value='';
 };
-window.leaveRoom = () => {
-  if(realtime) supabase.removeChannel(realtime);
-  room=null;
-  $('#chatPanel').style.display='none';
-  $('#roomList').style.display='flex';
-};
+window.leaveRoom = () => { if(realtime) supabase.removeChannel(realtime); room=null; $('#chatPanel').style.display='none'; $('#roomList').style.display='flex'; };
 
-// 动态/好友
 window.openPost = () => {
   $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`;
   $('#genericModal').classList.add('show');
@@ -551,7 +512,6 @@ window.showRequests = async () => {
 window.handleReq = async (id,status) => { await supabase.from('friendships').update({status}).eq('id',id); T('已处理'); window.showRequests(); };
 window.addFriend = () => { const email=prompt('对方邮箱'); if(email) supabase.from('friendships').insert([{from_email:user.email,to_email:email}]).then(()=>T('已发送')); };
 
-// 个人中心 + 编辑资料 + 搜索用户
 async function renderProfile(){
   if(!user) return;
   let html=`<div class="card" style="text-align:center;padding:24px">
@@ -567,60 +527,34 @@ async function renderProfile(){
 }
 
 window.showEditProfile = () => {
-  let html = `<h3>编辑资料</h3>
-    <input id="editNick" placeholder="新昵称" value="${user.nickname||''}">
-    <input id="editPass" type="password" placeholder="新密码（留空不变）">
-    <input id="editAvatar" placeholder="头像URL（可选）">
-    <button class="main" onclick="saveProfile()">保存</button>`;
+  let html = `<h3>编辑资料</h3><input id="editNick" placeholder="新昵称" value="${user.nickname||''}"><input id="editPass" type="password" placeholder="新密码（留空不变）"><input id="editAvatar" placeholder="头像URL（可选）"><button class="main" onclick="saveProfile()">保存</button>`;
   $('#genericContent').innerHTML = html;
   $('#genericModal').classList.add('show');
 };
 window.saveProfile = async () => {
-  const nick = $('#editNick')?.value.trim();
-  const pass = $('#editPass')?.value.trim();
-  const avatar = $('#editAvatar')?.value.trim();
+  const nick = $('#editNick')?.value.trim(), pass = $('#editPass')?.value.trim(), avatar = $('#editAvatar')?.value.trim();
   if(!nick) return T('昵称不能为空');
-  const {data, error} = await supabase.rpc('update_profile', {
-    user_email: user.email,
-    new_nickname: nick || null,
-    new_password: pass || null,
-    new_avatar_url: avatar || null
-  });
+  const {data, error} = await supabase.rpc('update_profile', { user_email: user.email, new_nickname: nick||null, new_password: pass||null, new_avatar_url: avatar||null });
   if(error) return T('更新失败');
-  user = data[0];
-  localStorage.setItem('oskwk_user', JSON.stringify(user));
-  T('资料已更新');
-  $('#genericModal').classList.remove('show');
-  renderProfile();
+  user = data[0]; localStorage.setItem('oskwk_user', JSON.stringify(user));
+  T('资料已更新'); $('#genericModal').classList.remove('show'); renderProfile();
   document.getElementById('avatarTxt').textContent = user.nickname?.charAt(0)?.toUpperCase() || '?';
 };
 
 window.searchUser = () => {
   let html = `<h3>搜索用户</h3><input id="searchKeyword" placeholder="邮箱或昵称"><button class="main" onclick="doSearch()">搜索</button><div id="searchResult"></div>`;
-  $('#genericContent').innerHTML = html;
-  $('#genericModal').classList.add('show');
+  $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show');
 };
 window.doSearch = async () => {
-  const kw = $('#searchKeyword')?.value.trim();
-  if(!kw) return T('请输入关键词');
-  const {data, error} = await supabase.from('profiles')
-    .select('email, nickname, avatar_url')
-    .or(`email.ilike.%${kw}%,nickname.ilike.%${kw}%`)
-    .limit(10);
+  const kw = $('#searchKeyword')?.value.trim(); if(!kw) return T('请输入关键词');
+  const {data, error} = await supabase.from('profiles').select('email, nickname, avatar_url').or(`email.ilike.%${kw}%,nickname.ilike.%${kw}%`).limit(10);
   if(error) return T('搜索失败');
   const list = $('#searchResult');
-  if(data && data.length){
-    list.innerHTML = data.map(u=>`<p><b>${u.nickname}</b> (${u.email}) <button onclick="addFriendByEmail('${u.email}')">加好友</button></p>`).join('');
-  } else {
-    list.innerHTML = '<p>未找到用户</p>';
-  }
+  if(data && data.length) list.innerHTML = data.map(u=>`<p><b>${u.nickname}</b> (${u.email}) <button onclick="addFriendByEmail('${u.email}')">加好友</button></p>`).join('');
+  else list.innerHTML = '<p>未找到用户</p>';
 };
-window.addFriendByEmail = (email) => {
-  if(email === user.email) return T('不能添加自己');
-  supabase.from('friendships').insert([{from_email:user.email, to_email:email}]).then(()=>T('请求已发送'));
-};
+window.addFriendByEmail = (email) => { if(email===user.email) return T('不能添加自己'); supabase.from('friendships').insert([{from_email:user.email, to_email:email}]).then(()=>T('请求已发送')); };
 
-// 管理员
 window.showAdmin = async () => {
   if(!isAdmin) return T('无权操作');
   const {data} = await supabase.from('profiles').select('*');
@@ -630,7 +564,6 @@ window.showAdmin = async () => {
 };
 window.toggleBan = async (email,ban) => { if(!isAdmin) return; await supabase.from('profiles').update({is_banned:ban}).eq('email',email); T('已更新'); window.showAdmin(); };
 
-// 通知
 async function fetchNotifs(){
   if(!user) return;
   const {data} = await supabase.from('notifications').select('*').eq('user_email',user.email).order('created_at',{ascending:false}).limit(20);
@@ -652,15 +585,13 @@ function subNotifs(){
   notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
 }
 
-// 安全登录/注册
 window.doLogin = async () => {
   const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
   if(!email||!pwd) return T('请输入邮箱和密码');
   const { data, error } = await supabase.rpc('verify_login', { user_email: email, user_password: pwd });
   if (error) { console.error('RPC error:', error); return T('登录服务异常'); }
   if (!data || data.length === 0) return T('邮箱或密码错误');
-  user = data[0];
-  isAdmin = (user.email === ADMIN_EMAIL);
+  user = data[0]; isAdmin = (user.email === ADMIN_EMAIL);
   localStorage.setItem('oskwk_user', JSON.stringify(user));
   enter();
 };
@@ -670,8 +601,7 @@ window.doRegister = async () => {
   if(code!=='123456') return T('验证码错误');
   const { data, error } = await supabase.rpc('register_user', { user_email: email, user_nickname: nick, user_phone: phone, user_password: pwd });
   if (error) return T('注册失败');
-  user = data[0];
-  isAdmin = false;
+  user = data[0]; isAdmin = false;
   localStorage.setItem('oskwk_user', JSON.stringify(user));
   enter();
 };
@@ -679,9 +609,7 @@ function enter(){
   document.getElementById('authWrap').style.display='none';
   document.getElementById('app').classList.add('on');
   document.getElementById('avatarTxt').textContent = user?.nickname?.charAt(0)?.toUpperCase() || '?';
-  subNotifs();
-  fetchNotifs();
-  switchTab('about');
+  subNotifs(); fetchNotifs(); switchTab('about');
 }
 window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
 window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
@@ -691,7 +619,6 @@ window.sendCode = () => T('验证码：123456');
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('regBtn').addEventListener('click', doRegister);
 
-// 自动登录
 (()=>{
   const saved = localStorage.getItem('oskwk_user');
   if (saved) {
