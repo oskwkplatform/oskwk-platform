@@ -6,7 +6,7 @@
   <title>OSKWK Platform · 自然之息</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #050505; --surface: #0a0a0a; --surface2: #111;
@@ -16,7 +16,7 @@
       --radius: 16px; --radius-sm: 10px; --radius-full: 9999px;
       --glass-bg: rgba(10,10,10,0.7); --glass-border: rgba(255,255,255,0.08);
       --blur: 24px; --font-size: 16px;
-      --font-serif: 'Cormorant Garamond', 'Playfair Display', serif;
+      --font-serif: 'Playfair Display', serif;
     }
     [data-theme="light"] {
       --bg: #f5f2ed; --surface: #fff; --surface2: #ebe5db;
@@ -40,30 +40,49 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 登录覆盖层 - 视频背景 */
+    /* 登录页 - 视频背景 + 高级玻璃质感 */
     .auth-overlay{
       position:fixed;inset:0;z-index:1000;
       display:flex;align-items:center;justify-content:center;padding:20px;
     }
     .auth-video{
-      position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.4);
+      position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.35);
     }
     .auth-card{
       position:relative;z-index:10;
-      background:var(--glass-bg);backdrop-filter:blur(var(--blur));
-      border:1px solid var(--glass-border);border-radius:var(--radius);
-      padding:40px 32px;max-width:420px;width:100%;
-      box-shadow:0 30px 60px rgba(0,0,0,.6);
-      animation:authIn .5s ease;
+      background: rgba(20,20,20,0.75); backdrop-filter: blur(40px);
+      border:1px solid rgba(255,255,255,0.1); border-radius:24px;
+      padding:50px 40px; max-width:400px; width:100%;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05) inset;
+      animation: authIn 0.6s ease;
+      text-align:center;
     }
-    @keyframes authIn{from{opacity:0;transform:translateY(20px) scale(.98)}}
-    .auth-card h2{font-family:var(--font-serif);font-size:2.4rem;margin-bottom:28px;text-align:center;font-weight:700;letter-spacing:1px}
-    .auth-card input{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;color:var(--text);font-size:.9rem;width:100%;margin-bottom:14px;outline:none}
-    .auth-card input:focus{border-color:var(--accent)}
-    .auth-btn{width:100%;padding:14px;border-radius:var(--radius-full);background:var(--accent);color:#111;font-weight:600;font-size:.95rem;border:none;cursor:pointer;letter-spacing:2px;text-transform:uppercase}
-    .auth-link{margin-top:20px;text-align:center;font-size:.85rem;color:var(--text3)}
-    .auth-link a{color:var(--accent);cursor:pointer;font-weight:500}
+    @keyframes authIn{from{opacity:0;transform:translateY(30px) scale(0.98)}}
+    .auth-card h2{
+      font-family:var(--font-serif); font-size:2.2rem; margin-bottom:32px;
+      font-weight:700; letter-spacing:2px; color:#fff;
+      text-shadow:0 2px 10px rgba(0,0,0,0.5);
+    }
+    .auth-card input{
+      background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+      border-radius:14px; padding:16px 20px; color:#fff; font-size:1rem;
+      width:100%; margin-bottom:16px; outline:none; transition:all 0.3s;
+    }
+    .auth-card input:focus{
+      border-color:var(--accent); background:rgba(255,255,255,0.12);
+      box-shadow:0 0 0 3px rgba(201,168,124,0.2);
+    }
+    .auth-btn{
+      width:100%; padding:16px; border-radius:14px;
+      background:var(--accent); color:#111; font-weight:600; font-size:1rem;
+      border:none; cursor:pointer; letter-spacing:1px; margin-top:8px;
+      transition:all 0.2s;
+    }
+    .auth-btn:hover{filter:brightness(1.1);}
+    .auth-link{margin-top:24px; font-size:0.9rem; color:rgba(255,255,255,0.6);}
+    .auth-link a{color:var(--accent); cursor:pointer; font-weight:500;}
 
+    /* 导航 */
     .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px}
     .nav-logo{cursor:pointer;display:flex;align-items:center}
     .nav-logo svg{width:28px;height:28px;stroke:var(--accent)}
@@ -134,7 +153,7 @@
 <body>
 <div id="loader"><div class="loader-ring"></div></div>
 
-<!-- 登录/注册（视频背景） -->
+<!-- 登录/注册（视频背景 + Apple/HP 风格） -->
 <div id="authWrap" class="auth-overlay">
   <video class="auth-video" autoplay muted loop playsinline>
     <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-mountain-3129/1080p.mp4" type="video/mp4">
@@ -143,18 +162,18 @@
     <h2>OSKWK</h2>
     <input type="email" id="loginEmail" placeholder="邮箱" autocomplete="email">
     <input type="password" id="loginPass" placeholder="密码">
-    <button class="auth-btn" id="loginBtn">进入</button>
-    <p id="loginHint" style="font-size:.8rem;color:var(--danger);margin-top:8px;text-align:center;"></p>
+    <button class="auth-btn" id="loginBtn">登录</button>
+    <p id="loginHint" style="font-size:0.85rem; color:var(--danger); margin-top:10px;"></p>
     <div class="auth-link">没有账户？ <a onclick="showReg()">创建账户</a></div>
   </div>
   <div class="auth-card" id="regBox" style="display:none">
-    <h2>加入</h2>
+    <h2>加入 OSKWK</h2>
     <input id="regPhone" placeholder="手机号" type="tel">
     <input id="regEmail" placeholder="邮箱" type="email">
-    <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer">获取</button></div>
+    <div style="display:flex; gap:8px;"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer;color:var(--text);">获取</button></div>
     <input id="regPass" type="password" placeholder="密码">
     <input id="regNick" placeholder="昵称">
-    <label style="display:flex;gap:8px;font-size:.8rem;color:var(--text2);margin:10px 0"><input type="checkbox" id="regAgree">同意协议</label>
+    <label style="display:flex; gap:8px; font-size:0.85rem; color:var(--text2); margin:10px 0;"><input type="checkbox" id="regAgree"> 同意协议</label>
     <button class="auth-btn" id="regBtn">注册</button>
     <div class="auth-link">已有账户？ <a onclick="showLogin()">返回登录</a></div>
   </div>
@@ -188,7 +207,7 @@
   </div>
 
   <section class="hero">
-    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山">
+    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山日出">
     <div class="hero-overlay"></div>
     <div class="hero-caption" id="heroCaption"><h1>探索无界</h1><p>OSKWK Platform</p></div>
   </section>
@@ -374,7 +393,7 @@ window.postComment = async id => {
   window.expandArticle(id);
 };
 
-// 聊天功能（增强稳定性）
+// 聊天功能（消息持久化）
 let allRooms = [];
 async function renderRoomList() {
   $('#chatPanel').style.display='none';
@@ -450,8 +469,10 @@ window.startPrivateChat = () => {
 async function startChat(){
   $('#roomList').style.display='none';
   $('#chatPanel').style.display='block';
-  $('#chatLog').innerHTML='';
+  // 每次进入聊天室都从数据库加载最新的50条消息，保证消息不丢失
   const {data} = await supabase.from('messages').select('*').eq('room',room).order('created_at',{ascending:true}).limit(50);
+  const log = $('#chatLog');
+  log.innerHTML = '';
   data?.forEach(renderMsg);
   if(realtime) supabase.removeChannel(realtime);
   realtime = supabase.channel('room-'+room)
@@ -469,12 +490,11 @@ window.sendMsg = async () => {
   if(!user) return T('请先登录');
   if(!room) return T('请先进入聊天室');
   if(!txt) return;
-  try {
-    const {error} = await supabase.from('messages').insert([{room, nickname:user.nickname, message:txt}]);
-    if(error) throw error;
-    renderMsg({room, nickname:user.nickname, message:txt, created_at:new Date().toISOString()});
-    inp.value='';
-  } catch(e){ T('发送失败'); }
+  const {error} = await supabase.from('messages').insert([{room, nickname:user.nickname, message:txt}]);
+  if(error) return T('发送失败');
+  inp.value='';
+  // 本地立即渲染
+  renderMsg({room, nickname:user.nickname, message:txt, created_at:new Date().toISOString()});
 };
 window.uploadImg = async () => {
   const f=$('#imgUpload').files[0];
@@ -492,7 +512,9 @@ window.uploadImg = async () => {
 };
 window.leaveRoom = () => {
   if(realtime) supabase.removeChannel(realtime);
-  room=null; $('#chatPanel').style.display='none'; renderRoomList();
+  room=null;
+  $('#chatPanel').style.display='none';
+  $('#roomList').style.display='flex';
 };
 
 // 动态/好友
@@ -529,7 +551,7 @@ window.showRequests = async () => {
 window.handleReq = async (id,status) => { await supabase.from('friendships').update({status}).eq('id',id); T('已处理'); window.showRequests(); };
 window.addFriend = () => { const email=prompt('对方邮箱'); if(email) supabase.from('friendships').insert([{from_email:user.email,to_email:email}]).then(()=>T('已发送')); };
 
-// 个人中心新增编辑资料、搜索用户
+// 个人中心 + 编辑资料 + 搜索用户
 async function renderProfile(){
   if(!user) return;
   let html=`<div class="card" style="text-align:center;padding:24px">
@@ -544,7 +566,6 @@ async function renderProfile(){
   $('#profileArea').innerHTML=html;
 }
 
-// 编辑个人资料
 window.showEditProfile = () => {
   let html = `<h3>编辑资料</h3>
     <input id="editNick" placeholder="新昵称" value="${user.nickname||''}">
@@ -574,7 +595,6 @@ window.saveProfile = async () => {
   document.getElementById('avatarTxt').textContent = user.nickname?.charAt(0)?.toUpperCase() || '?';
 };
 
-// 搜索用户
 window.searchUser = () => {
   let html = `<h3>搜索用户</h3><input id="searchKeyword" placeholder="邮箱或昵称"><button class="main" onclick="doSearch()">搜索</button><div id="searchResult"></div>`;
   $('#genericContent').innerHTML = html;
@@ -600,7 +620,7 @@ window.addFriendByEmail = (email) => {
   supabase.from('friendships').insert([{from_email:user.email, to_email:email}]).then(()=>T('请求已发送'));
 };
 
-// 管理员功能
+// 管理员
 window.showAdmin = async () => {
   if(!isAdmin) return T('无权操作');
   const {data} = await supabase.from('profiles').select('*');
@@ -632,18 +652,12 @@ function subNotifs(){
   notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
 }
 
-// 安全登录注册（修复登录错误）
+// 安全登录/注册
 window.doLogin = async () => {
   const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
   if(!email||!pwd) return T('请输入邮箱和密码');
-  const { data, error } = await supabase.rpc('verify_login', {
-    user_email: email,
-    user_password: pwd
-  });
-  if (error) {
-    console.error('RPC error:', error);
-    return T('登录服务异常，请稍后重试');
-  }
+  const { data, error } = await supabase.rpc('verify_login', { user_email: email, user_password: pwd });
+  if (error) { console.error('RPC error:', error); return T('登录服务异常'); }
   if (!data || data.length === 0) return T('邮箱或密码错误');
   user = data[0];
   isAdmin = (user.email === ADMIN_EMAIL);
@@ -654,13 +668,8 @@ window.doRegister = async () => {
   const email=$('#regEmail').value.trim(), phone=$('#regPhone').value.trim(), code=$('#regCode').value.trim(), pwd=$('#regPass').value.trim(), nick=$('#regNick').value.trim();
   if(!email||!phone||!pwd||!nick) return T('请填写完整');
   if(code!=='123456') return T('验证码错误');
-  const { data, error } = await supabase.rpc('register_user', {
-    user_email: email,
-    user_nickname: nick,
-    user_phone: phone,
-    user_password: pwd
-  });
-  if (error) return T('注册失败：'+error.message);
+  const { data, error } = await supabase.rpc('register_user', { user_email: email, user_nickname: nick, user_phone: phone, user_password: pwd });
+  if (error) return T('注册失败');
   user = data[0];
   isAdmin = false;
   localStorage.setItem('oskwk_user', JSON.stringify(user));
@@ -682,6 +691,7 @@ window.sendCode = () => T('验证码：123456');
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('regBtn').addEventListener('click', doRegister);
 
+// 自动登录
 (()=>{
   const saved = localStorage.getItem('oskwk_user');
   if (saved) {
