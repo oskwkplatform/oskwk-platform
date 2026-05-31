@@ -40,7 +40,7 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 登录页 - 视频背景 */
+    /* 登录页 - 动态视频背景 */
     .auth-overlay{
       position:fixed;inset:0;z-index:1000;
       display:flex;align-items:center;justify-content:center;padding:20px;
@@ -84,9 +84,9 @@
 
     /* 导航 */
     .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px}
-    .nav-logo{cursor:pointer;display:flex;align-items:center}
+    .nav-logo{cursor:pointer;display:flex;align-items:center;gap:8px;font-family:var(--font-serif);font-size:1.2rem;color:var(--accent);letter-spacing:2px}
     .nav-logo svg{width:28px;height:28px;stroke:var(--accent)}
-    .nav-icons{display:flex;gap:2px;margin:0 auto}
+    .nav-icons{display:flex;gap:4px;margin:0 auto}
     .nav-icon{background:none;border:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;color:var(--text2);transition:.2s;position:relative}
     .nav-icon svg{width:20px;height:20px;stroke:currentColor}
     .nav-icon:hover{color:var(--text);background:rgba(255,255,255,.05)}
@@ -100,7 +100,6 @@
     .mob-nav .nav-icon svg{width:22px;height:22px}
     .mob-nav .nav-icon.active{color:var(--accent)}
 
-    /* 英雄区 */
     .hero{position:relative;height:100vh;min-height:650px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;margin-top:-64px}
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.45)}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 8%,transparent 55%);z-index:2}
@@ -112,7 +111,6 @@
     .page{display:none;animation:fadeIn .35s ease}
     .page.active{display:block}
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}}
-
     .sec-title{display:flex;align-items:center;gap:12px;margin-bottom:28px;font-family:var(--font-serif);font-size:1.8rem;font-weight:700}
     .sec-title::after{content:'';flex:1;height:1px;background:var(--border-light)}
 
@@ -154,7 +152,7 @@
 <body>
 <div id="loader"><div class="loader-ring"></div></div>
 
-<!-- 登录/注册 -->
+<!-- 登录/注册 (动态视频背景) -->
 <div id="authWrap" class="auth-overlay">
   <video class="auth-video" autoplay muted loop playsinline>
     <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-mountain-3129/1080p.mp4" type="video/mp4">
@@ -184,7 +182,7 @@
 <div id="app">
   <nav class="nav">
     <div class="nav-logo" onclick="switchTab('about')">
-      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="4" ry="10" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h20" stroke="currentColor" stroke-width="1.5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="4" ry="10" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h20" stroke="currentColor" stroke-width="1.5"/></svg>OSKWK
     </div>
     <div class="nav-icons">
       <button class="nav-icon active" data-tab="about" onclick="switchTab('about')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/></svg></button>
@@ -308,6 +306,7 @@ const heroPhotos = [
 ];
 function heroLandscape() { return heroPhotos[Math.floor(Math.random() * heroPhotos.length)]; }
 
+// 全局设置
 window.setTheme = t => {
   document.documentElement.setAttribute('data-theme',t);
   document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));
@@ -392,6 +391,7 @@ window.postComment = async id => {
   window.expandArticle(id);
 };
 
+// 聊天系统
 let allRooms = [];
 async function renderRoomList() {
   $('#chatPanel').style.display='none';
@@ -460,44 +460,27 @@ window.startPrivateChat = () => {
 async function startChat(){
   $('#roomList').style.display='none';
   $('#chatPanel').style.display='block';
-  console.log('加载房间:', room);
-  const { data, error } = await supabase.from('messages').select('*').eq('room',room).order('created_at',{ascending:true}).limit(100);
-  if (error) { console.error('加载历史失败:', error); T('无法加载历史消息'); return; }
-  console.log(`历史消息条数: ${data.length}`);
+  const {data} = await supabase.from('messages').select('*').eq('room',room).order('created_at',{ascending:true}).limit(200);
   const log = $('#chatLog'); log.innerHTML = '';
-  if (data.length > 0) {
-    data.forEach(renderMsg);
-  } else {
-    log.innerHTML = '<p style="color:var(--text3);text-align:center">暂无消息，开始聊天吧</p>';
-  }
-  if (realtime) supabase.removeChannel(realtime);
+  if(data) data.forEach(renderMsg);
+  if(realtime) supabase.removeChannel(realtime);
   realtime = supabase.channel('room-'+room)
-    .on('postgres_changes', { event:'INSERT', schema:'public', table:'messages', filter:`room=eq.${room}` }, payload => {
-      console.log('实时推送:', payload.new);
-      renderMsg(payload.new);
-    })
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${room}`},payload=>renderMsg(payload.new))
     .subscribe();
 }
 function renderMsg(m){
   const log=$('#chatLog'); if(!log) return;
-  if (m.id && log.querySelector(`[data-id="${m.id}"]`)) return;
   const div=document.createElement('div'); div.className='msg '+(m.nickname===user?.nickname?'mine':'peer');
-  div.setAttribute('data-id', m.id || 'local-'+Date.now());
   div.innerHTML=`<b>${m.nickname}</b><br>${m.message||''}${m.image_url?`<br><img src="${m.image_url}">`:''}`;
   log.appendChild(div); log.scrollTop=log.scrollHeight;
 }
 window.sendMsg = async () => {
   const inp=$('#msgInput'), txt=inp.value.trim();
-  if(!user) return T('请先登录');
-  if(!room) return T('请先进入聊天室');
-  if(!txt) return;
-  console.log('发送消息:', {room, nickname:user.nickname, message:txt});
-  const { data, error } = await supabase.from('messages').insert([{room, nickname:user.nickname, message:txt}]).select();
-  if (error) { console.error('发送失败:', error); T('发送失败'); return; }
-  console.log('插入成功:', data);
+  if(!user) return T('请先登录'); if(!room) return T('请先进入聊天室'); if(!txt) return;
+  const {data, error} = await supabase.from('messages').insert([{room, nickname:user.nickname, message:txt}]).select();
+  if(error) return T('发送失败');
+  if(data && data[0]) renderMsg(data[0]);
   inp.value='';
-  if (data && data[0]) renderMsg(data[0]);
-  else renderMsg({id:'local-'+Date.now(), room, nickname:user.nickname, message:txt, created_at:new Date().toISOString()});
 };
 window.uploadImg = async () => {
   const f=$('#imgUpload').files[0];
@@ -509,14 +492,14 @@ window.uploadImg = async () => {
   const {error:uploadError} = await supabase.storage.from('chat-images').upload(name,blob);
   if(uploadError) return T('图片上传失败');
   const url=`${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
-  const { data, error: insertError } = await supabase.from('messages').insert([{room, nickname:user.nickname, image_url:url}]).select();
+  const {data, error:insertError} = await supabase.from('messages').insert([{room, nickname:user.nickname, image_url:url}]).select();
   if(insertError) return T('发送失败');
-  if (data && data[0]) renderMsg(data[0]);
-  else renderMsg({id:'img-'+Date.now(), room, nickname:user.nickname, message:'', image_url:url, created_at:new Date().toISOString()});
+  if(data && data[0]) renderMsg(data[0]);
   $('#imgUpload').value='';
 };
 window.leaveRoom = () => { if(realtime) supabase.removeChannel(realtime); room=null; $('#chatPanel').style.display='none'; $('#roomList').style.display='flex'; };
 
+// 动态/好友
 window.openPost = () => {
   $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`;
   $('#genericModal').classList.add('show');
@@ -627,8 +610,7 @@ window.doLogin = async () => {
   const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
   if(!email||!pwd) return T('请输入邮箱和密码');
   const { data, error } = await supabase.rpc('verify_login', { user_email: email, user_password: pwd });
-  if (error) { console.error('RPC error:', error); return T('登录服务异常'); }
-  if (!data || data.length === 0) return T('邮箱或密码错误');
+  if (error || !data || data.length === 0) return T('邮箱或密码错误');
   user = data[0]; isAdmin = (user.email === ADMIN_EMAIL);
   localStorage.setItem('oskwk_user', JSON.stringify(user));
   enter();
@@ -660,11 +642,8 @@ document.getElementById('regBtn').addEventListener('click', doRegister);
 (()=>{
   const saved = localStorage.getItem('oskwk_user');
   if (saved) {
-    try {
-      user = JSON.parse(saved);
-      isAdmin = (user.email === ADMIN_EMAIL);
-      enter();
-    } catch(e){ localStorage.removeItem('oskwk_user'); }
+    try { user = JSON.parse(saved); isAdmin = (user.email === ADMIN_EMAIL); enter(); }
+    catch(e){ localStorage.removeItem('oskwk_user'); }
   } else {
     document.getElementById('authWrap').style.display='flex';
   }
