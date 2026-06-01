@@ -6,21 +6,8 @@
   <title>OSKWK Platform · 自然之息</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #050505; --surface: #0a0a0a; --surface2: #111;
-      --text: #f0f0f0; --text2: #a8a8a8; --text3: #606060;
-      --border: rgba(255,255,255,0.06); --border-light: rgba(255,255,255,0.12);
-      --accent: #c9a87c; --danger: #e76f51; --success: #2a9d8f;
-      --radius: 16px; --radius-sm: 10px; --radius-full: 9999px;
-      --glass-bg: rgba(10,10,10,0.7); --glass-border: rgba(255,255,255,0.08);
-      --blur: 24px; --font-size: 16px;
-    }
-    [data-theme="light"] {
-      --bg: #f5f2ed; --surface: #fff; --surface2: #ebe5db;
-      --text: #1a1a1a; --text2: #555; --text3: #999;
-      --border: rgba(0,0,0,0.06); --border-light: rgba(0,0,0,0.1);
-      --glass-bg: rgba(255,255,255,0.7); --glass-border: rgba(0,0,0,0.08);
-    }
+    :root { --bg: #050505; --surface: #0a0a0a; --surface2: #111; --text: #f0f0f0; --text2: #a8a8a8; --text3: #606060; --border: rgba(255,255,255,0.06); --border-light: rgba(255,255,255,0.12); --accent: #c9a87c; --danger: #e76f51; --success: #2a9d8f; --radius: 16px; --radius-sm: 10px; --radius-full: 9999px; --glass-bg: rgba(10,10,10,0.7); --glass-border: rgba(255,255,255,0.08); --blur: 24px; --font-size: 16px; }
+    [data-theme="light"] { --bg: #f5f2ed; --surface: #fff; --surface2: #ebe5db; --text: #1a1a1a; --text2: #555; --text3: #999; --border: rgba(0,0,0,0.06); --border-light: rgba(0,0,0,0.1); --glass-bg: rgba(255,255,255,0.7); --glass-border: rgba(0,0,0,0.08); }
     *{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;font-size:var(--font-size)}
     body{background:var(--bg);overflow-x:hidden}
@@ -37,7 +24,7 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 登录页 - 视频+备用图片 */
+    /* 登录页 */
     .auth-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
     .auth-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.35);z-index:0}
     .auth-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:0}
@@ -48,9 +35,8 @@
     .auth-card input:focus{border-color:var(--accent)}
     .auth-btn{width:100%;padding:16px;border-radius:14px;background:var(--accent);color:#111;font-weight:600;font-size:1rem;border:none;cursor:pointer;margin-top:8px}
     .auth-link{margin-top:24px;color:rgba(255,255,255,0.6);font-size:0.9rem}
-    .auth-link a{color:var(--accent);cursor:pointer}
+    .auth-link a{color:var(--accent);cursor:pointer;text-decoration:underline}
     .agree-row{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text2);margin:10px 0}
-    .agree-row a{color:var(--accent);cursor:pointer;text-decoration:underline}
 
     .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px}
     .nav-logo{cursor:pointer;display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--accent)}
@@ -114,17 +100,15 @@
     input,textarea{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:.9rem;margin-bottom:14px;outline:none}
     input:focus,textarea:focus{border-color:var(--accent)}
     button.main{background:var(--accent);border:none;color:#111;font-weight:600;padding:14px 28px;border-radius:var(--radius-full);cursor:pointer;width:100%;font-size:.9rem;letter-spacing:2px}
-
     @media(max-width:768px){.nav-icons{display:none}.mob-nav{display:flex}.hero h1{font-size:2.8rem}.main-wrap{padding:24px 16px 100px}.grid{columns:1}}
   </style>
 </head>
 <body>
 <div id="loader"><div class="loader-ring"></div></div>
 
-<!-- 登录/注册（视频+备用图） -->
+<!-- 登录/注册 -->
 <div id="authWrap" class="auth-overlay">
-  <video class="auth-video" autoplay muted loop playsinline
-    poster="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80">
+  <video class="auth-video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80">
     <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-mountain-3129/1080p.mp4" type="video/mp4">
   </video>
   <img class="auth-bg-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="背景">
@@ -203,32 +187,15 @@
     </div>
     <div class="page" id="tab-chat">
       <div class="sec-title">交流</div>
-      <div id="roomTools" style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
-        <input id="roomSearch" placeholder="搜索房间..." style="flex:1;min-width:150px">
-        <button class="nav-icon" style="width:auto;padding:8px 16px" onclick="showCreateRoom()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
-      </div>
+      <div id="roomTools" style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap"><input id="roomSearch" placeholder="搜索房间..." style="flex:1;min-width:150px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="showCreateRoom()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
       <div id="roomList" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px"></div>
       <div id="chatPanel" style="display:none">
-        <div class="chat-box"><div class="chat-log" id="chatLog"></div>
-          <div class="chat-bar">
-            <input id="msgInput" placeholder="输入消息...">
-            <button onclick="sendMsg()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
-            <button onclick="document.getElementById('imgUpload').click()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
-            <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="uploadImg()">
-          </div>
-        </div>
+        <div class="chat-box"><div class="chat-log" id="chatLog"></div><div class="chat-bar"><input id="msgInput" placeholder="输入消息..."><button onclick="sendMsg()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button><button onclick="document.getElementById('imgUpload').click()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button><input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="uploadImg()"></div></div>
         <button class="nav-icon" style="margin-top:12px;width:auto;padding:8px 16px" onclick="leaveRoom()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
       </div>
     </div>
-    <div class="page" id="tab-friends">
-      <div class="sec-title">动态</div>
-      <button class="nav-icon" style="margin-bottom:20px;width:auto;padding:12px 20px" onclick="openPost()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
-      <div id="friendsFeed"></div>
-    </div>
-    <div class="page" id="tab-profile">
-      <div class="sec-title">个人</div>
-      <div id="profileArea" style="max-width:400px;margin:0 auto"></div>
-    </div>
+    <div class="page" id="tab-friends"><div class="sec-title">动态</div><button class="nav-icon" style="margin-bottom:20px;width:auto;padding:12px 20px" onclick="openPost()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button><div id="friendsFeed"></div></div>
+    <div class="page" id="tab-profile"><div class="sec-title">个人</div><div id="profileArea" style="max-width:400px;margin:0 auto"></div></div>
   </div>
 
   <div class="mob-nav">
@@ -241,12 +208,11 @@
   </div>
 </div>
 
-<!-- 通用模态框 -->
 <div class="modal" id="genericModal" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="modal-box" id="genericContent"></div>
 </div>
 
-<!-- 协议内容（隐藏） -->
+<!-- 协议内容 -->
 <div style="display:none" id="disclaimerText">
   <h2>免责声明</h2>
   <p>1. 本平台（OSKWK）是一个开放式的社交与内容分享空间，所有用户发布的内容仅代表发布者个人观点，与本平台立场无关。</p>
@@ -280,7 +246,6 @@ let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
 
-// 自然风景图库
 const naturePhotos = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
@@ -315,62 +280,27 @@ window.updateFontSize = v => { document.documentElement.style.setProperty('--fon
 window.setAccent = el => { document.documentElement.style.setProperty('--accent',el.dataset.accent); localStorage.setItem('oskwk_accent',el.dataset.accent); };
 window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-// 协议弹窗（全局且通过事件绑定）
-window.showDisclaimer = () => {
-  $('#genericContent').innerHTML = $('#disclaimerText').innerHTML;
-  $('#genericModal').classList.add('show');
-};
-window.showPrivacy = () => {
-  $('#genericContent').innerHTML = $('#privacyText').innerHTML;
-  $('#genericModal').classList.add('show');
-};
+window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
+window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
 
-// 绑定协议链接（通过事件委托，确保即使动态生成也有效）
-document.addEventListener('click', (e) => {
-  if (e.target.id === 'disclaimerLink' || e.target.closest('#disclaimerLink')) {
-    e.preventDefault();
-    window.showDisclaimer();
-  } else if (e.target.id === 'privacyLink' || e.target.closest('#privacyLink')) {
-    e.preventDefault();
-    window.showPrivacy();
-  }
-});
-
-// 登录/注册切换链接
-document.getElementById('showRegLink').addEventListener('click', () => {
-  $('#loginBox').style.display='none';
-  $('#regBox').style.display='block';
-});
-document.getElementById('showLoginLink').addEventListener('click', () => {
-  $('#regBox').style.display='none';
-  $('#loginBox').style.display='block';
-});
-window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
-window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
-
-// 站主弹窗
 function showOwnerModal() {
   if (localStorage.getItem('oskwk_no_owner_popup') === 'true') return;
-  $('#genericContent').innerHTML = `
-    <h2>关于站主 & 合作方式</h2>
-    <p><strong>站主：</strong>Peter</p>
-    <p>欢迎来到 OSKWK Platform，这是一个致力于探索自然与人文的社交空间。</p>
-    <p><strong>合作联系：</strong>邮箱 279933264@qq.com</p>
-    <p>我们欢迎各类合作：内容共创、技术交流、品牌推广等。</p>
-    <hr>
-    <label style="display:flex;align-items:center;gap:8px;margin-top:12px;">
-      <input type="checkbox" id="noMoreOwnerPopup"> 不再提示
-    </label>
-    <button class="main" onclick="closeOwnerModal()" style="margin-top:12px;">关闭</button>
-  `;
+  $('#genericContent').innerHTML = `<h2>关于站主 & 合作方式</h2><p><strong>站主：</strong>Peter</p><p>欢迎来到 OSKWK Platform，这是一个致力于探索自然与人文的社交空间。</p><p><strong>合作联系：</strong>邮箱 279933264@qq.com</p><p>我们欢迎各类合作：内容共创、技术交流、品牌推广等。</p><hr><label style="display:flex;align-items:center;gap:8px;margin-top:12px;"><input type="checkbox" id="noMoreOwnerPopup"> 不再提示</label><button class="main" onclick="closeOwnerModal()" style="margin-top:12px;">关闭</button>`;
   $('#genericModal').classList.add('show');
 }
-window.closeOwnerModal = () => {
-  if ($('#noMoreOwnerPopup')?.checked) localStorage.setItem('oskwk_no_owner_popup', 'true');
-  $('#genericModal').classList.remove('show');
-};
+window.closeOwnerModal = () => { if ($('#noMoreOwnerPopup')?.checked) localStorage.setItem('oskwk_no_owner_popup', 'true'); $('#genericModal').classList.remove('show'); };
 
-// 视差滚动与背景切换
+// 绑定协议链接及登录切换
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('regBtn').addEventListener('click', doRegister);
+  document.getElementById('sendCodeBtn').addEventListener('click', () => T('验证码：123456'));
+  document.getElementById('showRegLink').addEventListener('click', () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; });
+  document.getElementById('showLoginLink').addEventListener('click', () => { $('#regBox').style.display='none'; $('#loginBox').style.display='block'; });
+  document.getElementById('disclaimerLink').addEventListener('click', (e) => { e.preventDefault(); window.showDisclaimer(); });
+  document.getElementById('privacyLink').addEventListener('click', (e) => { e.preventDefault(); window.showPrivacy(); });
+});
+
 window.addEventListener('scroll',()=>{
   const y=window.scrollY, cap=$('#heroCaption');
   if(cap){ cap.style.opacity=Math.max(0,1-y/500); cap.style.transform=`translateY(${y*0.3}px)`; }
@@ -446,7 +376,7 @@ window.postComment = async id => {
   window.expandArticle(id);
 };
 
-// 聊天系统（含持久化、密码房修复）
+// 聊天系统
 let allRooms = [];
 async function renderRoomList() {
   $('#chatPanel').style.display='none';
@@ -659,7 +589,7 @@ function subNotifs(){
   notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
 }
 
-// 登录/注册（格式验证 + 安全函数）
+// 登录/注册
 window.doLogin = async () => {
   const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
   if(!email||!pwd) return T('请输入邮箱和密码');
@@ -692,12 +622,8 @@ function enter(){
   showOwnerModal();
 }
 window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
-window.sendCode = () => T('验证码：123456');
-
-// 绑定登录、注册、验证码按钮
-document.getElementById('loginBtn').addEventListener('click', doLogin);
-document.getElementById('regBtn').addEventListener('click', doRegister);
-document.getElementById('sendCodeBtn').addEventListener('click', sendCode);
+window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
+window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
 
 (()=>{
   const saved = localStorage.getItem('oskwk_user');
