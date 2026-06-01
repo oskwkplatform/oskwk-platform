@@ -134,21 +134,21 @@
     <input type="password" id="loginPass" placeholder="密码">
     <button class="auth-btn" id="loginBtn">登录</button>
     <p id="loginHint" style="color:var(--danger);font-size:0.85rem;margin-top:10px;"></p>
-    <div class="auth-link">没有账户？ <a onclick="showReg()">创建账户</a></div>
+    <div class="auth-link">没有账户？ <a id="showRegLink">创建账户</a></div>
   </div>
   <div class="auth-card" id="regBox" style="display:none">
     <h2>加入 OSKWK</h2>
     <input id="regPhone" placeholder="手机号" type="tel">
     <input id="regEmail" placeholder="邮箱" type="email">
-    <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer;color:var(--text)">获取</button></div>
+    <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button id="sendCodeBtn" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer;color:var(--text)">获取</button></div>
     <input id="regPass" type="password" placeholder="密码">
     <input id="regNick" placeholder="昵称">
     <div class="agree-row">
       <input type="checkbox" id="regAgree">
-      <span>我已阅读并同意 <a onclick="showDisclaimer()">《免责声明》</a> 和 <a onclick="showPrivacy()">《隐私协议》</a></span>
+      <span>我已阅读并同意 <a id="disclaimerLink">《免责声明》</a> 和 <a id="privacyLink">《隐私协议》</a></span>
     </div>
     <button class="auth-btn" id="regBtn">注册</button>
-    <div class="auth-link">已有账户？ <a onclick="showLogin()">返回登录</a></div>
+    <div class="auth-link">已有账户？ <a id="showLoginLink">返回登录</a></div>
   </div>
 </div>
 
@@ -241,12 +241,12 @@
   </div>
 </div>
 
-<!-- 模态框 -->
+<!-- 通用模态框 -->
 <div class="modal" id="genericModal" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="modal-box" id="genericContent"></div>
 </div>
 
-<!-- 隐藏的协议内容 -->
+<!-- 协议内容（隐藏） -->
 <div style="display:none" id="disclaimerText">
   <h2>免责声明</h2>
   <p>1. 本平台（OSKWK）是一个开放式的社交与内容分享空间，所有用户发布的内容仅代表发布者个人观点，与本平台立场无关。</p>
@@ -280,7 +280,7 @@ let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
 
-// 自然风景图片
+// 自然风景图库
 const naturePhotos = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
@@ -297,20 +297,12 @@ const naturePhotos = [
 ];
 function landscape() { return naturePhotos[Math.floor(Math.random() * naturePhotos.length)]; }
 
-// 视频回退逻辑
+// 视频回退
 const video = document.querySelector('.auth-video');
 const fallbackImg = document.querySelector('.auth-bg-img');
 if (video) {
-  video.addEventListener('error', () => {
-    video.style.display = 'none';
-    if (fallbackImg) fallbackImg.style.display = 'block';
-  });
-  video.addEventListener('canplay', () => {
-    video.play().catch(() => {
-      video.style.display = 'none';
-      if (fallbackImg) fallbackImg.style.display = 'block';
-    });
-  });
+  video.addEventListener('error', () => { video.style.display = 'none'; if (fallbackImg) fallbackImg.style.display = 'block'; });
+  video.addEventListener('canplay', () => { video.play().catch(() => { video.style.display = 'none'; if (fallbackImg) fallbackImg.style.display = 'block'; }); });
 }
 
 // 全局设置
@@ -323,7 +315,7 @@ window.updateFontSize = v => { document.documentElement.style.setProperty('--fon
 window.setAccent = el => { document.documentElement.style.setProperty('--accent',el.dataset.accent); localStorage.setItem('oskwk_accent',el.dataset.accent); };
 window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-// 协议弹窗（全局函数）
+// 协议弹窗（全局且通过事件绑定）
 window.showDisclaimer = () => {
   $('#genericContent').innerHTML = $('#disclaimerText').innerHTML;
   $('#genericModal').classList.add('show');
@@ -332,6 +324,29 @@ window.showPrivacy = () => {
   $('#genericContent').innerHTML = $('#privacyText').innerHTML;
   $('#genericModal').classList.add('show');
 };
+
+// 绑定协议链接（通过事件委托，确保即使动态生成也有效）
+document.addEventListener('click', (e) => {
+  if (e.target.id === 'disclaimerLink' || e.target.closest('#disclaimerLink')) {
+    e.preventDefault();
+    window.showDisclaimer();
+  } else if (e.target.id === 'privacyLink' || e.target.closest('#privacyLink')) {
+    e.preventDefault();
+    window.showPrivacy();
+  }
+});
+
+// 登录/注册切换链接
+document.getElementById('showRegLink').addEventListener('click', () => {
+  $('#loginBox').style.display='none';
+  $('#regBox').style.display='block';
+});
+document.getElementById('showLoginLink').addEventListener('click', () => {
+  $('#regBox').style.display='none';
+  $('#loginBox').style.display='block';
+});
+window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
+window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
 
 // 站主弹窗
 function showOwnerModal() {
@@ -355,7 +370,7 @@ window.closeOwnerModal = () => {
   $('#genericModal').classList.remove('show');
 };
 
-// 视差
+// 视差滚动与背景切换
 window.addEventListener('scroll',()=>{
   const y=window.scrollY, cap=$('#heroCaption');
   if(cap){ cap.style.opacity=Math.max(0,1-y/500); cap.style.transform=`translateY(${y*0.3}px)`; }
@@ -431,7 +446,7 @@ window.postComment = async id => {
   window.expandArticle(id);
 };
 
-// 聊天系统（密码房间已修复）
+// 聊天系统（含持久化、密码房修复）
 let allRooms = [];
 async function renderRoomList() {
   $('#chatPanel').style.display='none';
@@ -644,7 +659,7 @@ function subNotifs(){
   notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
 }
 
-// 登录/注册（格式验证）
+// 登录/注册（格式验证 + 安全函数）
 window.doLogin = async () => {
   const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
   if(!email||!pwd) return T('请输入邮箱和密码');
@@ -677,12 +692,12 @@ function enter(){
   showOwnerModal();
 }
 window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
-window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
-window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
 window.sendCode = () => T('验证码：123456');
 
+// 绑定登录、注册、验证码按钮
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('regBtn').addEventListener('click', doRegister);
+document.getElementById('sendCodeBtn').addEventListener('click', sendCode);
 
 (()=>{
   const saved = localStorage.getItem('oskwk_user');
