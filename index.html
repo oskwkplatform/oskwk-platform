@@ -120,7 +120,7 @@
 <body>
 <div id="loader"><div class="loader-ring"></div></div>
 
-<!-- 登录/注册（视频背景 + 备用图片） -->
+<!-- 登录/注册（视频背景） -->
 <div id="authWrap" class="auth-overlay">
   <video class="auth-video" autoplay muted loop playsinline
     poster="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80">
@@ -244,7 +244,7 @@
   <div class="modal-box" id="genericContent"></div>
 </div>
 
-<!-- 隐藏的协议内容 -->
+<!-- 协议文本 -->
 <div style="display:none" id="disclaimerText">
   <h2>免责声明</h2>
   <p>1. 本平台（OSKWK）是一个开放式的社交与内容分享空间，所有用户发布的内容仅代表发布者个人观点，与本平台立场无关。</p>
@@ -294,7 +294,7 @@ const naturePhotos = [
 ];
 function landscape() { return naturePhotos[Math.floor(Math.random() * naturePhotos.length)]; }
 
-// 设置
+// 全局设置
 window.setTheme = t => {
   document.documentElement.setAttribute('data-theme',t);
   document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));
@@ -330,7 +330,6 @@ window.closeOwnerModal = () => {
   $('#genericModal').classList.remove('show');
 };
 
-// 视差
 window.addEventListener('scroll',()=>{
   const y=window.scrollY, cap=$('#heroCaption');
   if(cap){ cap.style.opacity=Math.max(0,1-y/500); cap.style.transform=`translateY(${y*0.3}px)`; }
@@ -406,7 +405,7 @@ window.postComment = async id => {
   window.expandArticle(id);
 };
 
-// 聊天系统 (持久化 + 密码修复)
+// 聊天系统（密码房间已修复）
 let allRooms = [];
 async function renderRoomList() {
   $('#chatPanel').style.display='none';
@@ -428,7 +427,7 @@ function filterRooms(){
   }
   for(const r of allRooms){
     if(!kw || r.name.toLowerCase().includes(kw)){
-      html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinCustomRoom('${r.name.replace(/'/g,"\\'")}', '${r.password?1:0}')"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> ${r.name}${r.password?' 🔒':''}</button>`;
+      html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinCustomRoom('${r.name.replace(/'/g,"\\'")}', ${r.password !== ''})"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> ${r.name}${r.password?' 🔒':''}</button>`;
     }
   }
   html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="startPrivateChat()"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> 私信</button>`;
@@ -453,12 +452,16 @@ window.joinPublicRoom = name => { if(!user) return T('请登录'); room='oskwk-'
 window.joinCustomRoom = (name, hasPass) => {
   if(!user) return T('请登录');
   if(hasPass){
-    let pass = prompt('请输入房间密码：');
+    const pass = prompt('请输入房间密码：');
     if(pass === null) return;
-    supabase.from('rooms').select('password').eq('name',name).single().then(({data})=>{
-      if(data && data.password === pass){ room = 'oskwk-'+name; startChat(); }
-      else T('密码错误');
-    });
+    supabase.from('rooms').select('password').eq('name',name).single()
+      .then(({data, error}) => {
+        if(error) { console.error(error); return T('验证失败'); }
+        const roomPassword = data?.password ?? '';
+        if(roomPassword === pass){ room = 'oskwk-'+name; startChat(); }
+        else T('密码错误');
+      })
+      .catch(() => T('网络错误'));
   } else { room = 'oskwk-'+name; startChat(); }
 };
 
