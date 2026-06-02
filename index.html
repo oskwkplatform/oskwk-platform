@@ -281,7 +281,7 @@ window.updateFontSize = v => { document.documentElement.style.setProperty('--fon
 window.setAccent = el => { document.documentElement.style.setProperty('--accent',el.dataset.accent); localStorage.setItem('oskwk_accent',el.dataset.accent); };
 window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-// 协议弹窗 (通过事件绑定，绝对有效)
+// 协议弹窗 (通过事件绑定确保有效)
 window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
 window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
 
@@ -409,7 +409,7 @@ window.sendMsg = async () => { const inp=$('#msgInput'), txt=inp.value.trim(); i
 window.uploadImg = async () => { const f=$('#imgUpload').files[0]; if(!user) return T('请先登录'); if(!room) return T('请先进入聊天室'); if(!f) return; const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),img=new Image(); img.src=URL.createObjectURL(f); await new Promise(r=>img.onload=r); let w=img.width,h=img.height; if(w>800){h*=800/w;w=800;} canvas.width=w;canvas.height=h; ctx.drawImage(img,0,0,w,h); const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.7)); const name=`chat_${Date.now()}.jpg`; const {error:uploadError} = await supabase.storage.from('chat-images').upload(name,blob); if(uploadError) return T('图片上传失败'); const url=`${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`; const {data, error:insertError} = await supabase.from('messages').insert([{room, nickname:user.nickname, image_url:url}]).select(); if(insertError) return T('发送失败'); if(data && data[0]) renderMsg(data[0]); $('#imgUpload').value=''; };
 window.leaveRoom = () => { if(realtime) supabase.removeChannel(realtime); room=null; $('#chatPanel').style.display='none'; $('#roomList').style.display='flex'; };
 
-// 动态/好友/个人中心/管理员等 (保持与前相同，完整实现)
+// 动态/好友/个人中心/管理员等
 window.openPost = () => { $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`; $('#genericModal').classList.add('show'); };
 window.submitPost = async () => { const txt=$('#postText')?.value.trim(), file=$('#postFile')?.files[0]; let url=null; if(file){ const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),img=new Image(); img.src=URL.createObjectURL(file); await new Promise(r=>img.onload=r); let w=img.width,h=img.height; if(w>800){h*=800/w;w=800;} canvas.width=w;canvas.height=h; ctx.drawImage(img,0,0,w,h); const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.7)); const name=`post_${Date.now()}.jpg`; await supabase.storage.from('chat-images').upload(name,blob); url=`${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`; } await supabase.from('posts').insert([{email:user.email, nickname:user.nickname, content:txt||'', image_url:url}]); T('已发布'); $('#genericModal').classList.remove('show'); loadFeed(); };
 async function loadFeed(){
