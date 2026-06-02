@@ -37,10 +37,8 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 登录页 - 视频+回退 */
-    .auth-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
-    .auth-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.35);z-index:0}
-    .auth-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:0}
+    /* 登录页 - 高清静态背景 */
+    .auth-overlay{position:fixed;inset:0;z-index:1000;background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80') center/cover no-repeat;display:flex;align-items:center;justify-content:center;padding:20px}
     .auth-card{position:relative;z-index:10;background:rgba(20,20,20,0.75);backdrop-filter:blur(40px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:50px 40px;max-width:400px;width:100%;box-shadow:0 40px 80px rgba(0,0,0,0.6);text-align:center;animation:authIn 0.6s}
     @keyframes authIn{from{opacity:0;transform:translateY(30px)}}
     .auth-card h2{font-family:'Playfair Display',serif;font-size:2.2rem;margin-bottom:32px;color:#fff}
@@ -121,10 +119,6 @@
 
 <!-- 登录/注册 -->
 <div id="authWrap" class="auth-overlay">
-  <video class="auth-video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80">
-    <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-mountain-3129/1080p.mp4" type="video/mp4">
-  </video>
-  <img class="auth-bg-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="背景">
   <div class="auth-card" id="loginBox">
     <h2>OSKWK</h2>
     <input type="email" id="loginEmail" placeholder="邮箱" autocomplete="email">
@@ -238,396 +232,242 @@
 </div>
 
 <script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-const SUPABASE_URL = 'https://qnblruruefgbixbfgwkh.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-const ADMIN_EMAIL = '279933264@qq.com';
-let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
-const $ = s => document.querySelector(s);
-const T = m => alert(m);
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  const SUPABASE_URL = 'https://qnblruruefgbixbfgwkh.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  const ADMIN_EMAIL = '279933264@qq.com';
+  let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
+  const $ = s => document.querySelector(s);
+  const T = m => alert(m);
 
-const naturePhotos = [
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
-  'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
-  'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80',
-  'https://images.unsplash.com/photo-1434394354979-a235cd36269d?w=800&q=80',
-  'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80',
-  'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80',
-  'https://images.unsplash.com/photo-1520962880247-6e5a3c3c3e0a?w=800&q=80',
-  'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=800&q=80',
-  'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=800&q=80',
-  'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80',
-  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80',
-  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80'
-];
-function landscape() { return naturePhotos[Math.floor(Math.random() * naturePhotos.length)]; }
+  const naturePhotos = [
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
+    'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80',
+    'https://images.unsplash.com/photo-1434394354979-a235cd36269d?w=800&q=80',
+    'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80',
+    'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80',
+    'https://images.unsplash.com/photo-1520962880247-6e5a3c3c3e0a?w=800&q=80',
+    'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=800&q=80',
+    'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=800&q=80',
+    'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80',
+    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80',
+    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80'
+  ];
+  function landscape() { return naturePhotos[Math.floor(Math.random() * naturePhotos.length)]; }
 
-// 视频回退
-const video = document.querySelector('.auth-video');
-const fallbackImg = document.querySelector('.auth-bg-img');
-if (video) {
-  video.addEventListener('error', () => { video.style.display = 'none'; if (fallbackImg) fallbackImg.style.display = 'block'; });
-  video.addEventListener('canplay', () => { video.play().catch(() => { video.style.display = 'none'; if (fallbackImg) fallbackImg.style.display = 'block'; }); });
-  document.addEventListener('click', () => { if (video.paused) video.play().catch(()=>{}); }, { once: true });
-}
+  // 全局函数
+  window.setTheme = t => { document.documentElement.setAttribute('data-theme',t); document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t)); localStorage.setItem('oskwk_theme',t); };
+  window.updateFontSize = v => { document.documentElement.style.setProperty('--font-size',v+'px'); localStorage.setItem('oskwk_fontsize',v); };
+  window.setAccent = el => { document.documentElement.style.setProperty('--accent',el.dataset.accent); localStorage.setItem('oskwk_accent',el.dataset.accent); };
+  window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-// 全局函数
-window.setTheme = t => { document.documentElement.setAttribute('data-theme',t); document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t)); localStorage.setItem('oskwk_theme',t); };
-window.updateFontSize = v => { document.documentElement.style.setProperty('--font-size',v+'px'); localStorage.setItem('oskwk_fontsize',v); };
-window.setAccent = el => { document.documentElement.style.setProperty('--accent',el.dataset.accent); localStorage.setItem('oskwk_accent',el.dataset.accent); };
-window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
+  window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
+  window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
+  window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
+  window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
+  window.sendCode = () => T('验证码：123456');
 
-window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
-window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
-window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
-window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
-window.sendCode = () => T('验证码：123456');
-
-function showOwnerModal() {
-  if (localStorage.getItem('oskwk_no_owner_popup') === 'true') return;
-  $('#genericContent').innerHTML = `<h2>关于站主 & 合作方式</h2><p><strong>站主：</strong>Peter</p><p>欢迎来到 OSKWK Platform，这是一个致力于探索自然与人文的社交空间。</p><p><strong>合作联系：</strong>邮箱 279933264@qq.com</p><p>我们欢迎各类合作：内容共创、技术交流、品牌推广等。</p><hr><label style="display:flex;align-items:center;gap:8px;margin-top:12px;"><input type="checkbox" id="noMoreOwnerPopup"> 不再提示</label><button class="main" onclick="window.closeOwnerModal()" style="margin-top:12px;">关闭</button>`;
-  $('#genericModal').classList.add('show');
-}
-window.closeOwnerModal = () => { if ($('#noMoreOwnerPopup')?.checked) localStorage.setItem('oskwk_no_owner_popup', 'true'); $('#genericModal').classList.remove('show'); };
-
-window.addEventListener('scroll',()=>{
-  const y=window.scrollY, cap=$('#heroCaption');
-  if(cap){ cap.style.opacity=Math.max(0,1-y/500); cap.style.transform=`translateY(${y*0.3}px)`; }
-});
-setInterval(()=>{ const img=$('#heroBg'); if(img) img.src=`https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&rand=${Date.now()}`; },12000);
-
-window.switchTab = async tab => {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const page=$('#tab-'+tab); if(page) page.classList.add('active');
-  document.querySelectorAll('.nav-icon[data-tab], .mob-nav .nav-icon[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(tab==='about') { loadArticles('about'); updateAdminBar('about'); }
-  if(tab==='discover') { loadArticles('discover'); updateAdminBar('discover'); }
-  if(tab==='study') { loadArticles('study'); updateAdminBar('study'); }
-  if(tab==='chat') renderRoomList();
-  if(tab==='friends') loadFeed();
-  if(tab==='profile') renderProfile();
-};
-
-function updateAdminBar(cat){
-  const bar = document.getElementById('adminBar'+cat.charAt(0).toUpperCase()+cat.slice(1));
-  if(bar) bar.style.display = isAdmin ? 'flex' : 'none';
-}
-
-async function loadArticles(cat){
-  const c=$('#article-'+cat); if(!c) return;
-  const {data} = await supabase.from('articles').select('*').eq('category',cat).order('created_at',{ascending:false});
-  c.innerHTML = (data||[]).map(a=>`
-    <div class="card" onclick="expandArticle(${a.id})">
-      ${isAdmin ? `<button class="card-delete" onclick="event.stopPropagation();deleteArticle(${a.id},'${cat}')">×</button>` : ''}
-      <img src="${a.image_url||landscape()}" loading="lazy" onerror="this.src='${landscape()}'">
-      <div class="card-body"><h3>${a.title}</h3><p>${a.content?.slice(0,100)||''}</p></div>
-    </div>
-  `).join('')||'<p style="color:var(--text3)">暂无内容</p>';
-}
-
-window.openPublish = (cat) => {
-  if(!isAdmin) return T('无权操作');
-  let html = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="4"></textarea><input id="pubImage" placeholder="图片URL (可选)"><button class="main" onclick="publishArticle('${cat}')">发布</button>`;
-  $('#genericContent').innerHTML = html;
-  $('#genericModal').classList.add('show');
-};
-window.publishArticle = async (cat) => {
-  const title = $('#pubTitle')?.value.trim(), content = $('#pubContent')?.value.trim(), image_url = $('#pubImage')?.value.trim() || null;
-  if(!title||!content) return T('标题和内容不能为空');
-  const {error} = await supabase.from('articles').insert([{title,content,category:cat,author:user.nickname,image_url}]);
-  if(error) return T('发布失败');
-  T('发布成功'); $('#genericModal').classList.remove('show'); loadArticles(cat);
-};
-window.deleteArticle = async (id,cat) => {
-  if(!confirm('确认删除？')) return;
-  const {error} = await supabase.from('articles').delete().eq('id',id);
-  if(error) return T('删除失败');
-  T('已删除'); loadArticles(cat);
-};
-
-window.expandArticle = async id => {
-  try {
-    const {data:a,error} = await supabase.from('articles').select('*').eq('id',id).single();
-    if(error||!a) return T('文章加载失败');
-    let html=`<h2 style="font-family:Playfair Display">${a.title}</h2><img src="${a.image_url||landscape()}" style="width:100%;border-radius:8px;margin:12px 0"><p>${a.content}</p><hr><h4>评论</h4>`;
-    const {data:coms} = await supabase.from('comments').select('*').eq('article_id',id).order('created_at');
-    html+=(coms||[]).map(c=>`<p><b>${c.nickname}:</b> ${c.content}</p>`).join('');
-    html+=`<input id="commentInput" placeholder="写下评论..."><button onclick="postComment(${id})">发送</button>`;
-    $('#genericContent').innerHTML=html;
+  function showOwnerModal() {
+    if (localStorage.getItem('oskwk_no_owner_popup') === 'true') return;
+    $('#genericContent').innerHTML = `<h2>关于站主 & 合作方式</h2><p><strong>站主：</strong>Peter</p><p>欢迎来到 OSKWK Platform，这是一个致力于探索自然与人文的社交空间。</p><p><strong>合作联系：</strong>邮箱 279933264@qq.com</p><p>我们欢迎各类合作：内容共创、技术交流、品牌推广等。</p><hr><label style="display:flex;align-items:center;gap:8px;margin-top:12px;"><input type="checkbox" id="noMoreOwnerPopup"> 不再提示</label><button class="main" onclick="window.closeOwnerModal()" style="margin-top:12px;">关闭</button>`;
     $('#genericModal').classList.add('show');
-  } catch(e){ T('无法打开文章'); }
-};
-window.postComment = async id => {
-  const inp=$('#commentInput'); if(!inp?.value.trim()||!user) return;
-  await supabase.from('comments').insert([{article_id:id, nickname:user.nickname, content:inp.value.trim()}]);
-  T('评论成功');
-  window.expandArticle(id);
-};
-
-// 聊天系统（密码验证修复）
-let allRooms = [];
-async function renderRoomList() {
-  $('#chatPanel').style.display='none';
-  $('#roomList').style.display='flex';
-  const {data} = await supabase.from('rooms').select('*').order('created_at',{ascending:false});
-  allRooms = data || [];
-  filterRooms();
-  $('#roomSearch').oninput = filterRooms;
-}
-function filterRooms(){
-  const kw = $('#roomSearch').value.trim().toLowerCase();
-  const list = $('#roomList');
-  let html = '';
-  const publicRooms = ['大厅','技术','理论','艺术'];
-  for(const name of publicRooms){
-    if(!kw || name.includes(kw)){
-      html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinPublicRoom('${name}')"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> ${name}</button>`;
-    }
   }
-  for(const r of allRooms){
-    if(!kw || r.name.toLowerCase().includes(kw)){
-      html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinCustomRoom('${r.name.replace(/'/g,"\\'")}', ${r.password !== ''})"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> ${r.name}${r.password?' 🔒':''}</button>`;
-    }
+  window.closeOwnerModal = () => { if ($('#noMoreOwnerPopup')?.checked) localStorage.setItem('oskwk_no_owner_popup', 'true'); $('#genericModal').classList.remove('show'); };
+
+  window.addEventListener('scroll',()=>{ const y=window.scrollY, cap=$('#heroCaption'); if(cap){ cap.style.opacity=Math.max(0,1-y/500); cap.style.transform=`translateY(${y*0.3}px)`; } });
+  setInterval(()=>{ const img=$('#heroBg'); if(img) img.src=`https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&rand=${Date.now()}`; },12000);
+
+  window.switchTab = async tab => {
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    const page=$('#tab-'+tab); if(page) page.classList.add('active');
+    document.querySelectorAll('.nav-icon[data-tab], .mob-nav .nav-icon[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(tab==='about') { loadArticles('about'); updateAdminBar('about'); }
+    if(tab==='discover') { loadArticles('discover'); updateAdminBar('discover'); }
+    if(tab==='study') { loadArticles('study'); updateAdminBar('study'); }
+    if(tab==='chat') renderRoomList();
+    if(tab==='friends') loadFeed();
+    if(tab==='profile') renderProfile();
+  };
+
+  function updateAdminBar(cat){ const bar = document.getElementById('adminBar'+cat.charAt(0).toUpperCase()+cat.slice(1)); if(bar) bar.style.display = isAdmin ? 'flex' : 'none'; }
+
+  async function loadArticles(cat){
+    const c=$('#article-'+cat); if(!c) return;
+    const {data} = await supabase.from('articles').select('*').eq('category',cat).order('created_at',{ascending:false});
+    c.innerHTML = (data||[]).map(a=>`<div class="card" onclick="expandArticle(${a.id})">${isAdmin ? `<button class="card-delete" onclick="event.stopPropagation();deleteArticle(${a.id},'${cat}')">×</button>` : ''}<img src="${a.image_url||landscape()}" loading="lazy" onerror="this.src='${landscape()}'"><div class="card-body"><h3>${a.title}</h3><p>${a.content?.slice(0,100)||''}</p></div></div>`).join('')||'<p style="color:var(--text3)">暂无内容</p>';
   }
-  html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="startPrivateChat()"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> 私信</button>`;
-  list.innerHTML = html || '<p style="color:var(--text3)">没有匹配的房间</p>';
-}
 
-window.showCreateRoom = () => {
-  let html = `<h3>创建房间</h3><input id="newRoomName" placeholder="房间名称"><input id="newRoomPass" type="password" placeholder="密码（可选）"><button class="main" onclick="createRoom()">创建</button>`;
-  $('#genericContent').innerHTML = html;
-  $('#genericModal').classList.add('show');
-};
-window.createRoom = async () => {
-  const name = $('#newRoomName')?.value.trim(), pass = $('#newRoomPass')?.value.trim();
-  if(!name) return T('请输入房间名称');
-  if(['大厅','技术','理论','艺术'].includes(name)) return T('不能与公共房间重名');
-  const {error} = await supabase.from('rooms').insert([{name, password:pass||'', created_by:user.email}]);
-  if(error) return T('创建失败');
-  T('房间已创建'); $('#genericModal').classList.remove('show'); renderRoomList();
-};
+  window.openPublish = (cat) => { if(!isAdmin) return T('无权操作'); let html = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="4"></textarea><input id="pubImage" placeholder="图片URL (可选)"><button class="main" onclick="publishArticle('${cat}')">发布</button>`; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+  window.publishArticle = async (cat) => { const title = $('#pubTitle')?.value.trim(), content = $('#pubContent')?.value.trim(), image_url = $('#pubImage')?.value.trim() || null; if(!title||!content) return T('标题和内容不能为空'); const {error} = await supabase.from('articles').insert([{title,content,category:cat,author:user.nickname,image_url}]); if(error) return T('发布失败'); T('发布成功'); $('#genericModal').classList.remove('show'); loadArticles(cat); };
+  window.deleteArticle = async (id,cat) => { if(!confirm('确认删除？')) return; const {error} = await supabase.from('articles').delete().eq('id',id); if(error) return T('删除失败'); T('已删除'); loadArticles(cat); };
 
-window.joinPublicRoom = name => { if(!user) return T('请登录'); room='oskwk-'+name; startChat(); };
-window.joinCustomRoom = async (name, hasPass) => {
-  if(!user) return T('请登录');
-  if(hasPass){
-    const pass = prompt('请输入房间密码：');
-    if(pass === null) return;
+  window.expandArticle = async id => {
     try {
-      const { data, error } = await supabase.from('rooms').select('password').eq('name', name).single();
-      if (error) { console.error('查询房间密码失败', error); return T('验证失败，请稍后重试'); }
-      const roomPassword = data?.password ?? '';
-      if (roomPassword === pass) { room = 'oskwk-' + name; startChat(); }
-      else T('密码错误');
-    } catch (e) { console.error(e); T('验证异常'); }
-  } else {
-    room = 'oskwk-'+name; startChat();
+      const {data:a,error} = await supabase.from('articles').select('*').eq('id',id).single();
+      if(error||!a) return T('文章加载失败');
+      let html=`<h2 style="font-family:Playfair Display">${a.title}</h2><img src="${a.image_url||landscape()}" style="width:100%;border-radius:8px;margin:12px 0"><p>${a.content}</p><hr><h4>评论</h4>`;
+      const {data:coms} = await supabase.from('comments').select('*').eq('article_id',id).order('created_at');
+      html+=(coms||[]).map(c=>`<p><b>${c.nickname}:</b> ${c.content}</p>`).join('');
+      html+=`<input id="commentInput" placeholder="写下评论..."><button onclick="postComment(${id})">发送</button>`;
+      $('#genericContent').innerHTML=html;
+      $('#genericModal').classList.add('show');
+    } catch(e){ T('无法打开文章'); }
+  };
+  window.postComment = async id => { const inp=$('#commentInput'); if(!inp?.value.trim()||!user) return; await supabase.from('comments').insert([{article_id:id, nickname:user.nickname, content:inp.value.trim()}]); T('评论成功'); window.expandArticle(id); };
+
+  // 聊天系统
+  let allRooms = [];
+  async function renderRoomList() {
+    $('#chatPanel').style.display='none';
+    $('#roomList').style.display='flex';
+    const {data} = await supabase.from('rooms').select('*').order('created_at',{ascending:false});
+    allRooms = data || [];
+    filterRooms();
+    $('#roomSearch').oninput = filterRooms;
   }
-};
-
-window.startPrivateChat = () => {
-  if(!user) return T('请先登录');
-  const peer = prompt('对方邮箱');
-  if(!peer) return;
-  room = 'private-'+[user.email,peer].sort().join('_');
-  startChat();
-};
-
-async function startChat(){
-  $('#roomList').style.display='none';
-  $('#chatPanel').style.display='block';
-  const {data} = await supabase.from('messages').select('*').eq('room',room).order('created_at',{ascending:true}).limit(200);
-  const log = $('#chatLog'); log.innerHTML = '';
-  if(data) data.forEach(renderMsg);
-  if(realtime) supabase.removeChannel(realtime);
-  realtime = supabase.channel('room-'+room)
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${room}`},payload=>renderMsg(payload.new))
-    .subscribe();
-}
-function renderMsg(m){
-  const log=$('#chatLog'); if(!log) return;
-  const div=document.createElement('div'); div.className='msg '+(m.nickname===user?.nickname?'mine':'peer');
-  div.innerHTML=`<b>${m.nickname}</b><br>${m.message||''}${m.image_url?`<br><img src="${m.image_url}">`:''}`;
-  log.appendChild(div); log.scrollTop=log.scrollHeight;
-}
-window.sendMsg = async () => {
-  const inp=$('#msgInput'), txt=inp.value.trim();
-  if(!user) return T('请先登录'); if(!room) return T('请先进入聊天室'); if(!txt) return;
-  const {data, error} = await supabase.from('messages').insert([{room, nickname:user.nickname, message:txt}]).select();
-  if(error) return T('发送失败');
-  if(data && data[0]) renderMsg(data[0]);
-  inp.value='';
-};
-window.uploadImg = async () => {
-  const f=$('#imgUpload').files[0];
-  if(!user) return T('请先登录'); if(!room) return T('请先进入聊天室'); if(!f) return;
-  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),img=new Image(); img.src=URL.createObjectURL(f);
-  await new Promise(r=>img.onload=r); let w=img.width,h=img.height; if(w>800){h*=800/w;w=800;} canvas.width=w;canvas.height=h; ctx.drawImage(img,0,0,w,h);
-  const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.7));
-  const name=`chat_${Date.now()}.jpg`;
-  const {error:uploadError} = await supabase.storage.from('chat-images').upload(name,blob);
-  if(uploadError) return T('图片上传失败');
-  const url=`${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
-  const {data, error:insertError} = await supabase.from('messages').insert([{room, nickname:user.nickname, image_url:url}]).select();
-  if(insertError) return T('发送失败');
-  if(data && data[0]) renderMsg(data[0]);
-  $('#imgUpload').value='';
-};
-window.leaveRoom = () => { if(realtime) supabase.removeChannel(realtime); room=null; $('#chatPanel').style.display='none'; $('#roomList').style.display='flex'; };
-
-// 动态/好友
-window.openPost = () => {
-  $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`;
-  $('#genericModal').classList.add('show');
-};
-window.submitPost = async () => {
-  const txt=$('#postText')?.value.trim(), file=$('#postFile')?.files[0]; let url=null;
-  if(file){
-    const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),img=new Image(); img.src=URL.createObjectURL(file);
-    await new Promise(r=>img.onload=r); let w=img.width,h=img.height; if(w>800){h*=800/w;w=800;} canvas.width=w;canvas.height=h; ctx.drawImage(img,0,0,w,h);
-    const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.7));
-    const name=`post_${Date.now()}.jpg`; await supabase.storage.from('chat-images').upload(name,blob);
-    url=`${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
+  function filterRooms(){
+    const kw = $('#roomSearch').value.trim().toLowerCase();
+    const list = $('#roomList');
+    let html = '';
+    const publicRooms = ['大厅','技术','理论','艺术'];
+    for(const name of publicRooms) if(!kw || name.includes(kw)) html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinPublicRoom('${name}')"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> ${name}</button>`;
+    for(const r of allRooms) if(!kw || r.name.toLowerCase().includes(kw)) html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinCustomRoom('${r.name.replace(/'/g,"\\'")}', ${r.password !== ''})"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> ${r.name}${r.password?' 🔒':''}</button>`;
+    html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="startPrivateChat()"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> 私信</button>`;
+    list.innerHTML = html || '<p style="color:var(--text3)">没有匹配的房间</p>';
   }
-  await supabase.from('posts').insert([{email:user.email, nickname:user.nickname, content:txt||'', image_url:url}]);
-  T('已发布'); $('#genericModal').classList.remove('show'); loadFeed();
-};
-async function loadFeed(){
-  if(!user) return;
-  const {data:friends} = await supabase.from('friendships').select('*').or(`from_email.eq.${user.email},to_email.eq.${user.email}`).eq('status','accepted');
-  const emails=[user.email,...(friends||[]).map(f=>f.from_email===user.email?f.to_email:f.from_email)];
-  const {data:posts} = await supabase.from('posts').select('*').in('email',emails).order('created_at',{ascending:false}).limit(30);
-  $('#friendsFeed').innerHTML = (posts||[]).map(p=>`<div class="card"><div class="card-body"><b>${p.nickname}</b> ${p.content||''}</div>${p.image_url?`<img src="${p.image_url}" style="width:100%">`:''}</div>`).join('')||'<p style="color:var(--text3)">暂无动态</p>';
-}
-window.showRequests = async () => {
-  const {data} = await supabase.from('friendships').select('*').eq('to_email',user.email).eq('status','pending');
-  let html='<h3>好友请求</h3>';
-  if(data?.length) data.forEach(r=>html+=`<p>${r.from_email} <button onclick="handleReq(${r.id},'accepted')">接受</button> <button onclick="handleReq(${r.id},'rejected')">拒绝</button></p>`);
-  else html+='<p>暂无</p>';
-  $('#genericContent').innerHTML=html; $('#genericModal').classList.add('show');
-};
-window.handleReq = async (id,status) => { await supabase.from('friendships').update({status}).eq('id',id); T('已处理'); window.showRequests(); };
-window.addFriend = () => { const email=prompt('对方邮箱'); if(email) supabase.from('friendships').insert([{from_email:user.email,to_email:email}]).then(()=>T('已发送')); };
 
-async function renderProfile(){
-  if(!user) return;
-  let html=`<div class="card" style="text-align:center;padding:24px">
-    <div class="avatar" style="width:56px;height:56px;font-size:1.4rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div>
-    <h3>${user.nickname}</h3><p>${user.email}</p>
-    <button onclick="showRequests()">好友请求</button>
-    <button onclick="addFriend()">添加好友</button>
-    <button onclick="showEditProfile()">编辑资料</button>
-    <button onclick="searchUser()">搜索用户</button>`;
-  if(isAdmin) html+='<button onclick="showAdmin()">用户管理</button>';
-  html+='<button onclick="logout()">退出</button></div>';
-  $('#profileArea').innerHTML=html;
-}
-window.showEditProfile = () => {
-  let html = `<h3>编辑资料</h3><input id="editNick" placeholder="新昵称" value="${user.nickname||''}"><input id="editPass" type="password" placeholder="新密码（留空不变）"><input id="editAvatar" placeholder="头像URL（可选）"><button class="main" onclick="saveProfile()">保存</button>`;
-  $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show');
-};
-window.saveProfile = async () => {
-  const nick = $('#editNick')?.value.trim(), pass = $('#editPass')?.value.trim(), avatar = $('#editAvatar')?.value.trim();
-  if(!nick) return T('昵称不能为空');
-  const {data, error} = await supabase.rpc('update_profile', { user_email: user.email, new_nickname: nick||null, new_password: pass||null, new_avatar_url: avatar||null });
-  if(error) return T('更新失败');
-  user = data[0]; localStorage.setItem('oskwk_user', JSON.stringify(user));
-  T('资料已更新'); $('#genericModal').classList.remove('show'); renderProfile();
-  document.getElementById('avatarTxt').textContent = user.nickname?.charAt(0)?.toUpperCase() || '?';
-};
-window.searchUser = () => {
-  let html = `<h3>搜索用户</h3><input id="searchKeyword" placeholder="邮箱或昵称"><button class="main" onclick="doSearch()">搜索</button><div id="searchResult"></div>`;
-  $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show');
-};
-window.doSearch = async () => {
-  const kw = $('#searchKeyword')?.value.trim(); if(!kw) return T('请输入关键词');
-  const {data, error} = await supabase.from('profiles').select('email, nickname, avatar_url').or(`email.ilike.%${kw}%,nickname.ilike.%${kw}%`).limit(10);
-  if(error) return T('搜索失败');
-  const list = $('#searchResult');
-  if(data && data.length) list.innerHTML = data.map(u=>`<p><b>${u.nickname}</b> (${u.email}) <button onclick="addFriendByEmail('${u.email}')">加好友</button></p>`).join('');
-  else list.innerHTML = '<p>未找到用户</p>';
-};
-window.addFriendByEmail = (email) => { if(email===user.email) return T('不能添加自己'); supabase.from('friendships').insert([{from_email:user.email, to_email:email}]).then(()=>T('请求已发送')); };
-window.showAdmin = async () => {
-  if(!isAdmin) return T('无权操作');
-  const {data} = await supabase.from('profiles').select('*');
-  let html='<h3>用户管理</h3>';
-  data.forEach(u=>html+=`<p>${u.nickname} (${u.email}) ${u.is_banned?'[BANNED]':''} <button onclick="toggleBan('${u.email}',${!u.is_banned})">${u.is_banned?'解禁':'拉黑'}</button></p>`);
-  $('#genericContent').innerHTML=html; $('#genericModal').classList.add('show');
-};
-window.toggleBan = async (email,ban) => { if(!isAdmin) return; await supabase.from('profiles').update({is_banned:ban}).eq('email',email); T('已更新'); window.showAdmin(); };
+  window.showCreateRoom = () => { let html = `<h3>创建房间</h3><input id="newRoomName" placeholder="房间名称"><input id="newRoomPass" type="password" placeholder="密码（可选）"><button class="main" onclick="createRoom()">创建</button>`; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+  window.createRoom = async () => { const name = $('#newRoomName')?.value.trim(), pass = $('#newRoomPass')?.value.trim(); if(!name) return T('请输入房间名称'); if(['大厅','技术','理论','艺术'].includes(name)) return T('不能与公共房间重名'); const {error} = await supabase.from('rooms').insert([{name, password:pass||'', created_by:user.email}]); if(error) return T('创建失败'); T('房间已创建'); $('#genericModal').classList.remove('show'); renderRoomList(); };
 
-async function fetchNotifs(){
-  if(!user) return;
-  const {data} = await supabase.from('notifications').select('*').eq('user_email',user.email).order('created_at',{ascending:false}).limit(20);
-  const unread=data?.filter(n=>!n.read).length||0;
-  const dot=$('#notifDot'); if(dot) dot.style.display=unread?'block':'none';
-  return data;
-}
-window.showNotifs = async () => {
-  const data=await fetchNotifs();
-  let html='<h3>通知</h3>';
-  if(data?.length) data.forEach(n=>html+=`<p>${n.content} <small>${new Date(n.created_at).toLocaleString()}</small></p>`);
-  else html+='<p>暂无</p>';
-  $('#genericContent').innerHTML=html; $('#genericModal').classList.add('show');
-  await supabase.from('notifications').update({read:true}).eq('user_email',user.email).eq('read',false);
-};
-function subNotifs(){
-  if(!user) return;
-  if(notifSub) supabase.removeChannel(notifSub);
-  notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
-}
+  window.joinPublicRoom = name => { if(!user) return T('请登录'); room='oskwk-'+name; startChat(); };
+  window.joinCustomRoom = async (name, hasPass) => {
+    if(!user) return T('请登录');
+    if(hasPass){
+      const pass = prompt('请输入房间密码：');
+      if(pass === null) return;
+      try {
+        const { data, error } = await supabase.from('rooms').select('password').eq('name', name).single();
+        if (error) { console.error(error); return T('验证失败，请稍后重试'); }
+        const roomPassword = data?.password ?? '';
+        if (roomPassword === pass) { room = 'oskwk-'+name; startChat(); }
+        else T('密码错误');
+      } catch (e) { console.error(e); T('验证异常'); }
+    } else {
+      room = 'oskwk-'+name;
+      startChat();
+    }
+  };
 
-// 登录注册
-window.doLogin = async () => {
-  const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
-  if(!email||!pwd) return T('请输入邮箱和密码');
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return T('邮箱格式不正确');
-  const { data, error } = await supabase.rpc('verify_login', { user_email: email, user_password: pwd });
-  if (error || !data || data.length === 0) return T('邮箱或密码错误');
-  user = data[0]; isAdmin = (user.email === ADMIN_EMAIL);
-  localStorage.setItem('oskwk_user', JSON.stringify(user));
-  enter();
-};
-window.doRegister = async () => {
-  if (!$('#regAgree').checked) return T('请先同意免责声明和隐私协议');
-  const email=$('#regEmail').value.trim(), phone=$('#regPhone').value.trim(), code=$('#regCode').value.trim(), pwd=$('#regPass').value.trim(), nick=$('#regNick').value.trim();
-  if(!email||!phone||!pwd||!nick) return T('请填写完整');
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return T('邮箱格式不正确');
-  if(!/^1[3-9]\d{9}$/.test(phone)) return T('手机号格式不正确');
-  if(code!=='123456') return T('验证码错误');
-  if(pwd.length<6) return T('密码至少6位');
-  const { data, error } = await supabase.rpc('register_user', { user_email: email, user_nickname: nick, user_phone: phone, user_password: pwd });
-  if (error) return T('注册失败：'+error.message);
-  user = data[0]; isAdmin = false;
-  localStorage.setItem('oskwk_user', JSON.stringify(user));
-  enter();
-};
-function enter(){
-  document.getElementById('authWrap').style.display='none';
-  document.getElementById('app').classList.add('on');
-  document.getElementById('avatarTxt').textContent = user?.nickname?.charAt(0)?.toUpperCase() || '?';
-  subNotifs(); fetchNotifs(); switchTab('about');
-  showOwnerModal();
-}
-window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
+  window.startPrivateChat = () => { if(!user) return T('请先登录'); const peer = prompt('对方邮箱'); if(!peer) return; room = 'private-'+[user.email,peer].sort().join('_'); startChat(); };
 
-// 绑定按钮
-document.getElementById('loginBtn').addEventListener('click', window.doLogin);
-document.getElementById('regBtn').addEventListener('click', window.doRegister);
-
-(()=>{
-  const saved = localStorage.getItem('oskwk_user');
-  if (saved) {
-    try { user = JSON.parse(saved); isAdmin = (user.email === ADMIN_EMAIL); enter(); }
-    catch(e){ localStorage.removeItem('oskwk_user'); }
-  } else {
-    document.getElementById('authWrap').style.display='flex';
+  async function startChat(){
+    $('#roomList').style.display='none';
+    $('#chatPanel').style.display='block';
+    const {data} = await supabase.from('messages').select('*').eq('room',room).order('created_at',{ascending:true}).limit(200);
+    const log = $('#chatLog'); log.innerHTML = '';
+    if(data) data.forEach(renderMsg);
+    if(realtime) supabase.removeChannel(realtime);
+    realtime = supabase.channel('room-'+room).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`room=eq.${room}`},payload=>renderMsg(payload.new)).subscribe();
   }
-  setTimeout(() => $('#loader').classList.add('done'), 500);
-})();
+  function renderMsg(m){ const log=$('#chatLog'); if(!log) return; const div=document.createElement('div'); div.className='msg '+(m.nickname===user?.nickname?'mine':'peer'); div.innerHTML=`<b>${m.nickname}</b><br>${m.message||''}${m.image_url?`<br><img src="${m.image_url}">`:''}`; log.appendChild(div); log.scrollTop=log.scrollHeight; }
+  window.sendMsg = async () => { const inp=$('#msgInput'), txt=inp.value.trim(); if(!user) return T('请先登录'); if(!room) return T('请先进入聊天室'); if(!txt) return; const {data, error} = await supabase.from('messages').insert([{room, nickname:user.nickname, message:txt}]).select(); if(error) return T('发送失败'); if(data && data[0]) renderMsg(data[0]); inp.value=''; };
+  window.uploadImg = async () => { const f=$('#imgUpload').files[0]; if(!user) return T('请先登录'); if(!room) return T('请先进入聊天室'); if(!f) return; const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),img=new Image(); img.src=URL.createObjectURL(f); await new Promise(r=>img.onload=r); let w=img.width,h=img.height; if(w>800){h*=800/w;w=800;} canvas.width=w;canvas.height=h; ctx.drawImage(img,0,0,w,h); const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.7)); const name=`chat_${Date.now()}.jpg`; const {error:uploadError} = await supabase.storage.from('chat-images').upload(name,blob); if(uploadError) return T('图片上传失败'); const url=`${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`; const {data, error:insertError} = await supabase.from('messages').insert([{room, nickname:user.nickname, image_url:url}]).select(); if(insertError) return T('发送失败'); if(data && data[0]) renderMsg(data[0]); $('#imgUpload').value=''; };
+  window.leaveRoom = () => { if(realtime) supabase.removeChannel(realtime); room=null; $('#chatPanel').style.display='none'; $('#roomList').style.display='flex'; };
+
+  // 动态/好友
+  window.openPost = () => { $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`; $('#genericModal').classList.add('show'); };
+  window.submitPost = async () => { const txt=$('#postText')?.value.trim(), file=$('#postFile')?.files[0]; let url=null; if(file){ const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),img=new Image(); img.src=URL.createObjectURL(file); await new Promise(r=>img.onload=r); let w=img.width,h=img.height; if(w>800){h*=800/w;w=800;} canvas.width=w;canvas.height=h; ctx.drawImage(img,0,0,w,h); const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.7)); const name=`post_${Date.now()}.jpg`; await supabase.storage.from('chat-images').upload(name,blob); url=`${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`; } await supabase.from('posts').insert([{email:user.email, nickname:user.nickname, content:txt||'', image_url:url}]); T('已发布'); $('#genericModal').classList.remove('show'); loadFeed(); };
+  async function loadFeed(){
+    if(!user) return;
+    const {data:friends} = await supabase.from('friendships').select('*').or(`from_email.eq.${user.email},to_email.eq.${user.email}`).eq('status','accepted');
+    const emails=[user.email,...(friends||[]).map(f=>f.from_email===user.email?f.to_email:f.from_email)];
+    const {data:posts} = await supabase.from('posts').select('*').in('email',emails).order('created_at',{ascending:false}).limit(30);
+    $('#friendsFeed').innerHTML = (posts||[]).map(p=>`<div class="card"><div class="card-body"><b>${p.nickname}</b> ${p.content||''}</div>${p.image_url?`<img src="${p.image_url}" style="width:100%">`:''}</div>`).join('')||'<p style="color:var(--text3)">暂无动态</p>';
+  }
+  window.showRequests = async () => { const {data} = await supabase.from('friendships').select('*').eq('to_email',user.email).eq('status','pending'); let html='<h3>好友请求</h3>'; if(data?.length) data.forEach(r=>html+=`<p>${r.from_email} <button onclick="handleReq(${r.id},'accepted')">接受</button> <button onclick="handleReq(${r.id},'rejected')">拒绝</button></p>`); else html+='<p>暂无</p>'; $('#genericContent').innerHTML=html; $('#genericModal').classList.add('show'); };
+  window.handleReq = async (id,status) => { await supabase.from('friendships').update({status}).eq('id',id); T('已处理'); window.showRequests(); };
+  window.addFriend = () => { const email=prompt('对方邮箱'); if(email) supabase.from('friendships').insert([{from_email:user.email,to_email:email}]).then(()=>T('已发送')); };
+
+  async function renderProfile(){
+    if(!user) return;
+    let html=`<div class="card" style="text-align:center;padding:24px">
+      <div class="avatar" style="width:56px;height:56px;font-size:1.4rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div>
+      <h3>${user.nickname}</h3><p>${user.email}</p>
+      <button onclick="showRequests()">好友请求</button>
+      <button onclick="addFriend()">添加好友</button>
+      <button onclick="showEditProfile()">编辑资料</button>
+      <button onclick="searchUser()">搜索用户</button>`;
+    if(isAdmin) html+='<button onclick="showAdmin()">用户管理</button>';
+    html+='<button onclick="logout()">退出</button></div>';
+    $('#profileArea').innerHTML=html;
+  }
+  window.showEditProfile = () => { let html = `<h3>编辑资料</h3><input id="editNick" placeholder="新昵称" value="${user.nickname||''}"><input id="editPass" type="password" placeholder="新密码（留空不变）"><input id="editAvatar" placeholder="头像URL（可选）"><button class="main" onclick="saveProfile()">保存</button>`; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+  window.saveProfile = async () => { const nick = $('#editNick')?.value.trim(), pass = $('#editPass')?.value.trim(), avatar = $('#editAvatar')?.value.trim(); if(!nick) return T('昵称不能为空'); const {data, error} = await supabase.rpc('update_profile', { user_email: user.email, new_nickname: nick||null, new_password: pass||null, new_avatar_url: avatar||null }); if(error) return T('更新失败'); user = data[0]; localStorage.setItem('oskwk_user', JSON.stringify(user)); T('资料已更新'); $('#genericModal').classList.remove('show'); renderProfile(); document.getElementById('avatarTxt').textContent = user.nickname?.charAt(0)?.toUpperCase() || '?'; };
+  window.searchUser = () => { let html = `<h3>搜索用户</h3><input id="searchKeyword" placeholder="邮箱或昵称"><button class="main" onclick="doSearch()">搜索</button><div id="searchResult"></div>`; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+  window.doSearch = async () => { const kw = $('#searchKeyword')?.value.trim(); if(!kw) return T('请输入关键词'); const {data, error} = await supabase.from('profiles').select('email, nickname, avatar_url').or(`email.ilike.%${kw}%,nickname.ilike.%${kw}%`).limit(10); if(error) return T('搜索失败'); const list = $('#searchResult'); if(data && data.length) list.innerHTML = data.map(u=>`<p><b>${u.nickname}</b> (${u.email}) <button onclick="addFriendByEmail('${u.email}')">加好友</button></p>`).join(''); else list.innerHTML = '<p>未找到用户</p>'; };
+  window.addFriendByEmail = (email) => { if(email===user.email) return T('不能添加自己'); supabase.from('friendships').insert([{from_email:user.email, to_email:email}]).then(()=>T('请求已发送')); };
+  window.showAdmin = async () => { if(!isAdmin) return T('无权操作'); const {data} = await supabase.from('profiles').select('*'); let html='<h3>用户管理</h3>'; data.forEach(u=>html+=`<p>${u.nickname} (${u.email}) ${u.is_banned?'[BANNED]':''} <button onclick="toggleBan('${u.email}',${!u.is_banned})">${u.is_banned?'解禁':'拉黑'}</button></p>`); $('#genericContent').innerHTML=html; $('#genericModal').classList.add('show'); };
+  window.toggleBan = async (email,ban) => { if(!isAdmin) return; await supabase.from('profiles').update({is_banned:ban}).eq('email',email); T('已更新'); window.showAdmin(); };
+
+  async function fetchNotifs(){
+    if(!user) return;
+    const {data} = await supabase.from('notifications').select('*').eq('user_email',user.email).order('created_at',{ascending:false}).limit(20);
+    const unread=data?.filter(n=>!n.read).length||0;
+    const dot=$('#notifDot'); if(dot) dot.style.display=unread?'block':'none';
+    return data;
+  }
+  window.showNotifs = async () => { const data=await fetchNotifs(); let html='<h3>通知</h3>'; if(data?.length) data.forEach(n=>html+=`<p>${n.content} <small>${new Date(n.created_at).toLocaleString()}</small></p>`); else html+='<p>暂无</p>'; $('#genericContent').innerHTML=html; $('#genericModal').classList.add('show'); await supabase.from('notifications').update({read:true}).eq('user_email',user.email).eq('read',false); };
+  function subNotifs(){
+    if(!user) return;
+    if(notifSub) supabase.removeChannel(notifSub);
+    notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
+  }
+
+  window.doLogin = async () => {
+    const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
+    if(!email||!pwd) return T('请输入邮箱和密码');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return T('邮箱格式不正确');
+    const { data, error } = await supabase.rpc('verify_login', { user_email: email, user_password: pwd });
+    if (error || !data || data.length === 0) return T('邮箱或密码错误');
+    user = data[0]; isAdmin = (user.email === ADMIN_EMAIL);
+    localStorage.setItem('oskwk_user', JSON.stringify(user));
+    enter();
+  };
+  window.doRegister = async () => {
+    if (!$('#regAgree').checked) return T('请先同意免责声明和隐私协议');
+    const email=$('#regEmail').value.trim(), phone=$('#regPhone').value.trim(), code=$('#regCode').value.trim(), pwd=$('#regPass').value.trim(), nick=$('#regNick').value.trim();
+    if(!email||!phone||!pwd||!nick) return T('请填写完整');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return T('邮箱格式不正确');
+    if(!/^1[3-9]\d{9}$/.test(phone)) return T('手机号格式不正确');
+    if(code!=='123456') return T('验证码错误');
+    if(pwd.length<6) return T('密码至少6位');
+    const { data, error } = await supabase.rpc('register_user', { user_email: email, user_nickname: nick, user_phone: phone, user_password: pwd });
+    if (error) return T('注册失败：'+error.message);
+    user = data[0]; isAdmin = false;
+    localStorage.setItem('oskwk_user', JSON.stringify(user));
+    enter();
+  };
+  function enter(){
+    document.getElementById('authWrap').style.display='none';
+    document.getElementById('app').classList.add('on');
+    document.getElementById('avatarTxt').textContent = user?.nickname?.charAt(0)?.toUpperCase() || '?';
+    subNotifs(); fetchNotifs(); switchTab('about');
+    showOwnerModal();
+  }
+  window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
+
+  document.getElementById('loginBtn').addEventListener('click', window.doLogin);
+  document.getElementById('regBtn').addEventListener('click', window.doRegister);
+
+  (()=>{
+    const saved = localStorage.getItem('oskwk_user');
+    if (saved) { try { user = JSON.parse(saved); isAdmin = (user.email === ADMIN_EMAIL); enter(); } catch(e){ localStorage.removeItem('oskwk_user'); } }
+    else { document.getElementById('authWrap').style.display='flex'; }
+    setTimeout(() => $('#loader').classList.add('done'), 500);
+  })();
 </script>
 </body>
 </html>
