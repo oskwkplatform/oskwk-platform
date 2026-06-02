@@ -6,8 +6,21 @@
   <title>OSKWK Platform · 自然之息</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: #050505; --surface: #0a0a0a; --surface2: #111; --text: #f0f0f0; --text2: #a8a8a8; --text3: #606060; --border: rgba(255,255,255,0.06); --border-light: rgba(255,255,255,0.12); --accent: #c9a87c; --danger: #e76f51; --success: #2a9d8f; --radius: 16px; --radius-sm: 10px; --radius-full: 9999px; --glass-bg: rgba(10,10,10,0.7); --glass-border: rgba(255,255,255,0.08); --blur: 24px; --font-size: 16px; }
-    [data-theme="light"] { --bg: #f5f2ed; --surface: #fff; --surface2: #ebe5db; --text: #1a1a1a; --text2: #555; --text3: #999; --border: rgba(0,0,0,0.06); --border-light: rgba(0,0,0,0.1); --glass-bg: rgba(255,255,255,0.7); --glass-border: rgba(0,0,0,0.08); }
+    :root {
+      --bg: #050505; --surface: #0a0a0a; --surface2: #111;
+      --text: #f0f0f0; --text2: #a8a8a8; --text3: #606060;
+      --border: rgba(255,255,255,0.06); --border-light: rgba(255,255,255,0.12);
+      --accent: #c9a87c; --danger: #e76f51; --success: #2a9d8f;
+      --radius: 16px; --radius-sm: 10px; --radius-full: 9999px;
+      --glass-bg: rgba(10,10,10,0.7); --glass-border: rgba(255,255,255,0.08);
+      --blur: 24px; --font-size: 16px;
+    }
+    [data-theme="light"] {
+      --bg: #f5f2ed; --surface: #fff; --surface2: #ebe5db;
+      --text: #1a1a1a; --text2: #555; --text3: #999;
+      --border: rgba(0,0,0,0.06); --border-light: rgba(0,0,0,0.1);
+      --glass-bg: rgba(255,255,255,0.7); --glass-border: rgba(0,0,0,0.08);
+    }
     *{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;font-size:var(--font-size)}
     body{background:var(--bg);overflow-x:hidden}
@@ -24,7 +37,7 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 登录页 */
+    /* 登录页 - 视频+回退 */
     .auth-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
     .auth-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.35);z-index:0}
     .auth-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:0}
@@ -118,21 +131,21 @@
     <input type="password" id="loginPass" placeholder="密码">
     <button class="auth-btn" id="loginBtn">登录</button>
     <p id="loginHint" style="color:var(--danger);font-size:0.85rem;margin-top:10px;"></p>
-    <div class="auth-link">没有账户？ <a id="showRegLink">创建账户</a></div>
+    <div class="auth-link">没有账户？ <a onclick="window.showReg()">创建账户</a></div>
   </div>
   <div class="auth-card" id="regBox" style="display:none">
     <h2>加入 OSKWK</h2>
     <input id="regPhone" placeholder="手机号" type="tel">
     <input id="regEmail" placeholder="邮箱" type="email">
-    <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button id="sendCodeBtn" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer;color:var(--text)">获取</button></div>
+    <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="window.sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer;color:var(--text)">获取</button></div>
     <input id="regPass" type="password" placeholder="密码">
     <input id="regNick" placeholder="昵称">
     <div class="agree-row">
       <input type="checkbox" id="regAgree">
-      <span>我已阅读并同意 <a id="disclaimerLink">《免责声明》</a> 和 <a id="privacyLink">《隐私协议》</a></span>
+      <span>我已阅读并同意 <a onclick="window.showDisclaimer()">《免责声明》</a> 和 <a onclick="window.showPrivacy()">《隐私协议》</a></span>
     </div>
     <button class="auth-btn" id="regBtn">注册</button>
-    <div class="auth-link">已有账户？ <a id="showLoginLink">返回登录</a></div>
+    <div class="auth-link">已有账户？ <a onclick="window.showLogin()">返回登录</a></div>
   </div>
 </div>
 
@@ -170,21 +183,9 @@
   </section>
 
   <div class="main-wrap">
-    <div class="page active" id="tab-about">
-      <div class="sec-title">探索</div>
-      <div id="adminBarAbout" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('about')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
-      <div id="article-about" class="grid"></div>
-    </div>
-    <div class="page" id="tab-discover">
-      <div class="sec-title">发现</div>
-      <div id="adminBarDiscover" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('discover')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
-      <div id="article-discover" class="grid"></div>
-    </div>
-    <div class="page" id="tab-study">
-      <div class="sec-title">学术</div>
-      <div id="adminBarStudy" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('study')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
-      <div id="article-study" class="grid"></div>
-    </div>
+    <div class="page active" id="tab-about"><div class="sec-title">探索</div><div id="adminBarAbout" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('about')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="article-about" class="grid"></div></div>
+    <div class="page" id="tab-discover"><div class="sec-title">发现</div><div id="adminBarDiscover" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('discover')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="article-discover" class="grid"></div></div>
+    <div class="page" id="tab-study"><div class="sec-title">学术</div><div id="adminBarStudy" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('study')"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="article-study" class="grid"></div></div>
     <div class="page" id="tab-chat">
       <div class="sec-title">交流</div>
       <div id="roomTools" style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap"><input id="roomSearch" placeholder="搜索房间..." style="flex:1;min-width:150px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="showCreateRoom()"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
@@ -268,38 +269,27 @@ const fallbackImg = document.querySelector('.auth-bg-img');
 if (video) {
   video.addEventListener('error', () => { video.style.display = 'none'; if (fallbackImg) fallbackImg.style.display = 'block'; });
   video.addEventListener('canplay', () => { video.play().catch(() => { video.style.display = 'none'; if (fallbackImg) fallbackImg.style.display = 'block'; }); });
+  document.addEventListener('click', () => { if (video.paused) video.play().catch(()=>{}); }, { once: true });
 }
 
-// 全局设置
-window.setTheme = t => {
-  document.documentElement.setAttribute('data-theme',t);
-  document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));
-  localStorage.setItem('oskwk_theme',t);
-};
+// 全局函数
+window.setTheme = t => { document.documentElement.setAttribute('data-theme',t); document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t)); localStorage.setItem('oskwk_theme',t); };
 window.updateFontSize = v => { document.documentElement.style.setProperty('--font-size',v+'px'); localStorage.setItem('oskwk_fontsize',v); };
 window.setAccent = el => { document.documentElement.style.setProperty('--accent',el.dataset.accent); localStorage.setItem('oskwk_accent',el.dataset.accent); };
 window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
 window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
 window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
+window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
+window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
+window.sendCode = () => T('验证码：123456');
 
 function showOwnerModal() {
   if (localStorage.getItem('oskwk_no_owner_popup') === 'true') return;
-  $('#genericContent').innerHTML = `<h2>关于站主 & 合作方式</h2><p><strong>站主：</strong>Peter</p><p>欢迎来到 OSKWK Platform，这是一个致力于探索自然与人文的社交空间。</p><p><strong>合作联系：</strong>邮箱 279933264@qq.com</p><p>我们欢迎各类合作：内容共创、技术交流、品牌推广等。</p><hr><label style="display:flex;align-items:center;gap:8px;margin-top:12px;"><input type="checkbox" id="noMoreOwnerPopup"> 不再提示</label><button class="main" onclick="closeOwnerModal()" style="margin-top:12px;">关闭</button>`;
+  $('#genericContent').innerHTML = `<h2>关于站主 & 合作方式</h2><p><strong>站主：</strong>Peter</p><p>欢迎来到 OSKWK Platform，这是一个致力于探索自然与人文的社交空间。</p><p><strong>合作联系：</strong>邮箱 279933264@qq.com</p><p>我们欢迎各类合作：内容共创、技术交流、品牌推广等。</p><hr><label style="display:flex;align-items:center;gap:8px;margin-top:12px;"><input type="checkbox" id="noMoreOwnerPopup"> 不再提示</label><button class="main" onclick="window.closeOwnerModal()" style="margin-top:12px;">关闭</button>`;
   $('#genericModal').classList.add('show');
 }
 window.closeOwnerModal = () => { if ($('#noMoreOwnerPopup')?.checked) localStorage.setItem('oskwk_no_owner_popup', 'true'); $('#genericModal').classList.remove('show'); };
-
-// 绑定协议链接及登录切换
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('loginBtn').addEventListener('click', doLogin);
-  document.getElementById('regBtn').addEventListener('click', doRegister);
-  document.getElementById('sendCodeBtn').addEventListener('click', () => T('验证码：123456'));
-  document.getElementById('showRegLink').addEventListener('click', () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; });
-  document.getElementById('showLoginLink').addEventListener('click', () => { $('#regBox').style.display='none'; $('#loginBox').style.display='block'; });
-  document.getElementById('disclaimerLink').addEventListener('click', (e) => { e.preventDefault(); window.showDisclaimer(); });
-  document.getElementById('privacyLink').addEventListener('click', (e) => { e.preventDefault(); window.showPrivacy(); });
-});
 
 window.addEventListener('scroll',()=>{
   const y=window.scrollY, cap=$('#heroCaption');
@@ -376,7 +366,7 @@ window.postComment = async id => {
   window.expandArticle(id);
 };
 
-// 聊天系统
+// 聊天系统（密码验证修复）
 let allRooms = [];
 async function renderRoomList() {
   $('#chatPanel').style.display='none';
@@ -420,20 +410,21 @@ window.createRoom = async () => {
 };
 
 window.joinPublicRoom = name => { if(!user) return T('请登录'); room='oskwk-'+name; startChat(); };
-window.joinCustomRoom = (name, hasPass) => {
+window.joinCustomRoom = async (name, hasPass) => {
   if(!user) return T('请登录');
   if(hasPass){
     const pass = prompt('请输入房间密码：');
     if(pass === null) return;
-    supabase.from('rooms').select('password').eq('name',name).single()
-      .then(({data, error}) => {
-        if(error) { console.error(error); return T('验证失败'); }
-        const roomPassword = data?.password ?? '';
-        if(roomPassword === pass){ room = 'oskwk-'+name; startChat(); }
-        else T('密码错误');
-      })
-      .catch(() => T('网络错误'));
-  } else { room = 'oskwk-'+name; startChat(); }
+    try {
+      const { data, error } = await supabase.from('rooms').select('password').eq('name', name).single();
+      if (error) { console.error('查询房间密码失败', error); return T('验证失败，请稍后重试'); }
+      const roomPassword = data?.password ?? '';
+      if (roomPassword === pass) { room = 'oskwk-' + name; startChat(); }
+      else T('密码错误');
+    } catch (e) { console.error(e); T('验证异常'); }
+  } else {
+    room = 'oskwk-'+name; startChat();
+  }
 };
 
 window.startPrivateChat = () => {
@@ -589,7 +580,7 @@ function subNotifs(){
   notifSub = supabase.channel('notif-'+user.email).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_email=eq.${user.email}`},()=>fetchNotifs()).subscribe();
 }
 
-// 登录/注册
+// 登录注册
 window.doLogin = async () => {
   const email=$('#loginEmail').value.trim(), pwd=$('#loginPass').value.trim();
   if(!email||!pwd) return T('请输入邮箱和密码');
@@ -622,8 +613,10 @@ function enter(){
   showOwnerModal();
 }
 window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
-window.showReg = () => { $('#loginBox').style.display='none'; $('#regBox').style.display='block'; };
-window.showLogin = () => { $('#loginBox').style.display='block'; $('#regBox').style.display='none'; };
+
+// 绑定按钮
+document.getElementById('loginBtn').addEventListener('click', window.doLogin);
+document.getElementById('regBtn').addEventListener('click', window.doRegister);
 
 (()=>{
   const saved = localStorage.getItem('oskwk_user');
