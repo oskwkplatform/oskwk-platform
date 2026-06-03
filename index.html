@@ -39,7 +39,7 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 登录 */
+    /* 登录 - 分步 + 开机认证风格 */
     .auth-overlay{position:fixed;inset:0;z-index:1000;background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80') center/cover no-repeat;display:flex;align-items:center;justify-content:center;padding:20px}
     .auth-card{position:relative;z-index:10;background:rgba(20,20,20,0.75);backdrop-filter:blur(40px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:50px 40px;max-width:400px;width:100%;box-shadow:0 40px 80px rgba(0,0,0,0.6);text-align:center;animation:authIn 0.6s}
     @keyframes authIn{from{opacity:0;transform:translateY(30px)}}
@@ -128,7 +128,9 @@
     <h2>OSKWK</h2>
     <input type="email" id="loginEmail" placeholder="邮箱" autocomplete="email">
     <input type="password" id="loginPass" placeholder="密码">
-    <button class="auth-btn" id="loginBtn"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg> 登录</button>
+    <button class="auth-btn" id="loginBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg> 登录
+    </button>
     <p id="loginHint" style="color:var(--danger);font-size:0.85rem;margin-top:10px;"></p>
     <div class="auth-link">没有账户？ <a id="showRegLink">创建账户</a></div>
   </div>
@@ -138,17 +140,23 @@
     <div id="regStep1">
       <input id="regEmail" placeholder="邮箱" type="email">
       <input id="regPhone" placeholder="手机号" type="tel">
-      <button class="auth-btn" onclick="nextRegStep(2)">下一步 <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      <button class="auth-btn" onclick="nextRegStep(2)">
+        下一步 <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
     </div>
     <div id="regStep2" style="display:none">
       <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer;color:var(--text)">获取</button></div>
-      <button class="auth-btn" onclick="nextRegStep(3)">下一步 <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      <button class="auth-btn" onclick="nextRegStep(3)">
+        下一步 <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
     </div>
     <div id="regStep3" style="display:none">
       <input id="regPass" type="password" placeholder="密码">
       <input id="regNick" placeholder="昵称">
       <div class="agree-row"><input type="checkbox" id="regAgree"><span>我已阅读并同意 <a id="disclaimerLink">《免责声明》</a> 和 <a id="privacyLink">《隐私协议》</a></span></div>
-      <button class="auth-btn" id="regBtn"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg> 注册</button>
+      <button class="auth-btn" id="regBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg> 注册
+      </button>
     </div>
     <div class="auth-link">已有账户？ <a id="showLoginLink">返回登录</a></div>
   </div>
@@ -229,12 +237,12 @@
   <div id="nowPlaying" style="font-size:0.8rem;color:var(--text2)"></div>
 </div>
 
-<!-- 协议弹窗 -->
+<!-- 通用弹窗 -->
 <div class="modal" id="genericModal" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="modal-box" id="genericContent"></div>
 </div>
 
-<!-- 隐藏的协议内容 -->
+<!-- 协议内容（隐藏） -->
 <div style="display:none" id="disclaimerText">
   <h2>免责声明</h2>
   <p>1. 本平台（OSKWK）是一个开放式的社交与内容分享空间，所有用户发布的内容仅代表发布者个人观点，与本平台立场无关。</p>
@@ -258,23 +266,22 @@
   <p>9. 如果您对隐私政策有任何疑问，可联系平台管理员。</p>
 </div>
 
-<script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+<script type="module">import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
   const SUPABASE_URL = 'https://qnblruruefgbixbfgwkh.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
   const ADMIN_EMAIL = '279933264@qq.com';
-  let currentUser = null, isAdmin = false, realtimeForum = null;
+  let currentUser = null, isAdmin = false, realtimeForum = null, notifSub = null;
   const $ = s => document.querySelector(s);
   const T = m => alert(m);
 
   // 注册步骤控制
-  let regCurrentStep = 1;
-  window.nextRegStep = (step) => {
-    document.getElementById('regStep' + regCurrentStep).style.display = 'none';
-    document.getElementById('regStep' + step).style.display = 'block';
-    regCurrentStep = step;
-    document.querySelectorAll('#stepDots .step-dot').forEach((d,i) => d.classList.toggle('active', i < step));
+  let regStep = 1;
+  window.nextRegStep = (s) => {
+    document.getElementById('regStep' + regStep).style.display = 'none';
+    document.getElementById('regStep' + s).style.display = 'block';
+    regStep = s;
+    document.querySelectorAll('#stepDots .step-dot').forEach((d, i) => d.classList.toggle('active', i < s));
   };
   window.sendCode = () => T('验证码：123456');
 
@@ -286,58 +293,47 @@
     { title: "Hurt", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
     { title: "Metro Boomin", artist: "Metro", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }
   ];
-  let currentTrack = 0;
-  const audio = new Audio();
-  audio.volume = 0.5;
+  let curTrack = 0;
+  const audio = new Audio(); audio.volume = 0.5;
 
-  function loadTrack(index) {
-    if (index < 0) index = playlist.length - 1;
-    if (index >= playlist.length) index = 0;
-    currentTrack = index;
-    const track = playlist[index];
-    audio.src = track.src;
-    $('#nowPlaying').textContent = `${track.title} - ${track.artist}`;
+  function loadTrack(i) {
+    curTrack = (i + playlist.length) % playlist.length;
+    const t = playlist[curTrack];
+    audio.src = t.src;
+    $('#nowPlaying').textContent = `${t.title} - ${t.artist}`;
   }
   function togglePlay() {
     if (audio.paused) {
       audio.play();
-      document.getElementById('playIcon').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+      $('#playIcon').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
     } else {
       audio.pause();
-      document.getElementById('playIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
+      $('#playIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
     }
   }
   window.toggleMusic = () => {
-    const player = document.getElementById('musicPlayer');
-    player.classList.toggle('show');
-    if (player.classList.contains('show') && !audio.src) loadTrack(0);
+    const p = document.getElementById('musicPlayer');
+    p.classList.toggle('show');
+    if (p.classList.contains('show') && !audio.src) loadTrack(0);
   };
-  function renderPlaylist() {
-    const container = $('#playlist');
-    container.innerHTML = playlist.map((t, i) => `
-      <button class="music-btn" onclick="window.loadTrack(${i}); window.togglePlay();">
-        ${t.title} - ${t.artist}
-      </button>
-    `).join('');
-  }
   window.loadTrack = loadTrack;
   window.togglePlay = togglePlay;
-  document.getElementById('prevBtn').addEventListener('click', () => { loadTrack(currentTrack - 1); if (!audio.paused) audio.play(); });
+  document.getElementById('prevBtn').addEventListener('click', () => { loadTrack(curTrack - 1); if (!audio.paused) audio.play(); });
   document.getElementById('playBtn').addEventListener('click', togglePlay);
-  document.getElementById('nextBtn').addEventListener('click', () => { loadTrack(currentTrack + 1); if (!audio.paused) audio.play(); });
-  renderPlaylist();
+  document.getElementById('nextBtn').addEventListener('click', () => { loadTrack(curTrack + 1); if (!audio.paused) audio.play(); });
+  $('#playlist').innerHTML = playlist.map((t, i) => `<button class="music-btn" onclick="window.loadTrack(${i});window.togglePlay()">${t.title} - ${t.artist}</button>`).join('');
 
   // 设置
   window.setTheme = t => {
-    document.documentElement.setAttribute('data-theme',t);
-    document.querySelectorAll('.theme-btn[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));
-    localStorage.setItem('oskwk_theme',t);
+    document.documentElement.setAttribute('data-theme', t);
+    document.querySelectorAll('.theme-btn[data-theme]').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
+    localStorage.setItem('oskwk_theme', t);
   };
-  window.updateFontSize = v => { document.documentElement.style.setProperty('--font-size',v+'px'); localStorage.setItem('oskwk_fontsize',v); };
-  window.setAccent = el => { document.documentElement.style.setProperty('--accent',el.dataset.accent); localStorage.setItem('oskwk_accent',el.dataset.accent); };
+  window.updateFontSize = v => { document.documentElement.style.setProperty('--font-size', v + 'px'); localStorage.setItem('oskwk_fontsize', v); };
+  window.setAccent = el => { document.documentElement.style.setProperty('--accent', el.dataset.accent); localStorage.setItem('oskwk_accent', el.dataset.accent); };
   window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-  // 登录验证（邮箱格式）
+  // 登录/注册
   window.doLogin = async () => {
     const email = $('#loginEmail').value.trim(), pwd = $('#loginPass').value.trim();
     if (!email || !pwd) return T('请输入邮箱和密码');
@@ -348,15 +344,9 @@
     localStorage.setItem('oskwk_user', JSON.stringify(currentUser));
     enterApp();
   };
-
-  // 注册验证（邮箱、手机号）
   window.doRegister = async () => {
     if (!$('#regAgree').checked) return T('请先同意免责声明和隐私协议');
-    const email = $('#regEmail').value.trim();
-    const phone = $('#regPhone').value.trim();
-    const code = $('#regCode').value.trim();
-    const pwd = $('#regPass').value.trim();
-    const nick = $('#regNick').value.trim();
+    const email = $('#regEmail').value.trim(), phone = $('#regPhone').value.trim(), code = $('#regCode').value.trim(), pwd = $('#regPass').value.trim(), nick = $('#regNick').value.trim();
     if (!email || !phone || !pwd || !nick) return T('请填写完整');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return T('邮箱格式不正确');
     if (!/^1[3-9]\d{9}$/.test(phone)) return T('手机号格式不正确');
@@ -370,30 +360,21 @@
   };
 
   // 论坛
-  async function loadForumMessages() {
+  async function loadForum() {
     const { data } = await supabase.from('messages').select('*').eq('room', 'oskwk-forum').order('created_at', { ascending: true }).limit(100);
-    const container = $('#forumMessages');
-    container.innerHTML = (data || []).map(m => `
-      <div class="forum-msg">
-        <div class="avatar">${(m.nickname||'?')[0].toUpperCase()}</div>
-        <div class="msg-content">
-          <span class="name">${m.nickname}</span><span class="time">${new Date(m.created_at).toLocaleTimeString()}</span>
-          <div class="text">${m.message}</div>
-        </div>
-      </div>
-    `).join('');
+    const el = $('#forumMessages');
+    el.innerHTML = (data || []).map(m => `<div class="forum-msg"><div class="avatar">${(m.nickname || '?')[0].toUpperCase()}</div><div class="msg-content"><span class="name">${m.nickname}</span><span class="time">${new Date(m.created_at).toLocaleTimeString()}</span><div class="text">${m.message}</div></div></div>`).join('');
   }
   window.sendForumMsg = async () => {
-    const input = $('#forumMsgInput');
-    const text = input.value.trim();
-    if (!text || !currentUser) return;
-    await supabase.from('messages').insert([{ room: 'oskwk-forum', nickname: currentUser.nickname, message: text }]);
-    input.value = '';
-    loadForumMessages();
+    const t = $('#forumMsgInput').value.trim();
+    if (!t || !currentUser) return;
+    await supabase.from('messages').insert([{ room: 'oskwk-forum', nickname: currentUser.nickname, message: t }]);
+    $('#forumMsgInput').value = '';
+    loadForum();
   };
   function subscribeForum() {
     if (realtimeForum) supabase.removeChannel(realtimeForum);
-    realtimeForum = supabase.channel('forum').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: "room=eq.oskwk-forum" }, () => loadForumMessages()).subscribe();
+    realtimeForum = supabase.channel('forum').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: "room=eq.oskwk-forum" }, () => loadForum()).subscribe();
   }
 
   // 文章
@@ -408,21 +389,17 @@
     'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=800&q=80'
   ];
   function landscape() { return naturePhotos[Math.floor(Math.random() * naturePhotos.length)]; }
+
   async function loadArticles(cat) {
     const c = document.getElementById('article-' + cat);
     if (!c) return;
     const { data } = await supabase.from('articles').select('*').eq('category', cat).order('created_at', { ascending: false });
-    c.innerHTML = (data || []).map(a => `
-      <div class="card" onclick="expandArticle(${a.id})">
-        ${isAdmin ? `<button class="card-delete" onclick="event.stopPropagation();deleteArticle(${a.id},'${cat}')">×</button>` : ''}
-        <img src="${a.image_url || landscape()}" loading="lazy" onerror="this.src='${landscape()}'">
-        <div class="card-body"><h3>${a.title}</h3><p>${(a.content || '').slice(0, 100)}</p></div>
-      </div>
-    `).join('') || '<p style="color:var(--text3)">暂无内容</p>';
+    c.innerHTML = (data || []).map(a => `<div class="card" onclick="expandArticle(${a.id})">${isAdmin ? `<button class="card-delete" onclick="event.stopPropagation();deleteArticle(${a.id},'${cat}')">×</button>` : ''}<img src="${a.image_url || landscape()}" loading="lazy" onerror="this.src='${landscape()}'"><div class="card-body"><h3>${a.title}</h3><p>${(a.content || '').slice(0, 100)}</p></div></div>`).join('') || '<p style="color:var(--text3)">暂无内容</p>';
   }
+
   window.openPublish = (cat) => {
     if (!isAdmin) return T('无权操作');
-    let html = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="4"></textarea><input id="pubImage" placeholder="图片URL (可选)"><button class="main" onclick="publishArticle('${cat}')" style="background:var(--accent);border:none;color:#111;padding:12px 24px;border-radius:var(--radius-full);font-weight:600;cursor:pointer">发布</button>`;
+    let html = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="4"></textarea><input id="pubImage" placeholder="图片URL (可选)"><button class="main" onclick="publishArticle('${cat}')" style="background:var(--accent);border:none;color:#111;padding:12px 24px;border-radius:var(--radius-full);font-weight:600;cursor:pointer;width:100%;margin-top:12px;">发布</button>`;
     $('#genericContent').innerHTML = html;
     $('#genericModal').classList.add('show');
   };
@@ -464,7 +441,7 @@
 
   // 好友动态
   window.openPost = () => {
-    $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()" style="background:var(--accent);border:none;color:#111;padding:12px 24px;border-radius:var(--radius-full);font-weight:600;cursor:pointer">发布</button>`;
+    $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()" style="background:var(--accent);border:none;color:#111;padding:12px 24px;border-radius:var(--radius-full);font-weight:600;cursor:pointer;width:100%;margin-top:12px;">发布</button>`;
     $('#genericModal').classList.add('show');
   };
   window.submitPost = async () => {
@@ -476,8 +453,7 @@
       await new Promise(r => img.onload = r);
       let w = img.width, h = img.height;
       if (w > 800) { h *= 800 / w; w = 800; }
-      canvas.width = w; canvas.height = h;
-      ctx.drawImage(img, 0, 0, w, h);
+      canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h);
       const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.7));
       const name = `post_${Date.now()}.jpg`;
       await supabase.storage.from('chat-images').upload(name, blob);
@@ -513,12 +489,12 @@
     let html = `<div class="card" style="text-align:center;padding:24px">
       <div class="avatar" style="width:64px;height:64px;font-size:1.6rem;margin:0 auto 16px">${currentUser.nickname[0].toUpperCase()}</div>
       <h3>${currentUser.nickname}</h3><p>${currentUser.email}</p>
-      <button onclick="showRequests()">好友请求</button>
-      <button onclick="addFriend()">添加好友</button>
-      <button onclick="showEditProfile()">编辑资料</button>
-      <button onclick="searchUser()">搜索用户</button>`;
-    if (isAdmin) html += '<button onclick="showAdmin()">用户管理</button>';
-    html += '<button onclick="doLogout()">退出</button></div>';
+      <button onclick="showRequests()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg> 好友请求</button>
+      <button onclick="addFriend()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> 添加好友</button>
+      <button onclick="showEditProfile()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> 编辑资料</button>
+      <button onclick="searchUser()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg> 搜索用户</button>`;
+    if (isAdmin) html += `<button onclick="showAdmin()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> 用户管理</button>`;
+    html += `<button onclick="doLogout()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> 退出</button></div>`;
     $('#profileArea').innerHTML = html;
   }
   window.showEditProfile = () => {
@@ -552,10 +528,7 @@
     if (data && data.length) list.innerHTML = data.map(u => `<p><b>${u.nickname}</b> (${u.email}) <button onclick="addFriendByEmail('${u.email}')">加好友</button></p>`).join('');
     else list.innerHTML = '<p>未找到用户</p>';
   };
-  window.addFriendByEmail = (email) => {
-    if (email === currentUser.email) return T('不能添加自己');
-    supabase.from('friendships').insert([{ from_email: currentUser.email, to_email: email }]).then(() => T('请求已发送'));
-  };
+  window.addFriendByEmail = (email) => { if (email === currentUser.email) return T('不能添加自己'); supabase.from('friendships').insert([{ from_email: currentUser.email, to_email: email }]).then(() => T('请求已发送')); };
   window.showAdmin = async () => {
     if (!isAdmin) return T('无权操作');
     const { data } = await supabase.from('profiles').select('*');
@@ -586,11 +559,11 @@
   };
   function subscribeNotifs() {
     if (!currentUser) return;
-    if (window._notifSub) supabase.removeChannel(window._notifSub);
-    window._notifSub = supabase.channel('notif-' + currentUser.email).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_email=eq.${currentUser.email}` }, () => fetchNotifs()).subscribe();
+    if (notifSub) supabase.removeChannel(notifSub);
+    notifSub = supabase.channel('notif-' + currentUser.email).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_email=eq.${currentUser.email}` }, () => fetchNotifs()).subscribe();
   }
 
-  // 导航
+  // 导航切换
   window.switchTab = async tab => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const page = document.getElementById('tab-' + tab);
@@ -613,12 +586,13 @@
   window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
   window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
 
+  // 进入应用
   function enterApp() {
     document.getElementById('authWrap').style.display = 'none';
     document.getElementById('app').classList.add('on');
     document.getElementById('avatarTxt').textContent = currentUser.nickname[0].toUpperCase();
     document.getElementById('loginAvatar').textContent = currentUser.nickname[0].toUpperCase();
-    loadForumMessages();
+    loadForum();
     subscribeForum();
     subscribeNotifs();
     fetchNotifs();
@@ -628,8 +602,8 @@
   // 事件绑定
   document.getElementById('loginBtn').addEventListener('click', doLogin);
   document.getElementById('regBtn').addEventListener('click', doRegister);
-  document.getElementById('showRegLink').addEventListener('click', () => { document.getElementById('loginBox').style.display='none'; document.getElementById('regBox').style.display='block'; });
-  document.getElementById('showLoginLink').addEventListener('click', () => { document.getElementById('regBox').style.display='none'; document.getElementById('loginBox').style.display='block'; regCurrentStep=1; document.getElementById('regStep1').style.display='block'; document.getElementById('regStep2').style.display='none'; document.getElementById('regStep3').style.display='none'; document.querySelectorAll('#stepDots .step-dot').forEach((d,i)=>d.classList.toggle('active',i===0)); });
+  document.getElementById('showRegLink').addEventListener('click', () => { document.getElementById('loginBox').style.display = 'none'; document.getElementById('regBox').style.display = 'block'; });
+  document.getElementById('showLoginLink').addEventListener('click', () => { document.getElementById('regBox').style.display = 'none'; document.getElementById('loginBox').style.display = 'block'; regStep = 1; document.getElementById('regStep1').style.display = 'block'; document.getElementById('regStep2').style.display = 'none'; document.getElementById('regStep3').style.display = 'none'; document.querySelectorAll('#stepDots .step-dot').forEach((d, i) => d.classList.toggle('active', i === 0)); });
   document.getElementById('disclaimerLink').addEventListener('click', (e) => { e.preventDefault(); showDisclaimer(); });
   document.getElementById('privacyLink').addEventListener('click', (e) => { e.preventDefault(); showPrivacy(); });
 
@@ -638,9 +612,9 @@
     const saved = localStorage.getItem('oskwk_user');
     if (saved) {
       try { currentUser = JSON.parse(saved); isAdmin = (currentUser.email === ADMIN_EMAIL); enterApp(); }
-      catch(e) { localStorage.removeItem('oskwk_user'); document.getElementById('authWrap').style.display='flex'; }
+      catch (e) { localStorage.removeItem('oskwk_user'); document.getElementById('authWrap').style.display = 'flex'; }
     } else {
-      document.getElementById('authWrap').style.display='flex';
+      document.getElementById('authWrap').style.display = 'flex';
     }
     setTimeout(() => document.getElementById('loader').classList.add('done'), 500);
   })();
