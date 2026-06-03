@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>OSKWK · 探索无界</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -39,7 +37,7 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 登录 - 分步 + 开机认证风格 */
+    /* 登录页 */
     .auth-overlay{position:fixed;inset:0;z-index:1000;background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80') center/cover no-repeat;display:flex;align-items:center;justify-content:center;padding:20px}
     .auth-card{position:relative;z-index:10;background:rgba(20,20,20,0.75);backdrop-filter:blur(40px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:50px 40px;max-width:400px;width:100%;box-shadow:0 40px 80px rgba(0,0,0,0.6);text-align:center;animation:authIn 0.6s}
     @keyframes authIn{from{opacity:0;transform:translateY(30px)}}
@@ -128,36 +126,16 @@
     <h2>OSKWK</h2>
     <input type="email" id="loginEmail" placeholder="邮箱" autocomplete="email">
     <input type="password" id="loginPass" placeholder="密码">
-    <button class="auth-btn" id="loginBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg> 登录
-    </button>
+    <button class="auth-btn" id="loginBtn"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg> 登录</button>
     <p id="loginHint" style="color:var(--danger);font-size:0.85rem;margin-top:10px;"></p>
     <div class="auth-link">没有账户？ <a id="showRegLink">创建账户</a></div>
   </div>
   <div class="auth-card" id="regBox" style="display:none">
     <h2>加入 OSKWK</h2>
     <div class="step-indicator" id="stepDots"><span class="step-dot active"></span><span class="step-dot"></span><span class="step-dot"></span></div>
-    <div id="regStep1">
-      <input id="regEmail" placeholder="邮箱" type="email">
-      <input id="regPhone" placeholder="手机号" type="tel">
-      <button class="auth-btn" onclick="nextRegStep(2)">
-        下一步 <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-    <div id="regStep2" style="display:none">
-      <div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer;color:var(--text)">获取</button></div>
-      <button class="auth-btn" onclick="nextRegStep(3)">
-        下一步 <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-    <div id="regStep3" style="display:none">
-      <input id="regPass" type="password" placeholder="密码">
-      <input id="regNick" placeholder="昵称">
-      <div class="agree-row"><input type="checkbox" id="regAgree"><span>我已阅读并同意 <a id="disclaimerLink">《免责声明》</a> 和 <a id="privacyLink">《隐私协议》</a></span></div>
-      <button class="auth-btn" id="regBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg> 注册
-      </button>
-    </div>
+    <div id="regStep1"><input id="regEmail" placeholder="邮箱" type="email"><input id="regPhone" placeholder="手机号" type="tel"><button class="auth-btn" onclick="nextRegStep(2)">下一步 <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    <div id="regStep2" style="display:none"><div style="display:flex;gap:8px"><input id="regCode" placeholder="验证码" style="flex:1"><button onclick="sendCode()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 16px;cursor:pointer;color:var(--text)">获取</button></div><button class="auth-btn" onclick="nextRegStep(3)">下一步 <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    <div id="regStep3" style="display:none"><input id="regPass" type="password" placeholder="密码"><input id="regNick" placeholder="昵称"><div class="agree-row"><input type="checkbox" id="regAgree"><span>我已阅读并同意 <a id="disclaimerLink">《免责声明》</a> 和 <a id="privacyLink">《隐私协议》</a></span></div><button class="auth-btn" id="regBtn"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg> 注册</button></div>
     <div class="auth-link">已有账户？ <a id="showLoginLink">返回登录</a></div>
   </div>
 </div>
@@ -165,9 +143,7 @@
 <!-- 主应用 -->
 <div id="app">
   <nav class="nav">
-    <div class="nav-logo" onclick="switchTab('forum')">
-      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="4" ry="10" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h20" stroke="currentColor" stroke-width="1.5"/></svg>OSKWK
-    </div>
+    <div class="nav-logo" onclick="switchTab('forum')"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="4" ry="10" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h20" stroke="currentColor" stroke-width="1.5"/></svg>OSKWK</div>
     <div class="nav-icons">
       <button class="nav-icon active" data-tab="forum" onclick="switchTab('forum')" title="论坛"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
       <button class="nav-icon" data-tab="discover" onclick="switchTab('discover')" title="发现"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><circle cx="11" cy="11" r="2"/></svg></button>
@@ -189,39 +165,14 @@
     <div><label>主色</label><div style="display:flex;gap:8px;margin-top:8px"><span class="theme-btn" style="background:#c9a87c" data-accent="#c9a87c" onclick="setAccent(this)"></span><span class="theme-btn" style="background:#6c9ce0" data-accent="#6c9ce0" onclick="setAccent(this)"></span><span class="theme-btn" style="background:#a0c98a" data-accent="#a0c98a" onclick="setAccent(this)"></span></div></div>
   </div>
 
-  <section class="hero">
-    <img class="hero-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山">
-    <div class="hero-overlay"></div>
-    <div class="hero-caption"><h1>探索无界</h1></div>
-  </section>
+  <section class="hero"><img class="hero-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="高山"><div class="hero-overlay"></div><div class="hero-caption"><h1>探索无界</h1></div></section>
 
   <div class="main-wrap">
-    <div class="page active" id="tab-forum">
-      <div id="forumMessages"></div>
-      <div class="forum-input">
-        <input id="forumMsgInput" placeholder="说点什么..." onkeydown="if(event.key==='Enter')sendForumMsg()">
-        <button onclick="sendForumMsg()" title="发送"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
-      </div>
-    </div>
-    <div class="page" id="tab-discover">
-      <div class="sec-title">发现</div>
-      <div id="adminBarDiscover" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('discover')" title="发布文章"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
-      <div id="article-discover" class="grid"></div>
-    </div>
-    <div class="page" id="tab-study">
-      <div class="sec-title">学术</div>
-      <div id="adminBarStudy" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('study')" title="发布文章"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
-      <div id="article-study" class="grid"></div>
-    </div>
-    <div class="page" id="tab-friends">
-      <div class="sec-title">动态</div>
-      <button class="nav-icon" style="margin-bottom:20px;width:auto;padding:12px 20px" onclick="openPost()" title="发布动态"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
-      <div id="friendsFeed"></div>
-    </div>
-    <div class="page" id="tab-profile">
-      <div class="sec-title">个人</div>
-      <div id="profileArea" style="max-width:400px;margin:0 auto"></div>
-    </div>
+    <div class="page active" id="tab-forum"><div id="forumMessages"></div><div class="forum-input"><input id="forumMsgInput" placeholder="说点什么..." onkeydown="if(event.key==='Enter')sendForumMsg()"><button onclick="sendForumMsg()" title="发送"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div></div>
+    <div class="page" id="tab-discover"><div class="sec-title">发现</div><div id="adminBarDiscover" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('discover')" title="发布文章"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="article-discover" class="grid"></div></div>
+    <div class="page" id="tab-study"><div class="sec-title">学术</div><div id="adminBarStudy" style="display:none;margin-bottom:16px"><button class="nav-icon" style="width:auto;padding:8px 16px" onclick="openPublish('study')" title="发布文章"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="article-study" class="grid"></div></div>
+    <div class="page" id="tab-friends"><div class="sec-title">动态</div><button class="nav-icon" style="margin-bottom:20px;width:auto;padding:12px 20px" onclick="openPost()" title="发布动态"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button><div id="friendsFeed"></div></div>
+    <div class="page" id="tab-profile"><div class="sec-title">个人</div><div id="profileArea" style="max-width:400px;margin:0 auto"></div></div>
   </div>
 </div>
 
@@ -242,382 +193,172 @@
   <div class="modal-box" id="genericContent"></div>
 </div>
 
-<!-- 协议内容（隐藏） -->
-<div style="display:none" id="disclaimerText">
-  <h2>免责声明</h2>
-  <p>1. 本平台（OSKWK）是一个开放式的社交与内容分享空间，所有用户发布的内容仅代表发布者个人观点，与本平台立场无关。</p>
-  <p>2. 本平台尽力维护服务的稳定与安全，但不对因不可抗力、系统维护、网络中断、第三方攻击等原因造成的服务中断或数据丢失承担责任。</p>
-  <p>3. 用户应自行判断他人发布信息的真实性、准确性与合法性，因信赖他人信息而产生的任何风险由用户自行承担。</p>
-  <p>4. 本平台不保证任何通过平台建立的人际关系、商业合作或信息交换的可靠性，用户在线上或线下交往中应保持谨慎。</p>
-  <p>5. 本平台有权根据法律法规或自身运营需要，对用户内容进行审核、修改或删除，且无需事先通知。</p>
-  <p>6. 如用户违反本声明或相关协议，本平台有权暂停或终止其账户使用权，并保留追究法律责任的权利。</p>
-  <p>7. 本免责声明的最终解释权归 OSKWK 平台所有。</p>
-</div>
-<div style="display:none" id="privacyText">
-  <h2>隐私协议</h2>
-  <p>1. 我们重视您的隐私。本协议详细说明我们如何收集、使用和保护您的个人信息。</p>
-  <p>2. 当您注册账户时，我们将收集您的邮箱、昵称、手机号等必要信息，以便为您提供个性化服务。您的密码采用不可逆加密存储，确保即使数据库泄露也无法被破解。</p>
-  <p>3. 您在平台发布的动态、评论、聊天内容等公开信息将被其他用户可见，请谨慎发布涉及个人隐私的信息。</p>
-  <p>4. 我们可能使用您的设备信息用于安全防护和数据分析，但不会用于识别您的个人身份。</p>
-  <p>5. 未经您的明确同意，我们不会将您的个人信息出售、出租或分享给任何第三方，法律法规要求的情况除外。</p>
-  <p>6. 您有权访问、更正、删除您的个人数据，可以通过个人设置页面或联系管理员行使这些权利。</p>
-  <p>7. 我们采用行业标准的安全措施保护您的数据，但请理解互联网上的绝对安全是不存在的。</p>
-  <p>8. 本隐私协议可能不定期更新，更新版本将在平台内公布，继续使用即视为同意修改后的条款。</p>
-  <p>9. 如果您对隐私政策有任何疑问，可联系平台管理员。</p>
-</div>
+<!-- 协议内容 -->
+<div style="display:none" id="disclaimerText"><h2>免责声明</h2><p>1. 本平台（OSKWK）是一个开放式的社交与内容分享空间，所有用户发布的内容仅代表发布者个人观点，与本平台立场无关。</p><p>2. 本平台尽力维护服务的稳定与安全，但不对因不可抗力、系统维护、网络中断、第三方攻击等原因造成的服务中断或数据丢失承担责任。</p><p>3. 用户应自行判断他人发布信息的真实性、准确性与合法性，因信赖他人信息而产生的任何风险由用户自行承担。</p><p>4. 本平台不保证任何通过平台建立的人际关系、商业合作或信息交换的可靠性，用户在线上或线下交往中应保持谨慎。</p><p>5. 本平台有权根据法律法规或自身运营需要，对用户内容进行审核、修改或删除，且无需事先通知。</p><p>6. 如用户违反本声明或相关协议，本平台有权暂停或终止其账户使用权，并保留追究法律责任的权利。</p><p>7. 本免责声明的最终解释权归 OSKWK 平台所有。</p></div>
+<div style="display:none" id="privacyText"><h2>隐私协议</h2><p>1. 我们重视您的隐私。本协议详细说明我们如何收集、使用和保护您的个人信息。</p><p>2. 当您注册账户时，我们将收集您的邮箱、昵称、手机号等必要信息。您的密码采用不可逆加密存储。</p><p>3. 您在平台发布的动态、评论、聊天内容等公开信息将被其他用户可见，请谨慎发布涉及个人隐私的信息。</p><p>4. 我们可能使用您的设备信息用于安全防护和数据分析，但不会用于识别您的个人身份。</p><p>5. 未经您的明确同意，我们不会将您的个人信息出售、出租或分享给任何第三方。</p><p>6. 您有权访问、更正、删除您的个人数据，可以通过个人设置页面或联系管理员行使这些权利。</p><p>7. 我们采用行业标准的安全措施保护您的数据，但请理解互联网上的绝对安全是不存在的。</p><p>8. 本隐私协议可能不定期更新，更新版本将在平台内公布，继续使用即视为同意修改后的条款。</p><p>9. 如果您对隐私政策有任何疑问，可联系平台管理员。</p></div>
 
-<script type="module">import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-  const SUPABASE_URL = 'https://qnblruruefgbixbfgwkh.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
-  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-  const ADMIN_EMAIL = '279933264@qq.com';
-  let currentUser = null, isAdmin = false, realtimeForum = null, notifSub = null;
-  const $ = s => document.querySelector(s);
-  const T = m => alert(m);
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+const SUPABASE_URL = 'https://qnblruruefgbixbfgwkh.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuYmxydXJ1ZWZnYml4YmZnd2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTI2OTgsImV4cCI6MjA5NDMyODY5OH0.4fpWDHU1_bEQC7U8JWK4-bCtjexDT9Ve1zc-hY0Wgyw';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const ADMIN_EMAIL = '279933264@qq.com';
+let currentUser = null, isAdmin = false, realtimeForum = null, notifSub = null;
+const $ = s => document.querySelector(s);
+const T = m => alert(m);
 
-  // 注册步骤控制
-  let regStep = 1;
-  window.nextRegStep = (s) => {
-    document.getElementById('regStep' + regStep).style.display = 'none';
-    document.getElementById('regStep' + s).style.display = 'block';
-    regStep = s;
-    document.querySelectorAll('#stepDots .step-dot').forEach((d, i) => d.classList.toggle('active', i < s));
-  };
-  window.sendCode = () => T('验证码：123456');
+// 注册步骤
+let regStep = 1;
+window.nextRegStep = (s) => {
+  document.getElementById('regStep' + regStep).style.display = 'none';
+  document.getElementById('regStep' + s).style.display = 'block';
+  regStep = s;
+  document.querySelectorAll('#stepDots .step-dot').forEach((d, i) => d.classList.toggle('active', i < s));
+};
+window.sendCode = () => T('验证码：123456');
 
-  // 音乐播放器
-  const playlist = [
-    { title: "Billie Jean", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-    { title: "Beat It", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-    { title: "Closer", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
-    { title: "Hurt", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
-    { title: "Metro Boomin", artist: "Metro", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }
-  ];
-  let curTrack = 0;
-  const audio = new Audio(); audio.volume = 0.5;
+// 音乐播放器
+const playlist = [
+  { title: "Billie Jean", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+  { title: "Beat It", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+  { title: "Closer", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+  { title: "Hurt", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+  { title: "Metro Boomin", artist: "Metro", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }
+];
+let curTrack = 0;
+const audio = new Audio(); audio.volume = 0.5;
+function loadTrack(i) { curTrack = (i + playlist.length) % playlist.length; const t = playlist[curTrack]; audio.src = t.src; $('#nowPlaying').textContent = `${t.title} - ${t.artist}`; }
+function togglePlay() { if (audio.paused) { audio.play(); $('#playIcon').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'; } else { audio.pause(); $('#playIcon').innerHTML = '<path d="M8 5v14l11-7z"/>'; } }
+window.toggleMusic = () => { const p = document.getElementById('musicPlayer'); p.classList.toggle('show'); if (p.classList.contains('show') && !audio.src) loadTrack(0); };
+window.loadTrack = loadTrack; window.togglePlay = togglePlay;
+document.getElementById('prevBtn').addEventListener('click', () => { loadTrack(curTrack - 1); if (!audio.paused) audio.play(); });
+document.getElementById('playBtn').addEventListener('click', togglePlay);
+document.getElementById('nextBtn').addEventListener('click', () => { loadTrack(curTrack + 1); if (!audio.paused) audio.play(); });
+$('#playlist').innerHTML = playlist.map((t, i) => `<button class="music-btn" onclick="window.loadTrack(${i});window.togglePlay()">${t.title} - ${t.artist}</button>`).join('');
 
-  function loadTrack(i) {
-    curTrack = (i + playlist.length) % playlist.length;
-    const t = playlist[curTrack];
-    audio.src = t.src;
-    $('#nowPlaying').textContent = `${t.title} - ${t.artist}`;
-  }
-  function togglePlay() {
-    if (audio.paused) {
-      audio.play();
-      $('#playIcon').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-    } else {
-      audio.pause();
-      $('#playIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
-    }
-  }
-  window.toggleMusic = () => {
-    const p = document.getElementById('musicPlayer');
-    p.classList.toggle('show');
-    if (p.classList.contains('show') && !audio.src) loadTrack(0);
-  };
-  window.loadTrack = loadTrack;
-  window.togglePlay = togglePlay;
-  document.getElementById('prevBtn').addEventListener('click', () => { loadTrack(curTrack - 1); if (!audio.paused) audio.play(); });
-  document.getElementById('playBtn').addEventListener('click', togglePlay);
-  document.getElementById('nextBtn').addEventListener('click', () => { loadTrack(curTrack + 1); if (!audio.paused) audio.play(); });
-  $('#playlist').innerHTML = playlist.map((t, i) => `<button class="music-btn" onclick="window.loadTrack(${i});window.togglePlay()">${t.title} - ${t.artist}</button>`).join('');
+// 设置
+window.setTheme = t => { document.documentElement.setAttribute('data-theme', t); document.querySelectorAll('.theme-btn[data-theme]').forEach(b => b.classList.toggle('active', b.dataset.theme === t)); localStorage.setItem('oskwk_theme', t); };
+window.updateFontSize = v => { document.documentElement.style.setProperty('--font-size', v + 'px'); localStorage.setItem('oskwk_fontsize', v); };
+window.setAccent = el => { document.documentElement.style.setProperty('--accent', el.dataset.accent); localStorage.setItem('oskwk_accent', el.dataset.accent); };
+window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-  // 设置
-  window.setTheme = t => {
-    document.documentElement.setAttribute('data-theme', t);
-    document.querySelectorAll('.theme-btn[data-theme]').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
-    localStorage.setItem('oskwk_theme', t);
-  };
-  window.updateFontSize = v => { document.documentElement.style.setProperty('--font-size', v + 'px'); localStorage.setItem('oskwk_fontsize', v); };
-  window.setAccent = el => { document.documentElement.style.setProperty('--accent', el.dataset.accent); localStorage.setItem('oskwk_accent', el.dataset.accent); };
-  window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
+// 认证 (无明文)
+window.doLogin = async () => {
+  const email = $('#loginEmail').value.trim(), pwd = $('#loginPass').value.trim();
+  if (!email || !pwd) return T('请输入邮箱和密码');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return T('邮箱格式不正确');
+  const { data, error } = await supabase.rpc('verify_login', { user_email: email, user_password: pwd });
+  if (error || !data || data.length === 0) return T('邮箱或密码错误');
+  currentUser = data[0]; isAdmin = (currentUser.email === ADMIN_EMAIL);
+  localStorage.setItem('oskwk_user', JSON.stringify(currentUser));
+  enterApp();
+};
+window.doRegister = async () => {
+  if (!$('#regAgree').checked) return T('请先同意协议');
+  const email = $('#regEmail').value.trim(), phone = $('#regPhone').value.trim(), code = $('#regCode').value.trim(), pwd = $('#regPass').value.trim(), nick = $('#regNick').value.trim();
+  if (!email || !phone || !pwd || !nick) return T('请填写完整');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return T('邮箱格式不正确');
+  if (!/^1[3-9]\d{9}$/.test(phone)) return T('手机号格式不正确');
+  if (code !== '123456') return T('验证码错误');
+  if (pwd.length < 6) return T('密码至少6位');
+  const { data, error } = await supabase.rpc('register_user', { user_email: email, user_nickname: nick, user_phone: phone, user_password: pwd });
+  if (error) return T('注册失败：' + error.message);
+  currentUser = data[0]; isAdmin = false;
+  localStorage.setItem('oskwk_user', JSON.stringify(currentUser));
+  enterApp();
+};
 
-  // 登录/注册
-  window.doLogin = async () => {
-    const email = $('#loginEmail').value.trim(), pwd = $('#loginPass').value.trim();
-    if (!email || !pwd) return T('请输入邮箱和密码');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return T('邮箱格式不正确');
-    const { data, error } = await supabase.rpc('verify_login', { user_email: email, user_password: pwd });
-    if (error || !data || data.length === 0) return T('邮箱或密码错误');
-    currentUser = data[0]; isAdmin = (currentUser.email === ADMIN_EMAIL);
-    localStorage.setItem('oskwk_user', JSON.stringify(currentUser));
-    enterApp();
-  };
-  window.doRegister = async () => {
-    if (!$('#regAgree').checked) return T('请先同意免责声明和隐私协议');
-    const email = $('#regEmail').value.trim(), phone = $('#regPhone').value.trim(), code = $('#regCode').value.trim(), pwd = $('#regPass').value.trim(), nick = $('#regNick').value.trim();
-    if (!email || !phone || !pwd || !nick) return T('请填写完整');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return T('邮箱格式不正确');
-    if (!/^1[3-9]\d{9}$/.test(phone)) return T('手机号格式不正确');
-    if (code !== '123456') return T('验证码错误');
-    if (pwd.length < 6) return T('密码至少6位');
-    const { data, error } = await supabase.rpc('register_user', { user_email: email, user_nickname: nick, user_phone: phone, user_password: pwd });
-    if (error) return T('注册失败：' + error.message);
-    currentUser = data[0]; isAdmin = false;
-    localStorage.setItem('oskwk_user', JSON.stringify(currentUser));
-    enterApp();
-  };
+// 论坛
+async function loadForum() {
+  const { data } = await supabase.from('messages').select('*').eq('room', 'oskwk-forum').order('created_at', { ascending: true }).limit(100);
+  const el = $('#forumMessages');
+  el.innerHTML = (data || []).map(m => `<div class="forum-msg"><div class="avatar">${(m.nickname || '?')[0].toUpperCase()}</div><div class="msg-content"><span class="name">${m.nickname}</span><span class="time">${new Date(m.created_at).toLocaleTimeString()}</span><div class="text">${m.message}</div></div></div>`).join('');
+}
+window.sendForumMsg = async () => { const t = $('#forumMsgInput').value.trim(); if (!t || !currentUser) return; await supabase.from('messages').insert([{ room: 'oskwk-forum', nickname: currentUser.nickname, message: t }]); $('#forumMsgInput').value = ''; loadForum(); };
+function subscribeForum() { if (realtimeForum) supabase.removeChannel(realtimeForum); realtimeForum = supabase.channel('forum').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: "room=eq.oskwk-forum" }, () => loadForum()).subscribe(); }
 
-  // 论坛
-  async function loadForum() {
-    const { data } = await supabase.from('messages').select('*').eq('room', 'oskwk-forum').order('created_at', { ascending: true }).limit(100);
-    const el = $('#forumMessages');
-    el.innerHTML = (data || []).map(m => `<div class="forum-msg"><div class="avatar">${(m.nickname || '?')[0].toUpperCase()}</div><div class="msg-content"><span class="name">${m.nickname}</span><span class="time">${new Date(m.created_at).toLocaleTimeString()}</span><div class="text">${m.message}</div></div></div>`).join('');
-  }
-  window.sendForumMsg = async () => {
-    const t = $('#forumMsgInput').value.trim();
-    if (!t || !currentUser) return;
-    await supabase.from('messages').insert([{ room: 'oskwk-forum', nickname: currentUser.nickname, message: t }]);
-    $('#forumMsgInput').value = '';
-    loadForum();
-  };
-  function subscribeForum() {
-    if (realtimeForum) supabase.removeChannel(realtimeForum);
-    realtimeForum = supabase.channel('forum').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: "room=eq.oskwk-forum" }, () => loadForum()).subscribe();
-  }
+// 文章
+const naturePhotos = ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80','https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80','https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80','https://images.unsplash.com/photo-1434394354979-a235cd36269d?w=800&q=80','https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80','https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80','https://images.unsplash.com/photo-1520962880247-6e5a3c3c3e0a?w=800&q=80','https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=800&q=80'];
+function landscape() { return naturePhotos[Math.floor(Math.random() * naturePhotos.length)]; }
+async function loadArticles(cat) { const c = document.getElementById('article-' + cat); if (!c) return; const { data } = await supabase.from('articles').select('*').eq('category', cat).order('created_at', { ascending: false }); c.innerHTML = (data || []).map(a => `<div class="card" onclick="expandArticle(${a.id})">${isAdmin ? `<button class="card-delete" onclick="event.stopPropagation();deleteArticle(${a.id},'${cat}')">×</button>` : ''}<img src="${a.image_url || landscape()}" loading="lazy" onerror="this.src='${landscape()}'"><div class="card-body"><h3>${a.title}</h3><p>${(a.content || '').slice(0, 100)}</p></div></div>`).join('') || '<p style="color:var(--text3)">暂无内容</p>'; }
+window.openPublish = (cat) => { if (!isAdmin) return T('无权操作'); let html = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="4"></textarea><input id="pubImage" placeholder="图片URL (可选)"><button class="main" onclick="publishArticle('${cat}')" style="background:var(--accent);border:none;color:#111;padding:12px 24px;border-radius:var(--radius-full);font-weight:600;cursor:pointer;width:100%;margin-top:12px;">发布</button>`; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+window.publishArticle = async (cat) => { const title = $('#pubTitle')?.value.trim(), content = $('#pubContent')?.value.trim(), image_url = $('#pubImage')?.value.trim() || null; if (!title || !content) return T('标题和内容不能为空'); const { error } = await supabase.from('articles').insert([{ title, content, category: cat, author: currentUser.nickname, image_url }]); if (error) return T('发布失败'); T('发布成功'); $('#genericModal').classList.remove('show'); loadArticles(cat); };
+window.deleteArticle = async (id, cat) => { if (!confirm('确认删除？')) return; const { error } = await supabase.from('articles').delete().eq('id', id); if (error) return T('删除失败'); T('已删除'); loadArticles(cat); };
+window.expandArticle = async id => { try { const { data: a, error } = await supabase.from('articles').select('*').eq('id', id).single(); if (error || !a) return T('文章加载失败'); let html = `<h2>${a.title}</h2><img src="${a.image_url || landscape()}" style="width:100%;border-radius:8px;margin:12px 0"><p>${a.content}</p><hr><h4>评论</h4>`; const { data: coms } = await supabase.from('comments').select('*').eq('article_id', id).order('created_at'); html += (coms || []).map(c => `<p><b>${c.nickname}:</b> ${c.content}</p>`).join(''); html += `<input id="commentInput" placeholder="写下评论..."><button onclick="postComment(${id})">发送</button>`; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); } catch (e) { T('无法打开文章'); } };
+window.postComment = async id => { const inp = $('#commentInput'); if (!inp?.value.trim() || !currentUser) return; await supabase.from('comments').insert([{ article_id: id, nickname: currentUser.nickname, content: inp.value.trim() }]); T('评论成功'); window.expandArticle(id); };
 
-  // 文章
-  const naturePhotos = [
-    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
-    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
-    'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80',
-    'https://images.unsplash.com/photo-1434394354979-a235cd36269d?w=800&q=80',
-    'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80',
-    'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80',
-    'https://images.unsplash.com/photo-1520962880247-6e5a3c3c3e0a?w=800&q=80',
-    'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=800&q=80'
-  ];
-  function landscape() { return naturePhotos[Math.floor(Math.random() * naturePhotos.length)]; }
+// 好友动态
+window.openPost = () => { $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()" style="background:var(--accent);border:none;color:#111;padding:12px 24px;border-radius:var(--radius-full);font-weight:600;cursor:pointer;width:100%;margin-top:12px;">发布</button>`; $('#genericModal').classList.add('show'); };
+window.submitPost = async () => { const txt = $('#postText')?.value.trim(), file = $('#postFile')?.files[0]; let url = null; if (file) { const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image(); img.src = URL.createObjectURL(file); await new Promise(r => img.onload = r); let w = img.width, h = img.height; if (w > 800) { h *= 800 / w; w = 800; } canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h); const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.7)); const name = `post_${Date.now()}.jpg`; await supabase.storage.from('chat-images').upload(name, blob); url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`; } await supabase.from('posts').insert([{ email: currentUser.email, nickname: currentUser.nickname, content: txt || '', image_url: url }]); T('已发布'); $('#genericModal').classList.remove('show'); loadFeed(); };
+async function loadFeed() { if (!currentUser) return; const { data: friends } = await supabase.from('friendships').select('*').or(`from_email.eq.${currentUser.email},to_email.eq.${currentUser.email}`).eq('status', 'accepted'); const emails = [currentUser.email, ...(friends || []).map(f => f.from_email === currentUser.email ? f.to_email : f.from_email)]; const { data: posts } = await supabase.from('posts').select('*').in('email', emails).order('created_at', { ascending: false }).limit(30); const feed = document.getElementById('friendsFeed'); if (feed) feed.innerHTML = (posts || []).map(p => `<div class="card"><div class="card-body"><b>${p.nickname}</b> ${p.content || ''}</div>${p.image_url ? `<img src="${p.image_url}" style="width:100%">` : ''}</div>`).join('') || '<p style="color:var(--text3)">暂无动态</p>'; }
+window.showRequests = async () => { const { data } = await supabase.from('friendships').select('*').eq('to_email', currentUser.email).eq('status', 'pending'); let html = '<h3>好友请求</h3>'; if (data?.length) data.forEach(r => html += `<p>${r.from_email} <button onclick="handleReq(${r.id},'accepted')">接受</button> <button onclick="handleReq(${r.id},'rejected')">拒绝</button></p>`); else html += '<p>暂无</p>'; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+window.handleReq = async (id, status) => { await supabase.from('friendships').update({ status }).eq('id', id); T('已处理'); window.showRequests(); };
+window.addFriend = () => { const email = prompt('对方邮箱'); if (email) supabase.from('friendships').insert([{ from_email: currentUser.email, to_email: email }]).then(() => T('已发送')); };
 
-  async function loadArticles(cat) {
-    const c = document.getElementById('article-' + cat);
-    if (!c) return;
-    const { data } = await supabase.from('articles').select('*').eq('category', cat).order('created_at', { ascending: false });
-    c.innerHTML = (data || []).map(a => `<div class="card" onclick="expandArticle(${a.id})">${isAdmin ? `<button class="card-delete" onclick="event.stopPropagation();deleteArticle(${a.id},'${cat}')">×</button>` : ''}<img src="${a.image_url || landscape()}" loading="lazy" onerror="this.src='${landscape()}'"><div class="card-body"><h3>${a.title}</h3><p>${(a.content || '').slice(0, 100)}</p></div></div>`).join('') || '<p style="color:var(--text3)">暂无内容</p>';
-  }
+// 个人中心
+function renderProfile() {
+  if (!currentUser) return;
+  let html = `<div class="card" style="text-align:center;padding:24px"><div class="avatar" style="width:64px;height:64px;font-size:1.6rem;margin:0 auto 16px">${currentUser.nickname[0].toUpperCase()}</div><h3>${currentUser.nickname}</h3><p>${currentUser.email}</p>
+    <button onclick="showRequests()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg> 好友请求</button>
+    <button onclick="addFriend()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> 添加好友</button>
+    <button onclick="showEditProfile()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> 编辑资料</button>
+    <button onclick="searchUser()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg> 搜索用户</button>`;
+  if (isAdmin) html += `<button onclick="showAdmin()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> 用户管理</button>`;
+  html += `<button onclick="doLogout()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> 退出</button></div>`;
+  $('#profileArea').innerHTML = html;
+}
+window.showEditProfile = () => { let html = `<h3>编辑资料</h3><input id="editNick" placeholder="新昵称" value="${currentUser.nickname || ''}"><input id="editPass" type="password" placeholder="新密码（留空不变）"><input id="editAvatar" placeholder="头像URL（可选）"><button class="main" onclick="saveProfile()">保存</button>`; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+window.saveProfile = async () => { const nick = $('#editNick')?.value.trim(), pass = $('#editPass')?.value.trim(), avatar = $('#editAvatar')?.value.trim(); if (!nick) return T('昵称不能为空'); const { data, error } = await supabase.rpc('update_profile', { user_email: currentUser.email, new_nickname: nick || null, new_password: pass || null, new_avatar_url: avatar || null }); if (error) return T('更新失败'); currentUser = data[0]; localStorage.setItem('oskwk_user', JSON.stringify(currentUser)); T('资料已更新'); $('#genericModal').classList.remove('show'); renderProfile(); document.getElementById('avatarTxt').textContent = currentUser.nickname[0].toUpperCase(); };
+window.searchUser = () => { let html = `<h3>搜索用户</h3><input id="searchKeyword" placeholder="邮箱或昵称"><button class="main" onclick="doSearch()">搜索</button><div id="searchResult"></div>`; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+window.doSearch = async () => { const kw = $('#searchKeyword')?.value.trim(); if (!kw) return T('请输入关键词'); const { data, error } = await supabase.from('profiles').select('email, nickname, avatar_url').or(`email.ilike.%${kw}%,nickname.ilike.%${kw}%`).limit(10); if (error) return T('搜索失败'); const list = $('#searchResult'); if (data && data.length) list.innerHTML = data.map(u => `<p><b>${u.nickname}</b> (${u.email}) <button onclick="addFriendByEmail('${u.email}')">加好友</button></p>`).join(''); else list.innerHTML = '<p>未找到用户</p>'; };
+window.addFriendByEmail = (email) => { if (email === currentUser.email) return T('不能添加自己'); supabase.from('friendships').insert([{ from_email: currentUser.email, to_email: email }]).then(() => T('请求已发送')); };
+window.showAdmin = async () => { if (!isAdmin) return T('无权操作'); const { data } = await supabase.from('profiles').select('*'); let html = '<h3>用户管理</h3>'; data.forEach(u => html += `<p>${u.nickname} (${u.email}) ${u.is_banned ? '[BANNED]' : ''} <button onclick="toggleBan('${u.email}',${!u.is_banned})">${u.is_banned ? '解禁' : '拉黑'}</button></p>`); $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+window.toggleBan = async (email, ban) => { if (!isAdmin) return; await supabase.from('profiles').update({ is_banned: ban }).eq('email', email); T('已更新'); window.showAdmin(); };
 
-  window.openPublish = (cat) => {
-    if (!isAdmin) return T('无权操作');
-    let html = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="4"></textarea><input id="pubImage" placeholder="图片URL (可选)"><button class="main" onclick="publishArticle('${cat}')" style="background:var(--accent);border:none;color:#111;padding:12px 24px;border-radius:var(--radius-full);font-weight:600;cursor:pointer;width:100%;margin-top:12px;">发布</button>`;
-    $('#genericContent').innerHTML = html;
-    $('#genericModal').classList.add('show');
-  };
-  window.publishArticle = async (cat) => {
-    const title = $('#pubTitle')?.value.trim(), content = $('#pubContent')?.value.trim(), image_url = $('#pubImage')?.value.trim() || null;
-    if (!title || !content) return T('标题和内容不能为空');
-    const { error } = await supabase.from('articles').insert([{ title, content, category: cat, author: currentUser.nickname, image_url }]);
-    if (error) return T('发布失败');
-    T('发布成功');
-    $('#genericModal').classList.remove('show');
-    loadArticles(cat);
-  };
-  window.deleteArticle = async (id, cat) => {
-    if (!confirm('确认删除？')) return;
-    const { error } = await supabase.from('articles').delete().eq('id', id);
-    if (error) return T('删除失败');
-    T('已删除');
-    loadArticles(cat);
-  };
-  window.expandArticle = async id => {
-    try {
-      const { data: a, error } = await supabase.from('articles').select('*').eq('id', id).single();
-      if (error || !a) return T('文章加载失败');
-      let html = `<h2>${a.title}</h2><img src="${a.image_url || landscape()}" style="width:100%;border-radius:8px;margin:12px 0"><p>${a.content}</p><hr><h4>评论</h4>`;
-      const { data: coms } = await supabase.from('comments').select('*').eq('article_id', id).order('created_at');
-      html += (coms || []).map(c => `<p><b>${c.nickname}:</b> ${c.content}</p>`).join('');
-      html += `<input id="commentInput" placeholder="写下评论..."><button onclick="postComment(${id})">发送</button>`;
-      $('#genericContent').innerHTML = html;
-      $('#genericModal').classList.add('show');
-    } catch (e) { T('无法打开文章'); }
-  };
-  window.postComment = async id => {
-    const inp = $('#commentInput');
-    if (!inp?.value.trim() || !currentUser) return;
-    await supabase.from('comments').insert([{ article_id: id, nickname: currentUser.nickname, content: inp.value.trim() }]);
-    T('评论成功');
-    window.expandArticle(id);
-  };
+// 通知
+async function fetchNotifs() { if (!currentUser) return; const { data } = await supabase.from('notifications').select('*').eq('user_email', currentUser.email).order('created_at', { ascending: false }).limit(20); const unread = data?.filter(n => !n.read).length || 0; const dot = document.getElementById('notifDot'); if (dot) dot.style.display = unread ? 'block' : 'none'; return data; }
+window.showNotifs = async () => { const data = await fetchNotifs(); let html = '<h3>通知</h3>'; if (data?.length) data.forEach(n => html += `<p>${n.content} <small>${new Date(n.created_at).toLocaleString()}</small></p>`); else html += '<p>暂无</p>'; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); await supabase.from('notifications').update({ read: true }).eq('user_email', currentUser.email).eq('read', false); };
+function subscribeNotifs() { if (!currentUser) return; if (notifSub) supabase.removeChannel(notifSub); notifSub = supabase.channel('notif-' + currentUser.email).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_email=eq.${currentUser.email}` }, () => fetchNotifs()).subscribe(); }
 
-  // 好友动态
-  window.openPost = () => {
-    $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()" style="background:var(--accent);border:none;color:#111;padding:12px 24px;border-radius:var(--radius-full);font-weight:600;cursor:pointer;width:100%;margin-top:12px;">发布</button>`;
-    $('#genericModal').classList.add('show');
-  };
-  window.submitPost = async () => {
-    const txt = $('#postText')?.value.trim(), file = $('#postFile')?.files[0];
-    let url = null;
-    if (file) {
-      const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image();
-      img.src = URL.createObjectURL(file);
-      await new Promise(r => img.onload = r);
-      let w = img.width, h = img.height;
-      if (w > 800) { h *= 800 / w; w = 800; }
-      canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h);
-      const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.7));
-      const name = `post_${Date.now()}.jpg`;
-      await supabase.storage.from('chat-images').upload(name, blob);
-      url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
-    }
-    await supabase.from('posts').insert([{ email: currentUser.email, nickname: currentUser.nickname, content: txt || '', image_url: url }]);
-    T('已发布');
-    $('#genericModal').classList.remove('show');
-    loadFeed();
-  };
-  async function loadFeed() {
-    if (!currentUser) return;
-    const { data: friends } = await supabase.from('friendships').select('*').or(`from_email.eq.${currentUser.email},to_email.eq.${currentUser.email}`).eq('status', 'accepted');
-    const emails = [currentUser.email, ...(friends || []).map(f => f.from_email === currentUser.email ? f.to_email : f.from_email)];
-    const { data: posts } = await supabase.from('posts').select('*').in('email', emails).order('created_at', { ascending: false }).limit(30);
-    const feed = document.getElementById('friendsFeed');
-    if (feed) feed.innerHTML = (posts || []).map(p => `<div class="card"><div class="card-body"><b>${p.nickname}</b> ${p.content || ''}</div>${p.image_url ? `<img src="${p.image_url}" style="width:100%">` : ''}</div>`).join('') || '<p style="color:var(--text3)">暂无动态</p>';
-  }
-  window.showRequests = async () => {
-    const { data } = await supabase.from('friendships').select('*').eq('to_email', currentUser.email).eq('status', 'pending');
-    let html = '<h3>好友请求</h3>';
-    if (data?.length) data.forEach(r => html += `<p>${r.from_email} <button onclick="handleReq(${r.id},'accepted')">接受</button> <button onclick="handleReq(${r.id},'rejected')">拒绝</button></p>`);
-    else html += '<p>暂无</p>';
-    $('#genericContent').innerHTML = html;
-    $('#genericModal').classList.add('show');
-  };
-  window.handleReq = async (id, status) => { await supabase.from('friendships').update({ status }).eq('id', id); T('已处理'); window.showRequests(); };
-  window.addFriend = () => { const email = prompt('对方邮箱'); if (email) supabase.from('friendships').insert([{ from_email: currentUser.email, to_email: email }]).then(() => T('已发送')); };
+// 导航
+window.switchTab = async tab => {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('tab-' + tab);
+  if (page) page.classList.add('active');
+  document.querySelectorAll('.nav-icon[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  if (tab === 'discover' || tab === 'study') { if (tab === 'discover') loadArticles('discover'); if (tab === 'study') loadArticles('study'); updateAdminBar(tab); }
+  if (tab === 'friends') loadFeed();
+  if (tab === 'profile') renderProfile();
+};
+function updateAdminBar(cat) { const bar = document.getElementById('adminBar' + cat.charAt(0).toUpperCase() + cat.slice(1)); if (bar) bar.style.display = isAdmin ? 'flex' : 'none'; }
 
-  // 个人中心
-  function renderProfile() {
-    if (!currentUser) return;
-    let html = `<div class="card" style="text-align:center;padding:24px">
-      <div class="avatar" style="width:64px;height:64px;font-size:1.6rem;margin:0 auto 16px">${currentUser.nickname[0].toUpperCase()}</div>
-      <h3>${currentUser.nickname}</h3><p>${currentUser.email}</p>
-      <button onclick="showRequests()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg> 好友请求</button>
-      <button onclick="addFriend()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> 添加好友</button>
-      <button onclick="showEditProfile()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> 编辑资料</button>
-      <button onclick="searchUser()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg> 搜索用户</button>`;
-    if (isAdmin) html += `<button onclick="showAdmin()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> 用户管理</button>`;
-    html += `<button onclick="doLogout()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> 退出</button></div>`;
-    $('#profileArea').innerHTML = html;
-  }
-  window.showEditProfile = () => {
-    let html = `<h3>编辑资料</h3><input id="editNick" placeholder="新昵称" value="${currentUser.nickname || ''}"><input id="editPass" type="password" placeholder="新密码（留空不变）"><input id="editAvatar" placeholder="头像URL（可选）"><button class="main" onclick="saveProfile()">保存</button>`;
-    $('#genericContent').innerHTML = html;
-    $('#genericModal').classList.add('show');
-  };
-  window.saveProfile = async () => {
-    const nick = $('#editNick')?.value.trim(), pass = $('#editPass')?.value.trim(), avatar = $('#editAvatar')?.value.trim();
-    if (!nick) return T('昵称不能为空');
-    const { data, error } = await supabase.rpc('update_profile', { user_email: currentUser.email, new_nickname: nick || null, new_password: pass || null, new_avatar_url: avatar || null });
-    if (error) return T('更新失败');
-    currentUser = data[0];
-    localStorage.setItem('oskwk_user', JSON.stringify(currentUser));
-    T('资料已更新');
-    $('#genericModal').classList.remove('show');
-    renderProfile();
-    document.getElementById('avatarTxt').textContent = currentUser.nickname[0].toUpperCase();
-  };
-  window.searchUser = () => {
-    let html = `<h3>搜索用户</h3><input id="searchKeyword" placeholder="邮箱或昵称"><button class="main" onclick="doSearch()">搜索</button><div id="searchResult"></div>`;
-    $('#genericContent').innerHTML = html;
-    $('#genericModal').classList.add('show');
-  };
-  window.doSearch = async () => {
-    const kw = $('#searchKeyword')?.value.trim();
-    if (!kw) return T('请输入关键词');
-    const { data, error } = await supabase.from('profiles').select('email, nickname, avatar_url').or(`email.ilike.%${kw}%,nickname.ilike.%${kw}%`).limit(10);
-    if (error) return T('搜索失败');
-    const list = $('#searchResult');
-    if (data && data.length) list.innerHTML = data.map(u => `<p><b>${u.nickname}</b> (${u.email}) <button onclick="addFriendByEmail('${u.email}')">加好友</button></p>`).join('');
-    else list.innerHTML = '<p>未找到用户</p>';
-  };
-  window.addFriendByEmail = (email) => { if (email === currentUser.email) return T('不能添加自己'); supabase.from('friendships').insert([{ from_email: currentUser.email, to_email: email }]).then(() => T('请求已发送')); };
-  window.showAdmin = async () => {
-    if (!isAdmin) return T('无权操作');
-    const { data } = await supabase.from('profiles').select('*');
-    let html = '<h3>用户管理</h3>';
-    data.forEach(u => html += `<p>${u.nickname} (${u.email}) ${u.is_banned ? '[BANNED]' : ''} <button onclick="toggleBan('${u.email}',${!u.is_banned})">${u.is_banned ? '解禁' : '拉黑'}</button></p>`);
-    $('#genericContent').innerHTML = html;
-    $('#genericModal').classList.add('show');
-  };
-  window.toggleBan = async (email, ban) => { if (!isAdmin) return; await supabase.from('profiles').update({ is_banned: ban }).eq('email', email); T('已更新'); window.showAdmin(); };
+// 协议
+window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
+window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
 
-  // 通知
-  async function fetchNotifs() {
-    if (!currentUser) return;
-    const { data } = await supabase.from('notifications').select('*').eq('user_email', currentUser.email).order('created_at', { ascending: false }).limit(20);
-    const unread = data?.filter(n => !n.read).length || 0;
-    const dot = document.getElementById('notifDot');
-    if (dot) dot.style.display = unread ? 'block' : 'none';
-    return data;
-  }
-  window.showNotifs = async () => {
-    const data = await fetchNotifs();
-    let html = '<h3>通知</h3>';
-    if (data?.length) data.forEach(n => html += `<p>${n.content} <small>${new Date(n.created_at).toLocaleString()}</small></p>`);
-    else html += '<p>暂无</p>';
-    $('#genericContent').innerHTML = html;
-    $('#genericModal').classList.add('show');
-    await supabase.from('notifications').update({ read: true }).eq('user_email', currentUser.email).eq('read', false);
-  };
-  function subscribeNotifs() {
-    if (!currentUser) return;
-    if (notifSub) supabase.removeChannel(notifSub);
-    notifSub = supabase.channel('notif-' + currentUser.email).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_email=eq.${currentUser.email}` }, () => fetchNotifs()).subscribe();
-  }
+function enterApp() {
+  document.getElementById('authWrap').style.display = 'none';
+  document.getElementById('app').classList.add('on');
+  document.getElementById('avatarTxt').textContent = currentUser.nickname[0].toUpperCase();
+  document.getElementById('loginAvatar').textContent = currentUser.nickname[0].toUpperCase();
+  loadForum(); subscribeForum(); subscribeNotifs(); fetchNotifs();
+}
+window.doLogout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
 
-  // 导航切换
-  window.switchTab = async tab => {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const page = document.getElementById('tab-' + tab);
-    if (page) page.classList.add('active');
-    document.querySelectorAll('.nav-icon[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-    if (tab === 'discover' || tab === 'study') {
-      if (tab === 'discover') loadArticles('discover');
-      if (tab === 'study') loadArticles('study');
-      updateAdminBar(tab);
-    }
-    if (tab === 'friends') loadFeed();
-    if (tab === 'profile') renderProfile();
-  };
-  function updateAdminBar(cat) {
-    const bar = document.getElementById('adminBar' + cat.charAt(0).toUpperCase() + cat.slice(1));
-    if (bar) bar.style.display = isAdmin ? 'flex' : 'none';
-  }
+// 事件绑定
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('regBtn').addEventListener('click', doRegister);
+document.getElementById('showRegLink').addEventListener('click', () => { document.getElementById('loginBox').style.display = 'none'; document.getElementById('regBox').style.display = 'block'; });
+document.getElementById('showLoginLink').addEventListener('click', () => { document.getElementById('regBox').style.display = 'none'; document.getElementById('loginBox').style.display = 'block'; regStep = 1; document.getElementById('regStep1').style.display = 'block'; document.getElementById('regStep2').style.display = 'none'; document.getElementById('regStep3').style.display = 'none'; document.querySelectorAll('#stepDots .step-dot').forEach((d, i) => d.classList.toggle('active', i === 0)); });
+document.getElementById('disclaimerLink').addEventListener('click', (e) => { e.preventDefault(); showDisclaimer(); });
+document.getElementById('privacyLink').addEventListener('click', (e) => { e.preventDefault(); showPrivacy(); });
 
-  // 协议
-  window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
-  window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
-
-  // 进入应用
-  function enterApp() {
-    document.getElementById('authWrap').style.display = 'none';
-    document.getElementById('app').classList.add('on');
-    document.getElementById('avatarTxt').textContent = currentUser.nickname[0].toUpperCase();
-    document.getElementById('loginAvatar').textContent = currentUser.nickname[0].toUpperCase();
-    loadForum();
-    subscribeForum();
-    subscribeNotifs();
-    fetchNotifs();
-  }
-  window.doLogout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
-
-  // 事件绑定
-  document.getElementById('loginBtn').addEventListener('click', doLogin);
-  document.getElementById('regBtn').addEventListener('click', doRegister);
-  document.getElementById('showRegLink').addEventListener('click', () => { document.getElementById('loginBox').style.display = 'none'; document.getElementById('regBox').style.display = 'block'; });
-  document.getElementById('showLoginLink').addEventListener('click', () => { document.getElementById('regBox').style.display = 'none'; document.getElementById('loginBox').style.display = 'block'; regStep = 1; document.getElementById('regStep1').style.display = 'block'; document.getElementById('regStep2').style.display = 'none'; document.getElementById('regStep3').style.display = 'none'; document.querySelectorAll('#stepDots .step-dot').forEach((d, i) => d.classList.toggle('active', i === 0)); });
-  document.getElementById('disclaimerLink').addEventListener('click', (e) => { e.preventDefault(); showDisclaimer(); });
-  document.getElementById('privacyLink').addEventListener('click', (e) => { e.preventDefault(); showPrivacy(); });
-
-  // 自动登录
-  (() => {
-    const saved = localStorage.getItem('oskwk_user');
-    if (saved) {
-      try { currentUser = JSON.parse(saved); isAdmin = (currentUser.email === ADMIN_EMAIL); enterApp(); }
-      catch (e) { localStorage.removeItem('oskwk_user'); document.getElementById('authWrap').style.display = 'flex'; }
-    } else {
-      document.getElementById('authWrap').style.display = 'flex';
-    }
-    setTimeout(() => document.getElementById('loader').classList.add('done'), 500);
-  })();
+(() => {
+  const saved = localStorage.getItem('oskwk_user');
+  if (saved) { try { currentUser = JSON.parse(saved); isAdmin = (currentUser.email === ADMIN_EMAIL); enterApp(); } catch (e) { localStorage.removeItem('oskwk_user'); document.getElementById('authWrap').style.display = 'flex'; } }
+  else { document.getElementById('authWrap').style.display = 'flex'; }
+  setTimeout(() => document.getElementById('loader').classList.add('done'), 500);
+})();
 </script>
 </body>
 </html>
