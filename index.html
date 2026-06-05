@@ -59,101 +59,110 @@
       position:fixed;inset:0;z-index:1000;
       background: linear-gradient(135deg, #0e0e0e 0%, #1a1a2e 50%, #16213e 100%);
       display:flex;align-items:center;justify-content:center;padding:20px;
-      transition: background 1s;
     }
-    .auth-overlay::before {
-      content:'';
-      position:absolute;inset:0;
+    .auth-overlay::before{
+      content:'';position:absolute;inset:0;
       background: radial-gradient(circle at 30% 40%, rgba(201,168,124,0.08) 0%, transparent 70%);
     }
     .auth-card{
       position:relative;z-index:10;
       background: rgba(18,18,18,0.85);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:28px;
-      padding:48px 44px;
-      max-width:420px;width:100%;
+      backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+      border:1px solid rgba(255,255,255,0.08); border-radius:28px;
+      padding:48px 44px; max-width:420px; width:100%;
       box-shadow:0 50px 100px rgba(0,0,0,0.7), 0 0 80px rgba(201,168,124,0.1);
-      text-align:center;
-      animation:authIn 0.6s;
+      text-align:center; animation:authIn 0.6s;
     }
     @keyframes authIn{from{opacity:0;transform:translateY(30px)}}
     .auth-card h2{
-      font-family:'Playfair Display',serif;
-      font-size:2.4rem;
-      margin-bottom:36px;
-      color:#fff;
-      letter-spacing:2px;
+      font-family:'Playfair Display',serif; font-size:2.4rem;
+      margin-bottom:36px; color:#fff; letter-spacing:2px;
       background: linear-gradient(135deg, #c9a87c, #e0cba0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
     .auth-card input{
-      background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.1);
-      border-radius:14px;
-      padding:16px 20px;
-      color:#fff;
-      font-size:0.95rem;
-      width:100%;
-      margin-bottom:14px;
-      outline:none;
-      transition:border .2s, background .2s;
+      background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+      border-radius:14px; padding:16px 20px; color:#fff; font-size:0.95rem;
+      width:100%; margin-bottom:14px; outline:none; transition:border .2s, background .2s;
     }
-    .auth-card input:focus{
-      border-color:var(--accent);
-      background:rgba(255,255,255,0.1);
-    }
+    .auth-card input:focus{ border-color:var(--accent); background:rgba(255,255,255,0.1); }
     .auth-btn{
-      width:100%;
-      padding:16px;
-      border-radius:14px;
+      width:100%; padding:16px; border-radius:14px;
       background: linear-gradient(135deg, #c9a87c, #b28b5e);
-      color:#111;
-      font-weight:600;
-      font-size:1rem;
-      border:none;
-      cursor:pointer;
-      margin-top:12px;
-      transition:transform .2s, box-shadow .2s;
-      letter-spacing:1px;
+      color:#111; font-weight:600; font-size:1rem; border:none; cursor:pointer;
+      margin-top:12px; transition:transform .2s, box-shadow .2s; letter-spacing:1px;
     }
-    .auth-btn:hover{transform:scale(1.02);box-shadow:0 10px 25px rgba(201,168,124,0.3)}
+    .auth-btn:hover{transform:scale(1.02);box-shadow:0 10px 25px rgba(201,168,124,0.3);}
     .auth-link{margin-top:24px;color:rgba(255,255,255,0.5);font-size:0.9rem}
     .auth-link a{color:var(--accent);cursor:pointer;text-decoration:underline}
     .agree-row{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text2);margin:10px 0}
 
-    .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px;transition: background 0.3s, box-shadow 0.3s}
-    .nav-logo{cursor:pointer;display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--accent)}
+    /* 导航栏 */
+    .nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;height:64px;
+      background:var(--glass-bg); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+      border-bottom:1px solid var(--glass-border); display:flex; align-items:center;
+      padding:0 24px; transition: background 0.3s, box-shadow 0.3s;
+    }
+    .nav-logo{
+      cursor:pointer;display:flex;align-items:center;gap:8px;
+      font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--accent);
+    }
     .nav-logo svg{width:28px;height:28px;stroke:var(--accent)}
     .nav-icons{display:flex;gap:4px;margin:0 auto}
-    .nav-icon{background:none;border:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;color:var(--text2);transition:.2s;position:relative}
+    .nav-icon{
+      background:none;border:none;width:42px;height:42px;display:flex;align-items:center;
+      justify-content:center;border-radius:10px;cursor:pointer;color:var(--text2);
+      transition:.2s;position:relative;
+    }
     .nav-icon svg{width:20px;height:20px;stroke:currentColor}
     .nav-icon:hover{color:var(--text);background:rgba(255,255,255,.05)}
     .nav-icon.active{color:var(--accent);background:rgba(255,255,255,.03)}
     .nav-right{display:flex;align-items:center;gap:8px;margin-left:auto}
     .badge{position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--danger);border-radius:50%;display:none}
-    .avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#050505;font-weight:600;cursor:pointer;font-size:.8rem;border:1.5px solid var(--border-light);background-size:cover;background-position:center;}
+    .avatar{
+      width:34px;height:34px;border-radius:50%;background:var(--accent);
+      display:flex;align-items:center;justify-content:center;color:#050505;
+      font-weight:600;cursor:pointer;font-size:.8rem;border:1.5px solid var(--border-light);
+      background-size:cover;background-position:center;
+    }
 
-    .mob-nav{position:fixed;bottom:0;left:0;right:0;background:var(--glass-bg);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border-top:1px solid var(--glass-border);display:none;justify-content:space-around;padding:8px 0;z-index:100}
-    .mob-nav .nav-icon{flex-direction:column;gap:2px;width:auto;height:auto;padding:6px 10px;font-size:.55rem;color:var(--text3)}
+    .mob-nav{
+      position:fixed;bottom:0;left:0;right:0;background:var(--glass-bg);
+      backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+      border-top:1px solid var(--glass-border); display:none; justify-content:space-around;
+      padding:8px 0; z-index:100;
+    }
+    .mob-nav .nav-icon{
+      flex-direction:column;gap:2px;width:auto;height:auto;padding:6px 10px;
+      font-size:.55rem;color:var(--text3);
+    }
     .mob-nav .nav-icon svg{width:22px;height:22px}
     .mob-nav .nav-icon.active{color:var(--accent)}
 
-    .hero{height:100vh;min-height:650px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;margin-top:-64px;position:relative}
+    /* 英雄区 */
+    .hero{
+      height:100vh;min-height:650px;display:flex;align-items:flex-end;
+      justify-content:center;overflow:hidden;margin-top:-64px;position:relative;
+    }
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.45);will-change:transform;}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 8%,transparent 55%);z-index:2}
     .hero-caption{position:relative;z-index:3;text-align:center;padding-bottom:100px;will-change:opacity,transform;}
-    .hero-caption h1{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,10vw,7rem);font-weight:900;color:#fff;text-shadow:0 4px 60px rgba(0,0,0,.7);letter-spacing:4px;transition: text-shadow 0.1s}
+    .hero-caption h1{
+      font-family:'Playfair Display',serif; font-size:clamp(3.5rem,10vw,7rem);
+      font-weight:900; color:#fff; text-shadow:0 4px 60px rgba(0,0,0,.7);
+      letter-spacing:4px; transition: text-shadow 0.1s;
+    }
     .hero-caption p{color:rgba(255,255,255,.55);font-size:1.2rem;font-weight:300;margin-top:12px}
 
     .main-wrap{max-width:1200px;margin:0 auto;padding:40px 24px 120px}
     .page{display:none;animation:fadeIn .35s}
     .page.active{display:block}
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}}
-    .sec-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:28px;display:flex;align-items:center;gap:12px}
+    .sec-title{
+      font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:28px;
+      display:flex;align-items:center;gap:12px;
+    }
     .sec-title::after{content:'';flex:1;height:1px;background:var(--border-light)}
 
     .grid{columns:3 280px;column-gap:20px}
@@ -178,7 +187,7 @@
     .chat-bar input{flex:1;padding:12px 16px;border-radius:var(--radius-full);background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.88rem;outline:none}
     .chat-bar button{background:var(--accent);border:none;border-radius:var(--radius-full);padding:0 16px;cursor:pointer;color:#111;font-weight:600}
 
-    /* 论坛帖子 */
+    /* 论坛 */
     .forum-post{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:20px;margin-bottom:16px}
     .forum-post-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
     .forum-post-avatar{width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;color:#111;background-size:cover}
@@ -187,8 +196,6 @@
     .forum-post-time{font-size:.75rem;color:var(--text3)}
     .forum-post-content{margin-bottom:12px}
     .forum-post-image{max-width:100%;border-radius:12px;margin-top:8px}
-
-    /* 论坛评论 */
     .forum-comments{margin-top:16px;border-top:1px solid var(--border);padding-top:12px}
     .forum-comment-item{display:flex;gap:10px;margin-bottom:10px}
     .forum-comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.7rem;color:#111;flex-shrink:0}
@@ -202,41 +209,70 @@
     .forum-comment-input:focus{border-color:var(--accent)}
     .forum-comment-btn{background:var(--accent);border:none;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#111}
 
-    .settings{position:fixed;top:80px;right:24px;width:280px;background:var(--glass-bg);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;z-index:200;display:none;flex-direction:column;gap:20px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+    .settings{
+      position:fixed;top:80px;right:24px;width:280px;background:var(--glass-bg);
+      backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+      border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;
+      z-index:200;display:none;flex-direction:column;gap:20px;box-shadow:0 20px 50px rgba(0,0,0,.5);
+    }
     .settings.show{display:flex}
-    .theme-btn{padding:6px 16px;border-radius:var(--radius-full);background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;font-size:.8rem}
+    .theme-btn{
+      padding:6px 16px;border-radius:var(--radius-full);background:var(--surface2);
+      border:1px solid var(--border);color:var(--text);cursor:pointer;font-size:.8rem;
+    }
     .theme-btn.active{background:var(--accent);border-color:var(--accent);color:#111}
 
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+    .modal{
+      position:fixed;inset:0;background:rgba(0,0,0,.7);
+      backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+      z-index:300;display:none;align-items:center;justify-content:center;padding:20px;
+    }
     .modal.show{display:flex}
-    .modal-box{background:var(--surface2);border-radius:var(--radius);border:1px solid var(--border);padding:32px;max-width:500px;width:100%;animation:modalIn .3s;max-height:90vh;overflow-y:auto}
+    .modal-box{
+      background:var(--surface2);border-radius:var(--radius);border:1px solid var(--border);
+      padding:32px;max-width:500px;width:100%;animation:modalIn .3s;max-height:90vh;overflow-y:auto;
+    }
     @keyframes modalIn{from{opacity:0;transform:scale(.95)}}
-    input,textarea{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:.9rem;margin-bottom:14px;outline:none}
+    input,textarea{
+      width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--radius-sm);color:var(--text);font-size:.9rem;margin-bottom:14px;outline:none;
+    }
     input:focus,textarea:focus{border-color:var(--accent)}
-    button.main{background:var(--accent);border:none;color:#111;font-weight:600;padding:14px 28px;border-radius:var(--radius-full);cursor:pointer;width:100%;font-size:.9rem;letter-spacing:2px}
+    button.main{
+      background:var(--accent);border:none;color:#111;font-weight:600;padding:14px 28px;
+      border-radius:var(--radius-full);cursor:pointer;width:100%;font-size:.9rem;letter-spacing:2px;
+    }
 
     /* 音乐播放器 */
-    .music-player{position:fixed;bottom:24px;right:24px;z-index:200;width:320px;background:var(--glass-bg);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:18px;display:none;flex-direction:column;gap:12px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+    .music-player{
+      position:fixed;bottom:24px;right:24px;z-index:200;width:320px;
+      background:var(--glass-bg);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+      border:1px solid var(--glass-border);border-radius:var(--radius);padding:18px;
+      display:none;flex-direction:column;gap:12px;box-shadow:0 20px 50px rgba(0,0,0,.5);
+    }
     .music-player.show{display:flex}
-    .music-player-toggle{position:fixed;bottom:24px;right:24px;z-index:201;width:46px;height:46px;border-radius:50%;background:var(--accent);border:none;color:#111;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 25px rgba(0,0,0,.4);font-size:1.4rem}
+    .music-player-toggle{
+      position:fixed;bottom:24px;right:24px;z-index:201;width:46px;height:46px;
+      border-radius:50%;background:var(--accent);border:none;color:#111;
+      display:flex;align-items:center;justify-content:center;cursor:pointer;
+      box-shadow:0 8px 25px rgba(0,0,0,.4);
+    }
     .music-info{display:flex;justify-content:space-between;align-items:center}
     .music-title{font-weight:600;font-size:.9rem}
     .music-artist{color:var(--text2);font-size:.8rem}
     .music-controls{display:flex;gap:6px;justify-content:center}
-    .music-controls button{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 14px;color:var(--text);cursor:pointer;font-size:.85rem;transition: all 0.2s}
+    .music-controls button{
+      background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+      padding:6px 14px;color:var(--text);cursor:pointer;font-size:.85rem;transition:all 0.15s;
+      display:flex; align-items:center; justify-content:center;
+    }
     .music-controls button:hover{background:var(--accent);color:#111}
+    .music-controls button:active{transform:scale(0.96)}
     .music-track{width:100%}
 
-    /* SVG 图标交互 */
-    .svg-icon {
-      transition: transform 0.2s, opacity 0.2s;
-    }
-    button:hover .svg-icon {
-      transform: scale(1.1);
-    }
-    button:active .svg-icon {
-      transform: scale(0.95);
-    }
+    .svg-icon{transition: transform 0.2s, opacity 0.2s;}
+    button:hover .svg-icon{transform: scale(1.1);}
+    button:active .svg-icon{transform: scale(0.95);}
 
     @media(max-width:768px){
       .nav-icons{display:none}
@@ -252,7 +288,7 @@
 <body>
 <div id="loader"><div class="loader-ring"></div></div>
 
-<!-- 登录/注册 -->
+<!-- 登录/注册遮罩 -->
 <div id="authWrap" class="auth-overlay">
   <div class="auth-card" id="loginBox">
     <h2>OSKWK</h2>
@@ -416,7 +452,6 @@
     </div>
   </div>
 
-  <!-- 移动端底部导航 -->
   <div class="mob-nav">
     <button class="nav-icon active" data-tab="about" onclick="switchTab('about')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
@@ -497,7 +532,7 @@
   <div class="modal-box" id="genericContent"></div>
 </div>
 
-<!-- 协议内容（隐藏） -->
+<!-- 协议内容 -->
 <div style="display:none" id="disclaimerText">
   <h2>免责声明</h2>
   <p>1. 本平台（OSKWK）是一个开放式的社交与内容分享空间，所有用户发布的内容仅代表发布者个人观点，与本平台立场无关。</p>
@@ -530,18 +565,18 @@ let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
 
-// ==================== 高级 SVG 图标 ====================
+// ==================== SVG 图标库 ====================
 const SVG_ICONS = {
-  play: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-icon"><polygon points="5,3 19,12 5,21"/></svg>`,
-  pause: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-icon"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`,
-  prev: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-icon"><polyline points="11,17 4,12 11,7"/><line x1="18" y1="5" x2="18" y2="19"/></svg>`,
-  next: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-icon"><polyline points="13,17 20,12 13,7"/><line x1="6" y1="5" x2="6" y2="19"/></svg>`,
-  musicNote: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-icon"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
-  close: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-icon"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
-  arrowRight: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-icon"><path d="M9 18l6-6-6-6"/></svg>`,
-  lock: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`,
-  volume: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-icon"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>`,
-  volumeMute: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-icon"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`
+  play: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,3 19,12 5,21"/></svg>`,
+  pause: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`,
+  prev: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11,17 4,12 11,7"/><line x1="18" y1="5" x2="18" y2="19"/></svg>`,
+  next: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13,17 20,12 13,7"/><line x1="6" y1="5" x2="6" y2="19"/></svg>`,
+  musicNote: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+  close: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  arrowRight: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>`,
+  lock: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`,
+  volume: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>`,
+  volumeMute: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`
 };
 
 // ==================== 视差滚动联动 ====================
@@ -572,60 +607,25 @@ function setupParallax() {
   });
 }
 
-// ==================== 永不卡顿的音乐播放器（Web Audio API） ====================
-let audioCtx = null;
-let musicGain = null;
-let musicInterval = null;
-let currentBPM = 120;
-let isPlaying = false;
-let currentTrackIndex = 0;
-
+// ==================== 音乐播放器（真实 MP3，流畅无卡顿） ====================
 const playlist = [
-  { title: "Billie Jean", artist: "Michael Jackson", bpm: 117, pattern: [1,0,1,0,1,0,0,0] },
-  { title: "Thriller", artist: "Michael Jackson", bpm: 118, pattern: [1,1,0,1,0,1,0,0] },
-  { title: "Beat It", artist: "Michael Jackson", bpm: 139, pattern: [1,1,1,0,1,0,1,0] },
-  { title: "Closer", artist: "Nine Inch Nails", bpm: 90, pattern: [1,0,0,1,0,1,0,1] },
-  { title: "Hurt", artist: "Nine Inch Nails", bpm: 100, pattern: [1,1,0,0,1,0,0,0] },
-  { title: "The Hand That Feeds", artist: "Nine Inch Nails", bpm: 128, pattern: [1,0,1,1,0,1,0,0] },
-  { title: "Space Cadet", artist: "Metro Boomin", bpm: 140, pattern: [1,1,1,1,0,1,0,1] },
-  { title: "Ric Flair Drip", artist: "Metro Boomin", bpm: 100, pattern: [1,0,0,1,1,0,1,0] }
+  { title: "Billie Jean", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+  { title: "Thriller", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+  { title: "Beat It", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+  { title: "Closer", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+  { title: "Hurt", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+  { title: "The Hand That Feeds", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+  { title: "Space Cadet", artist: "Metro Boomin", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+  { title: "Ric Flair Drip", artist: "Metro Boomin", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+  { title: "Wait Wait Wait", artist: "蔡徐坤", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+  { title: "Bohemian Rhapsody", artist: "Queen", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" },
+  { title: "We Will Rock You", artist: "Queen", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3" }
 ];
 
-function createAudioContext() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    musicGain = audioCtx.createGain();
-    musicGain.gain.value = 0.5;
-    musicGain.connect(audioCtx.destination);
-  }
-}
-
-function playPattern(bpm, pattern) {
-  stopPattern();
-  const beatDuration = 60 / bpm;
-  let step = 0;
-  musicInterval = setInterval(() => {
-    if (pattern[step % pattern.length] === 1) {
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-      osc.type = 'square';
-      osc.frequency.value = 440;
-      gainNode.gain.value = 0.3;
-      osc.connect(gainNode);
-      gainNode.connect(musicGain);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.1);
-    }
-    step++;
-  }, beatDuration * 1000);
-}
-
-function stopPattern() {
-  if (musicInterval) {
-    clearInterval(musicInterval);
-    musicInterval = null;
-  }
-}
+let currentTrackIndex = 0;
+let isPlaying = false;
+const audio = document.getElementById('musicAudio');
+audio.volume = 0.5;
 
 function loadTrack(index) {
   if (index < 0) index = playlist.length - 1;
@@ -634,34 +634,20 @@ function loadTrack(index) {
   const track = playlist[index];
   document.getElementById('musicTitle').textContent = track.title;
   document.getElementById('musicArtist').textContent = track.artist;
-  if (isPlaying) {
-    createAudioContext();
-    playPattern(track.bpm, track.pattern);
-  }
+  audio.src = track.src;
+  if (isPlaying) audio.play().catch(() => {});
   updatePlayPauseIcon();
 }
 
 function togglePlay() {
-  createAudioContext();
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume().then(() => {
-      if (!isPlaying) startPlayback();
-    });
-    return;
-  }
   if (isPlaying) {
-    stopPattern();
+    audio.pause();
     isPlaying = false;
   } else {
-    startPlayback();
+    audio.play().then(() => { isPlaying = true; }).catch(() => { T('播放失败，点击页面后重试'); });
+    isPlaying = true;
   }
   updatePlayPauseIcon();
-}
-
-function startPlayback() {
-  const track = playlist[currentTrackIndex];
-  playPattern(track.bpm, track.pattern);
-  isPlaying = true;
 }
 
 function updatePlayPauseIcon() {
@@ -672,24 +658,24 @@ function updatePlayPauseIcon() {
 function nextTrack() { loadTrack(currentTrackIndex + 1); }
 function prevTrack() { loadTrack(currentTrackIndex - 1); }
 
-// 由于使用合成音，时间进度模拟
-setInterval(() => {
+audio.addEventListener('ended', nextTrack);
+audio.addEventListener('play', () => { isPlaying = true; updatePlayPauseIcon(); });
+audio.addEventListener('pause', () => { isPlaying = false; updatePlayPauseIcon(); });
+
+audio.addEventListener('timeupdate', () => {
   const progress = document.getElementById('musicProgress');
   const timeDisplay = document.getElementById('musicTime');
-  if (isPlaying && progress && timeDisplay) {
-    // 模拟进度（每曲60秒循环）
-    const elapsed = (Date.now() % 60000) / 1000;
-    progress.max = 60;
-    progress.value = elapsed;
-    timeDisplay.textContent = `${formatTime(elapsed)} / 1:00`;
+  if (progress && timeDisplay && audio.duration) {
+    progress.max = audio.duration;
+    progress.value = audio.currentTime;
+    timeDisplay.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
   }
-}, 500);
+});
 
-function formatTime(seconds) {
-  if (isNaN(seconds)) return '0:00';
-  const min = Math.floor(seconds / 60);
-  const sec = Math.floor(seconds % 60);
-  return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+function formatTime(s) {
+  if (isNaN(s)) return '0:00';
+  const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+  return `${m}:${sec < 10 ? '0' : ''}${sec}`;
 }
 
 window.toggleMusicPlayer = function() {
@@ -719,10 +705,12 @@ window.selectTrack = function(index) {
 };
 
 window.changeVolume = function(value) {
-  if (musicGain) musicGain.gain.value = value;
+  audio.volume = value;
   const volIcon = document.getElementById('volumeIcon');
-  if (volIcon) volIcon.innerHTML = value == 0 ? SVG_ICONS.volumeMute : SVG_ICONS.volume;
+  if (volIcon) volIcon.innerHTML = (value == 0) ? SVG_ICONS.volumeMute : SVG_ICONS.volume;
 };
+
+window.seekMusic = function(value) { audio.currentTime = value; };
 
 function initMusicControlsUI() {
   const toggle = document.getElementById('musicToggle');
@@ -748,7 +736,7 @@ function initMusicControlsUI() {
     `;
     musicPlayer.appendChild(volDiv);
     document.getElementById('volumeIcon').addEventListener('click', () => {
-      if (musicGain && musicGain.gain.value > 0) {
+      if (audio.volume > 0) {
         changeVolume(0);
         document.getElementById('volumeSlider').value = 0;
       } else {
@@ -779,6 +767,7 @@ window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
 window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
 
+// 自然图片
 const naturePhotos = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
@@ -907,7 +896,6 @@ async function loadArticles(cat) {
     </div>
   `).join('') || '<p style="color:var(--text3)">暂无内容</p>';
 }
-
 window.openPublish = (cat) => {
   if (!isAdmin) return T('无权操作');
   let html = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="4"></textarea><input id="pubImage" placeholder="图片URL (可选)"><button class="main" onclick="publishArticle('${cat}')">发布</button>`;
@@ -1175,7 +1163,7 @@ window.leaveRoom = () => {
   document.getElementById('roomList').style.display = 'flex';
 };
 
-// ==================== 动态（好友动态） ====================
+// ==================== 动态/好友 ====================
 window.openPost = () => {
   $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`;
   $('#genericModal').classList.add('show');
@@ -1328,13 +1316,7 @@ function subNotifs() {
     .subscribe();
 }
 
-// ==================== 退出 ====================
 window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
-
-// 音乐进度模拟（合成音无原生进度，手动更新）
-window.seekMusic = function(value) {
-  // 合成音无法跳转，可忽略
-};
 
 // ==================== 初始化 ====================
 (() => {
@@ -1357,7 +1339,6 @@ window.seekMusic = function(value) {
   if (accent) document.documentElement.style.setProperty('--accent', accent);
 })();
 
-// 定期更换 Hero 背景
 setInterval(() => {
   const img = document.getElementById('heroBg');
   if (img) img.src = `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&rand=${Date.now()}`;
