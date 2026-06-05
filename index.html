@@ -54,7 +54,7 @@
     #app{display:none;opacity:0;transition:opacity .5s}
     #app.on{display:block;opacity:1}
 
-    /* 登录页 —— 参考 Instagram/DJI 风格 */
+    /* 登录页 */
     .auth-overlay{
       position:fixed;inset:0;z-index:1000;
       background: linear-gradient(135deg, #0e0e0e 0%, #1a1a2e 50%, #16213e 100%);
@@ -143,9 +143,9 @@
     .mob-nav .nav-icon.active{color:var(--accent)}
 
     .hero{height:100vh;min-height:650px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;margin-top:-64px;position:relative}
-    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.45)}
+    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.45);will-change:transform;transition: transform 0.1s linear}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 8%,transparent 55%);z-index:2}
-    .hero-caption{position:relative;z-index:3;text-align:center;padding-bottom:100px}
+    .hero-caption{position:relative;z-index:3;text-align:center;padding-bottom:100px;will-change:opacity,transform;transition: opacity 0.1s, transform 0.1s}
     .hero-caption h1{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,10vw,7rem);font-weight:900;color:#fff;text-shadow:0 4px 60px rgba(0,0,0,.7);letter-spacing:4px}
     .hero-caption p{color:rgba(255,255,255,.55);font-size:1.2rem;font-weight:300;margin-top:12px}
 
@@ -178,7 +178,7 @@
     .chat-bar input{flex:1;padding:12px 16px;border-radius:var(--radius-full);background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.88rem;outline:none}
     .chat-bar button{background:var(--accent);border:none;border-radius:var(--radius-full);padding:0 16px;cursor:pointer;color:#111;font-weight:600}
 
-    /* 论坛帖子样式 */
+    /* 论坛帖子 */
     .forum-post{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:20px;margin-bottom:16px}
     .forum-post-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
     .forum-post-avatar{width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;color:#111;background-size:cover}
@@ -187,6 +187,20 @@
     .forum-post-time{font-size:.75rem;color:var(--text3)}
     .forum-post-content{margin-bottom:12px}
     .forum-post-image{max-width:100%;border-radius:12px;margin-top:8px}
+
+    /* 论坛评论 */
+    .forum-comments{margin-top:16px;border-top:1px solid var(--border);padding-top:12px}
+    .forum-comment-item{display:flex;gap:10px;margin-bottom:10px}
+    .forum-comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.7rem;color:#111;flex-shrink:0}
+    .forum-comment-body{flex:1}
+    .forum-comment-meta{display:flex;gap:8px;align-items:baseline}
+    .forum-comment-nickname{font-weight:600;font-size:0.85rem}
+    .forum-comment-time{font-size:0.7rem;color:var(--text3)}
+    .forum-comment-content{margin-top:4px;font-size:0.9rem}
+    .forum-comment-form{display:flex;gap:8px;margin-top:12px}
+    .forum-comment-input{flex:1;padding:10px 14px;border-radius:20px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:0.85rem;outline:none}
+    .forum-comment-input:focus{border-color:var(--accent)}
+    .forum-comment-btn{background:var(--accent);border:none;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#111}
 
     .settings{position:fixed;top:80px;right:24px;width:280px;background:var(--glass-bg);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;z-index:200;display:none;flex-direction:column;gap:20px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
     .settings.show{display:flex}
@@ -415,7 +429,7 @@
   </div>
 </div>
 
-<!-- 音乐播放器触发器（SVG 图标替代 Emoji） -->
+<!-- 音乐播放器触发器 -->
 <button class="music-player-toggle" id="musicToggle" onclick="toggleMusicPlayer()">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
     <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
@@ -465,11 +479,12 @@
   </div>
 </div>
 
+<!-- 通用模态框 -->
 <div class="modal" id="genericModal" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="modal-box" id="genericContent"></div>
 </div>
 
-<!-- 协议内容（隐藏） -->
+<!-- 协议内容 -->
 <div style="display:none" id="disclaimerText">
   <h2>免责声明</h2>
   <p>1. 本平台（OSKWK）是一个开放式的社交与内容分享空间，所有用户发布的内容仅代表发布者个人观点，与本平台立场无关。</p>
@@ -502,7 +517,7 @@ let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
 
-// SVG 图标常量（替代所有 Emoji 或特殊字符）
+// ==================== SVG 图标库 ====================
 const SVG_ICONS = {
   play: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,3 19,12 5,21"/></svg>`,
   pause: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`,
@@ -510,42 +525,45 @@ const SVG_ICONS = {
   next: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13,17 20,12 13,7"/><line x1="6" y1="5" x2="6" y2="19"/></svg>`,
   musicNote: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
   close: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
-  arrowRight: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>`
+  arrowRight: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>`,
+  lock: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`,
+  volume: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>`,
+  volumeMute: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`
 };
 
-// 更新音乐控件中的图标为 SVG
-function initMusicControlsUI() {
-  const toggle = document.getElementById('musicToggle');
-  if (toggle) toggle.innerHTML = SVG_ICONS.musicNote;
-  const playPauseBtn = document.getElementById('playPauseBtn');
-  if (playPauseBtn) playPauseBtn.innerHTML = SVG_ICONS.play;
-  const musicPlayer = document.getElementById('musicPlayer');
-  if (musicPlayer) {
-    const closeBtn = musicPlayer.querySelector('button[onclick="toggleMusicPlayer()"]');
-    if (closeBtn) closeBtn.innerHTML = SVG_ICONS.close;
-  }
-  const playlistLink = document.querySelector('.music-player small[style*="cursor:pointer"]');
-  if (playlistLink) playlistLink.innerHTML = `歌单 ${SVG_ICONS.arrowRight}`;
-  const prevBtn = document.querySelector('.music-controls button:nth-child(1)');
-  const nextBtn = document.querySelector('.music-controls button:nth-child(3)');
-  if (prevBtn) prevBtn.innerHTML = SVG_ICONS.prev;
-  if (nextBtn) nextBtn.innerHTML = SVG_ICONS.next;
+// ==================== 视差滚动效果 ====================
+function setupParallax() {
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const heroImg = document.getElementById('heroBg');
+    const heroCaption = document.getElementById('heroCaption');
+    if (heroImg) {
+      heroImg.style.transform = `translateY(${scrollY * 0.2}px)`;
+    }
+    if (heroCaption) {
+      const opacity = Math.max(0, 1 - scrollY / 600);
+      heroCaption.style.opacity = opacity;
+      heroCaption.style.transform = `translateY(${scrollY * 0.4}px)`;
+    }
+  });
 }
 
-// 音乐播放器逻辑
+// ==================== 音乐播放器 ====================
 const playlist = [
-  { title: "Billie Jean", artist: "Michael Jackson", src: "" },
-  { title: "Thriller", artist: "Michael Jackson", src: "" },
-  { title: "Beat It", artist: "Michael Jackson", src: "" },
-  { title: "Closer", artist: "Nine Inch Nails", src: "" },
-  { title: "Hurt", artist: "Nine Inch Nails", src: "" },
-  { title: "The Hand That Feeds", artist: "Nine Inch Nails", src: "" },
-  { title: "Space Cadet", artist: "Metro Boomin", src: "" },
-  { title: "Ric Flair Drip", artist: "Metro Boomin", src: "" }
+  { title: "Billie Jean", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+  { title: "Thriller", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+  { title: "Beat It", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+  { title: "Closer", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+  { title: "Hurt", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+  { title: "The Hand That Feeds", artist: "Nine Inch Nails", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+  { title: "Space Cadet", artist: "Metro Boomin", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+  { title: "Ric Flair Drip", artist: "Metro Boomin", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" }
 ];
 let currentTrackIndex = 0;
 let isPlaying = false;
-const audio = document.getElementById('musicAudio');
+let audio = document.getElementById('musicAudio');
+let currentVolume = 0.8;
+audio.volume = currentVolume;
 
 function loadTrack(index) {
   if (index < 0) index = playlist.length - 1;
@@ -554,23 +572,19 @@ function loadTrack(index) {
   const track = playlist[index];
   document.getElementById('musicTitle').textContent = track.title;
   document.getElementById('musicArtist').textContent = track.artist;
-  audio.src = track.src || '';
+  audio.src = track.src;
   if (isPlaying) {
-    audio.play().catch(() => {});
+    audio.play().catch(() => T('播放被浏览器阻止，请先点击页面上的播放按钮'));
   }
   updatePlayPauseIcon();
 }
 
 function togglePlay() {
-  if (!audio.src && !playlist[currentTrackIndex].src) {
-    T('当前曲目无音频链接，请先设置有效的音乐源');
-    return;
-  }
   if (isPlaying) {
     audio.pause();
     isPlaying = false;
   } else {
-    audio.play().catch(e => T('播放失败'));
+    audio.play().then(() => isPlaying = true).catch(() => T('播放失败，请检查网络或点击页面任意位置后重试'));
     isPlaying = true;
   }
   updatePlayPauseIcon();
@@ -587,18 +601,19 @@ function prevTrack() { loadTrack(currentTrackIndex - 1); }
 audio.addEventListener('timeupdate', () => {
   const progress = document.getElementById('musicProgress');
   const timeDisplay = document.getElementById('musicTime');
-  if (progress && timeDisplay) {
-    const current = formatTime(audio.currentTime);
-    const duration = formatTime(audio.duration || 0);
-    progress.max = audio.duration || 0;
+  if (progress && timeDisplay && audio.duration) {
+    progress.max = audio.duration;
     progress.value = audio.currentTime;
-    timeDisplay.textContent = `${current} / ${duration}`;
+    timeDisplay.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
   }
 });
 
 audio.addEventListener('ended', nextTrack);
+audio.addEventListener('play', () => { isPlaying = true; updatePlayPauseIcon(); });
+audio.addEventListener('pause', () => { isPlaying = false; updatePlayPauseIcon(); });
 
 function formatTime(seconds) {
+  if (isNaN(seconds)) return '0:00';
   const min = Math.floor(seconds / 60);
   const sec = Math.floor(seconds % 60);
   return `${min}:${sec < 10 ? '0' : ''}${sec}`;
@@ -626,13 +641,60 @@ window.showPlaylist = function() {
 
 window.selectTrack = function(index) {
   loadTrack(index);
-  if (!isPlaying) {
-    togglePlay();
-  }
+  if (!isPlaying) togglePlay();
   $('#genericModal').classList.remove('show');
 };
 
-// 全局设置
+window.changeVolume = function(value) {
+  audio.volume = value;
+  currentVolume = value;
+  const volIcon = document.getElementById('volumeIcon');
+  if (volIcon) {
+    volIcon.innerHTML = value == 0 ? SVG_ICONS.volumeMute : SVG_ICONS.volume;
+  }
+};
+
+function initMusicControlsUI() {
+  const toggle = document.getElementById('musicToggle');
+  if (toggle) toggle.innerHTML = SVG_ICONS.musicNote;
+
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  if (playPauseBtn) playPauseBtn.innerHTML = SVG_ICONS.play;
+
+  const closeBtn = document.querySelector('.music-player button[onclick="toggleMusicPlayer()"]');
+  if (closeBtn) closeBtn.innerHTML = SVG_ICONS.close;
+
+  const playlistLink = document.querySelector('.music-player small[style*="cursor:pointer"]');
+  if (playlistLink) playlistLink.innerHTML = `歌单 ${SVG_ICONS.arrowRight}`;
+
+  const prevBtn = document.querySelector('.music-controls button:nth-child(1)');
+  const nextBtn = document.querySelector('.music-controls button:nth-child(3)');
+  if (prevBtn) prevBtn.innerHTML = SVG_ICONS.prev;
+  if (nextBtn) nextBtn.innerHTML = SVG_ICONS.next;
+
+  // 添加音量控制
+  const musicPlayer = document.getElementById('musicPlayer');
+  if (musicPlayer) {
+    const volDiv = document.createElement('div');
+    volDiv.style.cssText = 'display:flex;align-items:center;gap:8px;margin-top:4px';
+    volDiv.innerHTML = `
+      <span id="volumeIcon" style="cursor:pointer">${SVG_ICONS.volume}</span>
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="${currentVolume}" style="flex:1;height:4px;cursor:pointer" oninput="changeVolume(this.value)">
+    `;
+    musicPlayer.appendChild(volDiv);
+    document.getElementById('volumeIcon').addEventListener('click', () => {
+      if (audio.volume > 0) {
+        changeVolume(0);
+        document.getElementById('volumeSlider').value = 0;
+      } else {
+        changeVolume(currentVolume || 0.8);
+        document.getElementById('volumeSlider').value = currentVolume || 0.8;
+      }
+    });
+  }
+}
+
+// ==================== 全局设置 ====================
 window.setTheme = t => {
   document.documentElement.setAttribute('data-theme', t);
   document.querySelectorAll('.theme-btn[data-theme]').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
@@ -648,11 +710,11 @@ window.setAccent = el => {
 };
 window.toggleSettings = () => $('#settingsPanel').classList.toggle('show');
 
-// 协议弹窗
+// ==================== 协议弹窗 ====================
 window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
 window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
 
-// 自然图片
+// ==================== 自然图片 ====================
 const naturePhotos = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
@@ -669,7 +731,7 @@ const naturePhotos = [
 ];
 function landscape() { return naturePhotos[Math.floor(Math.random() * naturePhotos.length)]; }
 
-// 绑定事件
+// ==================== 事件绑定 ====================
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('loginBtn').addEventListener('click', window.doLogin);
   document.getElementById('regBtn').addEventListener('click', window.doRegister);
@@ -686,9 +748,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('privacyLink').addEventListener('click', (e) => { e.preventDefault(); window.showPrivacy(); });
   initMusicControlsUI();
   loadTrack(0);
+  setupParallax();
 });
 
-// 登录/注册
+// ==================== 登录/注册 ====================
 window.doLogin = async () => {
   const email = document.getElementById('loginEmail').value.trim();
   const pwd = document.getElementById('loginPass').value.trim();
@@ -746,7 +809,7 @@ window.closeOwnerModal = () => {
   $('#genericModal').classList.remove('show');
 };
 
-// 标签切换
+// ==================== 标签切换 ====================
 window.switchTab = async tab => {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const page = document.getElementById('tab-' + tab);
@@ -767,7 +830,7 @@ function updateAdminBar(cat) {
   if (bar) bar.style.display = isAdmin ? 'flex' : 'none';
 }
 
-// 文章
+// ==================== 文章管理 ====================
 async function loadArticles(cat) {
   const c = document.getElementById('article-' + cat);
   if (!c) return;
@@ -836,13 +899,28 @@ window.postComment = async id => {
   window.expandArticle(id);
 };
 
-// 论坛
+// ==================== 论坛（含评论） ====================
 async function loadForumPosts() {
   const container = document.getElementById('forumPosts');
   if (!container) return;
-  const { data } = await supabase.from('forum_posts').select('*').order('created_at', { ascending: false });
-  container.innerHTML = (data || []).map(p => `
-    <div class="forum-post">
+  const { data: posts } = await supabase.from('forum_posts').select('*').order('created_at', { ascending: false });
+  if (!posts || posts.length === 0) {
+    container.innerHTML = '<p style="color:var(--text3)">暂无帖子，快来发第一帖！</p>';
+    return;
+  }
+
+  const postsWithComments = await Promise.all(posts.map(async (post) => {
+    const { data: comments } = await supabase
+      .from('forum_comments')
+      .select('*')
+      .eq('post_id', post.id)
+      .order('created_at', { ascending: true })
+      .limit(5);
+    return { ...post, comments: comments || [] };
+  }));
+
+  container.innerHTML = postsWithComments.map(p => `
+    <div class="forum-post" id="forum-post-${p.id}">
       <div class="forum-post-header">
         <div class="forum-post-avatar">${p.nickname?.charAt(0)}</div>
         <div class="forum-post-meta">
@@ -852,9 +930,55 @@ async function loadForumPosts() {
       </div>
       <div class="forum-post-content">${p.content}</div>
       ${p.image_url ? `<img class="forum-post-image" src="${p.image_url}">` : ''}
+      
+      <div class="forum-comments">
+        ${p.comments.map(c => `
+          <div class="forum-comment-item">
+            <div class="forum-comment-avatar">${c.nickname?.charAt(0)}</div>
+            <div class="forum-comment-body">
+              <div class="forum-comment-meta">
+                <span class="forum-comment-nickname">${c.nickname}</span>
+                <span class="forum-comment-time">${new Date(c.created_at).toLocaleString()}</span>
+              </div>
+              <div class="forum-comment-content">${c.content}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      
+      <div class="forum-comment-form">
+        <input type="text" class="forum-comment-input" id="comment-input-${p.id}" placeholder="写评论...">
+        <button class="forum-comment-btn" onclick="submitForumComment(${p.id})">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
     </div>
-  `).join('') || '<p style="color:var(--text3)">暂无帖子，快来发第一帖！</p>';
+  `).join('');
 }
+
+window.submitForumComment = async function(postId) {
+  if (!user) return T('请先登录');
+  const input = document.getElementById(`comment-input-${postId}`);
+  if (!input) return;
+  const content = input.value.trim();
+  if (!content) return;
+  
+  const { error } = await supabase.from('forum_comments').insert([{
+    post_id: postId,
+    nickname: user.nickname,
+    content: content
+  }]);
+  
+  if (error) {
+    console.error(error);
+    return T('评论失败');
+  }
+  
+  input.value = '';
+  loadForumPosts();  // 重新加载以显示新评论
+};
 
 window.openForumPost = () => {
   if (!user) return T('请先登录');
@@ -888,7 +1012,7 @@ window.submitForumPost = async () => {
   loadForumPosts();
 };
 
-// 聊天室（包含头像和时间）
+// ==================== 聊天室 ====================
 let allRooms = [];
 async function renderRoomList() {
   document.getElementById('chatPanel').style.display = 'none';
@@ -904,7 +1028,7 @@ function filterRooms() {
   let html = '';
   const publicRooms = ['大厅', '技术', '理论', '艺术'];
   for (const name of publicRooms) if (!kw || name.includes(kw)) html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinPublicRoom('${name}')"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> ${name}</button>`;
-  for (const r of allRooms) if (!kw || r.name.toLowerCase().includes(kw)) html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinCustomRoom('${r.name.replace(/'/g, "\\'")}', ${r.password !== ''})"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> ${r.name}${r.password ? ' 🔒' : ''}</button>`;
+  for (const r of allRooms) if (!kw || r.name.toLowerCase().includes(kw)) html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="joinCustomRoom('${r.name.replace(/'/g, "\\'")}', ${r.password !== ''})"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> ${r.name} ${r.password ? SVG_ICONS.lock : ''}</button>`;
   html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="startPrivateChat()"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> 私信</button>`;
   list.innerHTML = html || '<p style="color:var(--text3)">没有匹配的房间</p>';
 }
@@ -972,11 +1096,9 @@ function renderMsg(m) {
   const isMine = m.nickname === user?.nickname;
   const msgDiv = document.createElement('div');
   msgDiv.className = 'msg ' + (isMine ? 'mine' : 'peer');
-  // 头像
   const avatarDiv = document.createElement('div');
   avatarDiv.className = 'msg-avatar';
   avatarDiv.textContent = m.nickname?.charAt(0) || '?';
-  // 内容体
   const bodyDiv = document.createElement('div');
   bodyDiv.className = 'msg-body';
   bodyDiv.innerHTML = `<b>${m.nickname}</b><br>${m.message || ''}${m.image_url ? `<br><img src="${m.image_url}">` : ''}`;
@@ -1031,7 +1153,7 @@ window.leaveRoom = () => {
   document.getElementById('roomList').style.display = 'flex';
 };
 
-// 动态/好友
+// ==================== 动态/好友 ====================
 window.openPost = () => {
   $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`;
   $('#genericModal').classList.add('show');
@@ -1092,7 +1214,7 @@ window.addFriend = () => {
   if (email) supabase.from('friendships').insert([{ from_email: user.email, to_email: email }]).then(() => T('已发送'));
 };
 
-// 个人资料
+// ==================== 个人资料 ====================
 async function renderProfile() {
   if (!user) return;
   let html = `<div class="card" style="text-align:center;padding:24px"><div class="avatar" style="width:56px;height:56px;font-size:1.4rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div><h3>${user.nickname}</h3><p>${user.email}</p><button onclick="showRequests()">好友请求</button><button onclick="addFriend()">添加好友</button><button onclick="showEditProfile()">编辑资料</button><button onclick="searchUser()">搜索用户</button>`;
@@ -1161,7 +1283,7 @@ window.toggleBan = async (email, ban) => {
   window.showAdmin();
 };
 
-// 通知
+// ==================== 通知 ====================
 async function fetchNotifs() {
   if (!user) return;
   const { data } = await supabase.from('notifications').select('*').eq('user_email', user.email).order('created_at', { ascending: false }).limit(20);
@@ -1189,10 +1311,15 @@ function subNotifs() {
     .subscribe();
 }
 
-// 退出
+// ==================== 退出 ====================
 window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
 
-// 初始化
+// ==================== 音乐进度控制 ====================
+window.seekMusic = function(value) {
+  if (audio) audio.currentTime = value;
+};
+
+// ==================== 初始化 ====================
 (() => {
   const saved = localStorage.getItem('oskwk_user');
   if (saved) {
@@ -1218,9 +1345,4 @@ setInterval(() => {
   const img = document.getElementById('heroBg');
   if (img) img.src = `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&rand=${Date.now()}`;
 }, 12000);
-
-// 音乐进度控制
-window.seekMusic = function(value) {
-  if (audio) audio.currentTime = value;
-};
 </script>
