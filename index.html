@@ -45,13 +45,13 @@
     }
     *{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;font-size:var(--font-size);transition: background 0.5s}
-    body{background:var(--bg);overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;transition: background 0.5s}
+    body{background:var(--bg);overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column;align-items:center;transition: background 0.5s}
     ::selection{background:var(--accent);color:#fff}
     ::-webkit-scrollbar{width:4px}
     ::-webkit-scrollbar-track{background:transparent}
     ::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:4px}
 
-    /* 动态背景 */
+    /* 动态光晕背景 */
     .bg-animation {
       position: fixed; inset: 0; z-index: -1; opacity: 0.6;
       background: radial-gradient(ellipse at 50% 0%, rgba(0,113,227,0.15), transparent 70%),
@@ -71,7 +71,7 @@
     #app{width:100%;display:none;opacity:0;transition:opacity .6s}
     #app.on{display:block;opacity:1}
 
-    /* macOS 风格登录卡片 */
+    /* macOS 风格登录卡 */
     .auth-overlay{
       position:fixed;inset:0;z-index:1000;
       background: var(--bg);
@@ -132,7 +132,7 @@
     .auth-link a{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:500}
     .agree-row{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text2);margin:10px 0;text-align:left;}
 
-    /* 导航栏 - macOS 风格模糊 */
+    /* 导航栏 */
     .nav{
       position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;
       height:52px; max-width:680px; width:calc(100% - 32px);
@@ -170,7 +170,7 @@
     }
     .avatar:hover { transform: scale(1.05); }
 
-    /* 移动端导航 - 底部悬浮 Dock */
+    /* 移动端底部导航 */
     .mob-nav{
       position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:100;
       background:var(--glass-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
@@ -185,9 +185,16 @@
     .hero{
       height:100vh;min-height:700px;display:flex;align-items:flex-end;
       justify-content:center;overflow:hidden;position:relative;
-      margin-top: 0;
     }
-    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.55);will-change:transform; transition: filter 0.5s;}
+    .hero-img{
+      position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+      filter:brightness(0.55);will-change:transform; transition: filter 0.5s;
+    }
+    .hero-img-error {
+      display:none;
+      position:absolute;inset:0;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+    }
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 5%,transparent 60%);z-index:2}
     .hero-caption{
       position:relative;z-index:3;text-align:center;padding-bottom:120px;
@@ -225,7 +232,15 @@
       transform:translateY(-6px);border-color:var(--accent);
       box-shadow:var(--shadow-md);
     }
-    .card img{width:100%;display:block;background:var(--surface2);transition: transform 0.5s}
+    .card-img-wrap {
+      position: relative;
+      width: 100%;
+      background: var(--surface2);
+    }
+    .card img{
+      width:100%;display:block;transition: transform 0.5s;
+      background: var(--surface2);
+    }
     .card:hover img{transform: scale(1.04)}
     .card-body{padding:20px}
     .card-body h3{font-size:1.2rem;font-weight:600;margin-bottom:6px}
@@ -248,7 +263,7 @@
     .chat-bar button:hover{transform: scale(1.05);}
 
     /* 论坛 */
-    .forum-post{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:24px;margin-bottom:24px;position:relative;transition: box-shadow 0.3s}
+    .forum-post{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:24px;margin-bottom:24px;position:relative;transition: box-shadow 0.3s;cursor:pointer;}
     .forum-post:hover{box-shadow:var(--shadow-md)}
     .forum-post-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
     .forum-post-avatar{width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:1rem}
@@ -367,7 +382,6 @@
     button:hover .svg-icon{transform: scale(1.12);}
     button:active .svg-icon{transform: scale(0.95);}
 
-    /* 管理员工具栏 */
     .admin-toolbar { display: none; align-items: center; gap: 12px; margin-bottom: 20px; }
     .admin-toolbar.show { display: flex; }
 
@@ -375,11 +389,13 @@
       .nav{top:8px; width:calc(100% - 16px); height:48px; padding:0 12px;}
       .nav-icons{display:none}
       .mob-nav{display:flex}
-      .hero h1{font-size:3.5rem}
+      .hero{min-height:600px}
+      .hero-caption h1{font-size:3.5rem}
       .main-wrap{padding:40px 16px 120px}
       .grid{columns:1}
       .music-player{width:280px;right:16px;bottom:90px}
       .music-player-toggle{bottom:90px;right:16px}
+      .settings{width:280px;right:10px;top:70px}
     }
   </style>
 </head>
@@ -488,7 +504,8 @@
   </div>
 
   <section class="hero">
-    <img class="hero-img" id="heroBg" src="https://source.unsplash.com/featured/1920x1080/?mountain,forest" alt="自然">
+    <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="自然风光" onerror="this.style.display='none';document.getElementById('heroFallback').style.display='block';">
+    <div class="hero-img-error" id="heroFallback"></div>
     <div class="hero-overlay"></div>
     <div class="hero-caption" id="heroCaption"><h1>探索无界</h1><p>OSKWK Platform</p></div>
   </section>
@@ -597,7 +614,6 @@
   </div>
 </div>
 
-<!-- 音乐触发器 -->
 <button class="music-player-toggle" id="musicToggle" onclick="toggleMusicPlayer()">
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
 </button>
@@ -670,7 +686,7 @@ function setupParallax() {
   });
 }
 
-// ==================== 音乐播放器 ====================
+// ==================== 音乐播放器（占位 MP3，流畅无卡顿） ====================
 const playlist = [
   { title: "Billie Jean", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
   { title: "Thriller", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -776,13 +792,13 @@ window.toggleSettings = () => {
   document.getElementById('adminForumSettings').style.display = isAdmin ? 'block' : 'none';
 };
 
-// 协议
+// 协议弹窗
 window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
 window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
 
-// 随机图片
+// 高质量随机图片（用于文章卡片等）
 const photoKeywords = ['nature', 'landscape', 'mountain', 'forest', 'ocean', 'architecture', 'city', 'art'];
-const randomPhoto = () => `https://source.unsplash.com/featured/800x600/?${photoKeywords[Math.floor(Math.random() * photoKeywords.length)]}&t=${Date.now()}`;
+const randomPhoto = () => `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80`;
 
 // 事件绑定
 document.addEventListener('DOMContentLoaded', () => {
@@ -805,7 +821,7 @@ function toggleAuthBox(type) {
   else { loginBox.style.display = 'none'; regBox.style.display = 'block'; }
 }
 
-// 清除输入错误样式
+// 清除/设置输入错误
 function clearError(input) { input.classList.remove('error'); const hint = input.parentElement.querySelector('.input-hint'); if (hint) hint.classList.remove('show'); }
 function setError(input, msg) { input.classList.add('error'); const hint = input.parentElement.querySelector('.input-hint'); if (hint) { hint.textContent = msg; hint.classList.add('show'); } }
 
@@ -923,22 +939,30 @@ function renderCountdown() {
     </div>`;
 }
 
-// ==================== 文章管理 ====================
+// ==================== 文章管理（新标签页打开） ====================
 async function loadArticles(cat) {
   const c = document.getElementById('article-' + cat);
   if (!c) return;
   const { data } = await supabase.from('articles').select('*').eq('category', cat).order('created_at', { ascending: false });
   c.innerHTML = (data || []).map(a => `
-    <div class="card" onclick="window.open('about:blank').document.write(decodeURIComponent('${encodeURIComponent(articleHTML(a))}'))">
+    <div class="card" onclick="event.stopPropagation(); openArticleInNewTab('${encodeURIComponent(JSON.stringify(a))}')">
       ${isAdmin ? `<button class="card-delete" onclick="event.stopPropagation();deleteArticle(${a.id},'${cat}')">×</button>` : ''}
-      <img src="${a.image_url || randomPhoto()}" loading="lazy" onerror="this.src='${randomPhoto()}'">
+      <div class="card-img-wrap">
+        <img src="${a.image_url || randomPhoto()}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg, #1a1a2e, #16213e)';">
+      </div>
       <div class="card-body"><h3>${a.title}</h3><p>${a.content?.slice(0, 100) || ''}</p></div>
     </div>
   `).join('') || '<p style="color:var(--text3)">暂无内容</p>';
 }
-function articleHTML(a) {
-  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${a.title}</title><style>body{font-family:Inter,sans-serif;background:#1c1c1e;color:#f5f5f7;padding:40px;max-width:800px;margin:auto}h1{font-family:'Playfair Display',serif}img{max-width:100%;border-radius:16px;margin:20px 0}</style></head><body><h1>${a.title}</h1><img src="${a.image_url || randomPhoto()}"><p>${a.content}</p></body></html>`;
-}
+
+window.openArticleInNewTab = (encodedArticle) => {
+  const a = JSON.parse(decodeURIComponent(encodedArticle));
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${a.title}</title><style>body{font-family:Inter,sans-serif;background:#1c1c1e;color:#f5f5f7;padding:40px;max-width:800px;margin:auto;line-height:1.6}h1{font-family:'Playfair Display',serif}img{max-width:100%;border-radius:16px;margin:20px 0}</style></head><body><h1>${a.title}</h1><img src="${a.image_url || randomPhoto()}" onerror="this.style.display='none'"><p>${a.content}</p></body></html>`;
+  const newWindow = window.open('about:blank', '_blank');
+  if (newWindow) newWindow.document.write(html);
+  else T('请允许弹窗以查看文章');
+};
+
 window.openPublish = (cat) => {
   if (!isAdmin) return T('无权操作');
   $('#genericContent').innerHTML = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="6"></textarea><input id="pubImage" placeholder="图片URL"><button class="main" onclick="publishArticle('${cat}')">发布</button>`;
@@ -958,7 +982,7 @@ window.deleteArticle = async (id, cat) => {
   T('已删除'); loadArticles(cat);
 };
 
-// ==================== 论坛（管理员删除帖子、公告） ====================
+// ==================== 论坛（管理员删除、公告，新标签页打开详情） ====================
 async function loadForumPosts() {
   const container = document.getElementById('forumPosts');
   if (!container) return;
@@ -971,14 +995,14 @@ async function loadForumPosts() {
   const forumNotice = localStorage.getItem('forum_notice') || '';
   container.innerHTML = (forumNotice ? `<div style="background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:14px;margin-bottom:20px;font-style:italic">${forumNotice}</div>` : '') +
     postsWithComments.map(p => `
-    <div class="forum-post">
-      ${isAdmin ? `<button class="forum-post-delete" onclick="deleteForumPost(${p.id})">×</button>` : ''}
+    <div class="forum-post" onclick="event.stopPropagation(); openForumPostInNewTab('${encodeURIComponent(JSON.stringify(p))}')">
+      ${isAdmin ? `<button class="forum-post-delete" onclick="event.stopPropagation();deleteForumPost(${p.id})">×</button>` : ''}
       <div class="forum-post-header">
         <div class="forum-post-avatar">${p.nickname?.charAt(0)}</div>
         <div class="forum-post-meta"><span class="forum-post-nickname">${p.nickname}</span><span class="forum-post-time">${new Date(p.created_at).toLocaleString()}</span></div>
       </div>
       <div class="forum-post-content">${p.content}</div>
-      ${p.image_url ? `<img class="forum-post-image" src="${p.image_url}">` : ''}
+      ${p.image_url ? `<img class="forum-post-image" src="${p.image_url}" onerror="this.style.display='none'">` : ''}
       <div class="forum-comments">
         ${p.comments.map(c => `
           <div class="forum-comment-item">
@@ -990,13 +1014,31 @@ async function loadForumPosts() {
           </div>
         `).join('')}
       </div>
-      <div class="forum-comment-form">
+      <div class="forum-comment-form" onclick="event.stopPropagation()">
         <input type="text" class="forum-comment-input" id="comment-input-${p.id}" placeholder="写评论...">
         <button class="forum-comment-btn" onclick="submitForumComment(${p.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
       </div>
     </div>
   `).join('');
 }
+
+window.openForumPostInNewTab = (encodedPost) => {
+  const p = JSON.parse(decodeURIComponent(encodedPost));
+  const commentsHtml = (p.comments || []).map(c => `
+    <div style="display:flex;gap:10px;margin-bottom:12px;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#0071e3;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;">${c.nickname?.charAt(0)}</div>
+      <div>
+        <div style="display:flex;gap:8px;"><span style="font-weight:600;">${c.nickname}</span><span style="color:#aaa;font-size:0.8rem;">${new Date(c.created_at).toLocaleString()}</span></div>
+        <div>${c.content}</div>
+      </div>
+    </div>
+  `).join('');
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${p.nickname} 的帖子</title><style>body{font-family:Inter,sans-serif;background:#1c1c1e;color:#f5f5f7;padding:40px;max-width:800px;margin:auto;line-height:1.6}h2{font-family:'Playfair Display',serif}.meta{color:#aaa;font-size:0.9rem}img{max-width:100%;border-radius:12px;margin:10px 0}.comment{border-top:1px solid #444;padding-top:16px;margin-top:16px}</style></head><body><h2>${p.nickname} 的帖子</h2><div class="meta">${new Date(p.created_at).toLocaleString()}</div><p>${p.content}</p>${p.image_url ? `<img src="${p.image_url}" onerror="this.style.display='none'">` : ''}<div class="comment"><h3>评论</h3>${commentsHtml || '暂无评论'}</div></body></html>`;
+  const newWindow = window.open('about:blank', '_blank');
+  if (newWindow) newWindow.document.write(html);
+  else T('请允许弹窗以查看帖子');
+};
+
 window.submitForumComment = async function(postId) {
   if (!user) return T('请先登录');
   const input = document.getElementById(`comment-input-${postId}`);
@@ -1128,7 +1170,7 @@ function renderMsg(m) {
   avatarDiv.textContent = m.nickname?.charAt(0) || '?';
   const bodyDiv = document.createElement('div');
   bodyDiv.className = 'msg-body';
-  bodyDiv.innerHTML = `<b>${m.nickname}</b><br>${m.message || ''}${m.image_url ? `<br><img src="${m.image_url}" style="max-width:200px;border-radius:8px">` : ''}`;
+  bodyDiv.innerHTML = `<b>${m.nickname}</b><br>${m.message || ''}${m.image_url ? `<br><img src="${m.image_url}" style="max-width:200px;border-radius:8px" onerror="this.style.display='none'">` : ''}`;
   const timeSpan = document.createElement('div');
   timeSpan.className = 'msg-time';
   timeSpan.textContent = new Date(m.created_at).toLocaleTimeString();
@@ -1203,7 +1245,7 @@ async function loadFeed() {
   document.getElementById('friendsFeed').innerHTML = (posts || []).map(p => `
     <div class="card">
       <div class="card-body"><b>${p.nickname}</b> ${p.content || ''}</div>
-      ${p.image_url ? `<img src="${p.image_url}" style="width:100%">` : ''}
+      ${p.image_url ? `<img src="${p.image_url}" style="width:100%" onerror="this.style.display='none'">` : ''}
     </div>
   `).join('') || '<p style="color:var(--text3)">暂无动态</p>';
 }
@@ -1330,5 +1372,5 @@ window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload()
   const fontSize = localStorage.getItem('oskwk_fontsize'); if (fontSize) updateFontSize(fontSize);
   const accent = localStorage.getItem('oskwk_accent'); if (accent) document.documentElement.style.setProperty('--accent', accent);
 })();
-setInterval(() => { const img = document.getElementById('heroBg'); if (img) img.src = `https://source.unsplash.com/featured/1920x1080/?nature,landscape&t=${Date.now()}`; }, 15000);
+setInterval(() => { const img = document.getElementById('heroBg'); if (img) img.src = `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&t=${Date.now()}`; }, 15000);
 </script>
