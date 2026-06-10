@@ -51,7 +51,6 @@
     ::-webkit-scrollbar-track{background:transparent}
     ::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:4px}
 
-    /* 动态光晕背景 */
     .bg-animation {
       position: fixed; inset: 0; z-index: -1; opacity: 0.6;
       background: radial-gradient(ellipse at 50% 0%, rgba(0,113,227,0.15), transparent 70%),
@@ -71,7 +70,7 @@
     #app{width:100%;display:none;opacity:0;transition:opacity .6s}
     #app.on{display:block;opacity:1}
 
-    /* macOS 风格登录卡 */
+    /* 登录卡片 */
     .auth-overlay{
       position:fixed;inset:0;z-index:1000;
       background: var(--bg);
@@ -170,7 +169,7 @@
     }
     .avatar:hover { transform: scale(1.05); }
 
-    /* 移动端底部导航 */
+    /* 移动端底部 Dock */
     .mob-nav{
       position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:100;
       background:var(--glass-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
@@ -186,15 +185,7 @@
       height:100vh;min-height:700px;display:flex;align-items:flex-end;
       justify-content:center;overflow:hidden;position:relative;
     }
-    .hero-img{
-      position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-      filter:brightness(0.55);will-change:transform; transition: filter 0.5s;
-    }
-    .hero-img-error {
-      display:none;
-      position:absolute;inset:0;
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
-    }
+    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.55);will-change:transform;}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 5%,transparent 60%);z-index:2}
     .hero-caption{
       position:relative;z-index:3;text-align:center;padding-bottom:120px;
@@ -232,22 +223,13 @@
       transform:translateY(-6px);border-color:var(--accent);
       box-shadow:var(--shadow-md);
     }
-    .card-img-wrap {
-      position: relative;
-      width: 100%;
-      background: var(--surface2);
-    }
-    .card img{
-      width:100%;display:block;transition: transform 0.5s;
-      background: var(--surface2);
-    }
+    .card img{width:100%;display:block;background:var(--surface2);transition: transform 0.5s}
     .card:hover img{transform: scale(1.04)}
     .card-body{padding:20px}
     .card-body h3{font-size:1.2rem;font-weight:600;margin-bottom:6px}
     .card-delete{position:absolute;top:12px;right:12px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;opacity:0;transition:opacity 0.2s;z-index:2}
     .card:hover .card-delete{opacity:1}
 
-    /* 聊天室 */
     .chat-box{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;height:65vh;display:flex;flex-direction:column}
     .chat-log{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
     .msg{max-width:78%;padding:12px 16px;border-radius:22px;font-size:.9rem;word-break:break-word;display:flex;gap:10px;align-items:flex-start;animation:msgPop 0.2s ease}
@@ -262,7 +244,6 @@
     .chat-bar button{background:var(--accent);border:none;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff; transition: transform 0.2s}
     .chat-bar button:hover{transform: scale(1.05);}
 
-    /* 论坛 */
     .forum-post{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:24px;margin-bottom:24px;position:relative;transition: box-shadow 0.3s;cursor:pointer;}
     .forum-post:hover{box-shadow:var(--shadow-md)}
     .forum-post-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
@@ -276,7 +257,6 @@
     .forum-post-delete{position:absolute;top:16px;right:16px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:30px;height:30px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:2}
     .forum-post:hover .forum-post-delete{display:flex}
 
-    /* 评论区 */
     .forum-comments{margin-top:20px;border-top:1px solid var(--border);padding-top:20px}
     .forum-comment-item{display:flex;gap:10px;margin-bottom:14px}
     .forum-comment-avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:.7rem}
@@ -291,7 +271,6 @@
     .forum-comment-btn{background:var(--accent);border:none;border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;transition:transform 0.2s}
     .forum-comment-btn:hover{transform:scale(1.1)}
 
-    /* 设置面板 */
     .settings{
       position:fixed;top:100px;right:24px;width:320px;
       background:var(--glass-bg);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
@@ -308,7 +287,6 @@
     .theme-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
     .theme-btn:hover{transform:scale(1.02)}
 
-    /* 节日倒计时 */
     .countdown-widget {
       background: var(--surface); backdrop-filter: blur(10px);
       border: 1px solid var(--border); border-radius: var(--radius); padding: 28px;
@@ -351,7 +329,6 @@
     }
     button.main:hover{ transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,113,227,0.4); }
 
-    /* 音乐播放器 */
     .music-player{
       position:fixed;bottom:30px;right:30px;z-index:200;width:340px;
       background:var(--glass-bg);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
@@ -505,7 +482,7 @@
 
   <section class="hero">
     <img class="hero-img" id="heroBg" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="自然风光" onerror="this.style.display='none';document.getElementById('heroFallback').style.display='block';">
-    <div class="hero-img-error" id="heroFallback"></div>
+    <div class="hero-img-error" id="heroFallback" style="display:none;position:absolute;inset:0;background:linear-gradient(135deg, #1a1a2e, #16213e);"></div>
     <div class="hero-overlay"></div>
     <div class="hero-caption" id="heroCaption"><h1>探索无界</h1><p>OSKWK Platform</p></div>
   </section>
@@ -638,7 +615,9 @@
   </div>
 </div>
 
-<div class="modal" id="genericModal"><div class="modal-box" id="genericContent"></div></div>
+<div class="modal" id="genericModal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-box" id="genericContent"></div>
+</div>
 
 <div style="display:none" id="disclaimerText"><h2>免责声明</h2><p>本平台内容由用户生成，不代表平台立场。</p></div>
 <div style="display:none" id="privacyText"><h2>隐私协议</h2><p>我们重视你的隐私，密码加密存储。</p></div>
@@ -651,6 +630,24 @@ const ADMIN_EMAIL = '279933264@qq.com';
 let user = null, isAdmin = false, room = null, realtime = null, notifSub = null;
 const $ = s => document.querySelector(s);
 const T = m => alert(m);
+
+// ==================== 高质量风景图片数组（可继续扩充） ====================
+const naturePhotos = [
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+  'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
+  'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80',
+  'https://images.unsplash.com/photo-1434394354979-a235cd36269d?w=800&q=80',
+  'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80',
+  'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80',
+  'https://images.unsplash.com/photo-1520962880247-6e5a3c3c3e0a?w=800&q=80',
+  'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=800&q=80',
+  'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=800&q=80',
+  'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80',
+  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80',
+  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80',
+  // 添加更多 Unsplash 图片 ID 以扩充至 100+
+];
+function landscape() { return naturePhotos[Math.floor(Math.random() * naturePhotos.length)]; }
 
 // ==================== SVG 图标库 ====================
 const SVG_ICONS = {
@@ -666,7 +663,7 @@ const SVG_ICONS = {
   volumeMute: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`
 };
 
-// ==================== 视差滚动 + 导航栏效果 ====================
+// ==================== 视差滚动 ====================
 function setupParallax() {
   window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
@@ -686,7 +683,7 @@ function setupParallax() {
   });
 }
 
-// ==================== 音乐播放器（占位 MP3，流畅无卡顿） ====================
+// ==================== 音乐播放器 ====================
 const playlist = [
   { title: "Billie Jean", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
   { title: "Thriller", artist: "Michael Jackson", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -738,23 +735,19 @@ audio.addEventListener('timeupdate', () => {
     timeDisplay.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
   }
 });
-function formatTime(s) {
-  if (isNaN(s)) return '0:00';
-  const m = Math.floor(s / 60), sec = Math.floor(s % 60);
-  return `${m}:${sec < 10 ? '0' : ''}${sec}`;
-}
+function formatTime(s) { if (isNaN(s)) return '0:00'; const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec<10?'0':''}${sec}`; }
 window.toggleMusicPlayer = () => {
   const player = document.getElementById('musicPlayer'), toggle = document.getElementById('musicToggle');
   if (player.classList.contains('show')) { player.classList.remove('show'); toggle.style.display = 'flex'; }
   else { player.classList.add('show'); toggle.style.display = 'none'; }
 };
 window.showPlaylist = () => {
-  const list = playlist.map((t, i) => `<p style="cursor:pointer;padding:8px;border-bottom:1px solid var(--border)" onclick="selectTrack(${i})">${t.title} - ${t.artist}</p>`).join('');
+  const list = playlist.map((t,i) => `<p style="cursor:pointer;padding:8px;border-bottom:1px solid var(--border)" onclick="selectTrack(${i})">${t.title} - ${t.artist}</p>`).join('');
   $('#genericContent').innerHTML = `<h3>歌单</h3>${list}`;
   $('#genericModal').classList.add('show');
 };
 window.selectTrack = (index) => { loadTrack(index); if (!isPlaying) togglePlay(); $('#genericModal').classList.remove('show'); };
-window.changeVolume = (v) => { audio.volume = v; const icon = document.getElementById('volumeIcon'); if (icon) icon.innerHTML = (v == 0) ? SVG_ICONS.volumeMute : SVG_ICONS.volume; };
+window.changeVolume = (v) => { audio.volume = v; const icon = document.getElementById('volumeIcon'); if(icon) icon.innerHTML = (v==0) ? SVG_ICONS.volumeMute : SVG_ICONS.volume; };
 window.seekMusic = (v) => { audio.currentTime = v; };
 
 function initMusicControlsUI() {
@@ -780,63 +773,26 @@ function initMusicControlsUI() {
 }
 
 // ==================== 全局设置 ====================
-window.setTheme = t => {
-  document.documentElement.setAttribute('data-theme', t);
-  document.querySelectorAll('.theme-btn[data-theme]').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
-  localStorage.setItem('oskwk_theme', t);
-};
+window.setTheme = t => { document.documentElement.setAttribute('data-theme', t); document.querySelectorAll('.theme-btn[data-theme]').forEach(b => b.classList.toggle('active', b.dataset.theme===t)); localStorage.setItem('oskwk_theme', t); };
 window.updateFontSize = v => { document.documentElement.style.setProperty('--font-size', v+'px'); localStorage.setItem('oskwk_fontsize', v); };
 window.setAccent = el => { document.documentElement.style.setProperty('--accent', el.dataset.accent); localStorage.setItem('oskwk_accent', el.dataset.accent); };
-window.toggleSettings = () => {
-  document.getElementById('settingsPanel').classList.toggle('show');
-  document.getElementById('adminForumSettings').style.display = isAdmin ? 'block' : 'none';
-};
+window.toggleSettings = () => { document.getElementById('settingsPanel').classList.toggle('show'); document.getElementById('adminForumSettings').style.display = isAdmin ? 'block' : 'none'; };
 
-// 协议弹窗
+// 协议
 window.showDisclaimer = () => { $('#genericContent').innerHTML = $('#disclaimerText').innerHTML; $('#genericModal').classList.add('show'); };
 window.showPrivacy = () => { $('#genericContent').innerHTML = $('#privacyText').innerHTML; $('#genericModal').classList.add('show'); };
 
-// 高质量随机图片（用于文章卡片等）
-const photoKeywords = ['nature', 'landscape', 'mountain', 'forest', 'ocean', 'architecture', 'city', 'art'];
-const randomPhoto = () => `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80`;
-
-// 事件绑定
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('loginBtn').addEventListener('click', doLogin);
-  document.getElementById('regBtn').addEventListener('click', doRegister);
-  document.getElementById('sendCodeBtn').addEventListener('click', () => T('验证码：123456'));
-  document.getElementById('showRegLink').addEventListener('click', () => { toggleAuthBox('reg'); });
-  document.getElementById('showLoginLink').addEventListener('click', () => { toggleAuthBox('login'); });
-  document.getElementById('disclaimerLink').addEventListener('click', (e) => { e.preventDefault(); showDisclaimer(); });
-  document.getElementById('privacyLink').addEventListener('click', (e) => { e.preventDefault(); showPrivacy(); });
-  initMusicControlsUI();
-  loadTrack(0);
-  setupParallax();
-});
-
-function toggleAuthBox(type) {
-  const loginBox = document.getElementById('loginBox');
-  const regBox = document.getElementById('regBox');
-  if (type === 'login') { loginBox.style.display = 'block'; regBox.style.display = 'none'; }
-  else { loginBox.style.display = 'none'; regBox.style.display = 'block'; }
-}
-
-// 清除/设置输入错误
-function clearError(input) { input.classList.remove('error'); const hint = input.parentElement.querySelector('.input-hint'); if (hint) hint.classList.remove('show'); }
-function setError(input, msg) { input.classList.add('error'); const hint = input.parentElement.querySelector('.input-hint'); if (hint) { hint.textContent = msg; hint.classList.add('show'); } }
-
-// ==================== 登录/注册（带加载态和验证） ====================
+// ==================== 登录/注册 ====================
 async function doLogin() {
   const emailInput = document.getElementById('loginEmail'), passInput = document.getElementById('loginPass');
   const email = emailInput.value.trim(), pwd = passInput.value.trim();
   let valid = true;
-  [emailInput, passInput].forEach(i => clearError(i));
-  if (!email) { setError(emailInput, '请输入邮箱'); valid = false; } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError(emailInput, '邮箱格式不正确'); valid = false; }
-  if (!pwd) { setError(passInput, '密码不能为空'); valid = false; }
+  [emailInput, passInput].forEach(i => { i.classList.remove('error'); const hint = i.parentElement.querySelector('.input-hint'); if(hint) hint.classList.remove('show'); });
+  if (!email) { emailInput.classList.add('error'); emailInput.parentElement.querySelector('.input-hint').classList.add('show'); valid = false; }
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { emailInput.classList.add('error'); emailInput.parentElement.querySelector('.input-hint').textContent='邮箱格式不正确'; emailInput.parentElement.querySelector('.input-hint').classList.add('show'); valid = false; }
+  if (!pwd) { passInput.classList.add('error'); passInput.parentElement.querySelector('.input-hint').classList.add('show'); valid = false; }
   if (!valid) return;
-
-  const btn = document.getElementById('loginBtn');
-  btn.classList.add('loading');
+  const btn = document.getElementById('loginBtn'); btn.classList.add('loading');
   const { data, error } = await supabase.rpc('verify_login', { user_email: email, user_password: pwd });
   btn.classList.remove('loading');
   if (error || !data || data.length === 0) { document.getElementById('loginHint').textContent = '邮箱或密码错误'; return; }
@@ -844,7 +800,6 @@ async function doLogin() {
   localStorage.setItem('oskwk_user', JSON.stringify(user));
   enter();
 }
-
 async function doRegister() {
   if (!document.getElementById('regAgree').checked) return T('请先同意免责声明和隐私协议');
   const email = document.getElementById('regEmail').value.trim(), phone = document.getElementById('regPhone').value.trim(),
@@ -855,8 +810,7 @@ async function doRegister() {
   if (!/^1[3-9]\d{9}$/.test(phone)) return T('手机号格式不正确');
   if (code !== '123456') return T('验证码错误');
   if (pwd.length < 6) return T('密码至少6位');
-  const btn = document.getElementById('regBtn');
-  btn.classList.add('loading');
+  const btn = document.getElementById('regBtn'); btn.classList.add('loading');
   const { data, error } = await supabase.rpc('register_user', { user_email: email, user_nickname: nick, user_phone: phone, user_password: pwd, user_signature: signature });
   btn.classList.remove('loading');
   if (error) return T('注册失败：' + error.message);
@@ -864,7 +818,6 @@ async function doRegister() {
   localStorage.setItem('oskwk_user', JSON.stringify(user));
   enter();
 }
-
 function enter() {
   document.getElementById('authWrap').style.display = 'none';
   document.getElementById('app').classList.add('on');
@@ -897,28 +850,20 @@ window.switchTab = async tab => {
   if (tab === 'friends') loadFeed();
   if (tab === 'profile') renderProfile();
 };
-function updateAdminBar(cat) {
-  const bar = document.getElementById('adminBar' + cat.charAt(0).toUpperCase() + cat.slice(1));
-  if (bar) bar.style.display = isAdmin ? 'flex' : 'none';
-}
+function updateAdminBar(cat) { const bar = document.getElementById('adminBar' + cat.charAt(0).toUpperCase() + cat.slice(1)); if (bar) bar.style.display = isAdmin ? 'flex' : 'none'; }
 function toggleForumToolbar() {
-  const adminBar = document.getElementById('forumAdminToolbar');
-  const normalBar = document.getElementById('forumNormalToolbar');
+  const adminBar = document.getElementById('forumAdminToolbar'), normalBar = document.getElementById('forumNormalToolbar');
   if (adminBar) adminBar.style.display = isAdmin ? 'flex' : 'none';
   if (normalBar) normalBar.style.display = isAdmin ? 'none' : 'block';
 }
 
-// ==================== 节日倒计时（单个最近节日+进度条） ====================
+// ==================== 节日倒计时 ====================
 function renderCountdown() {
-  const today = new Date();
-  const year = today.getFullYear();
+  const today = new Date(); const year = today.getFullYear();
   const rawEvents = [
-    { name: '元旦', month: 1, day: 1 },
-    { name: '情人节', month: 2, day: 14 },
-    { name: '劳动节', month: 5, day: 1 },
-    { name: '中秋节', month: 9, day: 17 },
-    { name: '国庆节', month: 10, day: 1 },
-    { name: '圣诞节', month: 12, day: 25 }
+    { name: '元旦', month: 1, day: 1 }, { name: '情人节', month: 2, day: 14 },
+    { name: '劳动节', month: 5, day: 1 }, { name: '中秋节', month: 9, day: 17 },
+    { name: '国庆节', month: 10, day: 1 }, { name: '圣诞节', month: 12, day: 25 }
   ];
   const eventsWithDiff = rawEvents.map(e => {
     let eventDate = new Date(year, e.month - 1, e.day);
@@ -927,8 +872,7 @@ function renderCountdown() {
     return { ...e, diffDays };
   });
   const nextEvent = eventsWithDiff.reduce((min, curr) => curr.diffDays < min.diffDays ? curr : min, eventsWithDiff[0]);
-  const daysInYear = 365;
-  const elapsedDays = daysInYear - nextEvent.diffDays;
+  const daysInYear = 365, elapsedDays = daysInYear - nextEvent.diffDays;
   const progressPercent = Math.min(100, Math.max(0, (elapsedDays / daysInYear) * 100));
   document.getElementById('countdownWidget').innerHTML = `
     <h3>节日倒计时</h3>
@@ -947,42 +891,27 @@ async function loadArticles(cat) {
   c.innerHTML = (data || []).map(a => `
     <div class="card" onclick="event.stopPropagation(); openArticleInNewTab('${encodeURIComponent(JSON.stringify(a))}')">
       ${isAdmin ? `<button class="card-delete" onclick="event.stopPropagation();deleteArticle(${a.id},'${cat}')">×</button>` : ''}
-      <div class="card-img-wrap">
-        <img src="${a.image_url || randomPhoto()}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg, #1a1a2e, #16213e)';">
-      </div>
+      <img src="${a.image_url || landscape()}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.card-img-fallback').style.display='block';">
+      <div class="card-img-fallback" style="display:none;width:100%;height:200px;background:linear-gradient(135deg, #1a1a2e, #16213e);"></div>
       <div class="card-body"><h3>${a.title}</h3><p>${a.content?.slice(0, 100) || ''}</p></div>
     </div>
   `).join('') || '<p style="color:var(--text3)">暂无内容</p>';
 }
+window.openArticleInNewTab = (encoded) => {
+  const a = JSON.parse(decodeURIComponent(encoded));
+  const w = window.open('about:blank', '_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${a.title}</title><style>body{font-family:Inter,sans-serif;background:#1c1c1e;color:#f5f5f7;padding:40px;max-width:800px;margin:auto;line-height:1.6}h1{font-family:'Playfair Display',serif}img{max-width:100%;border-radius:16px;margin:20px 0}.comment{border-top:1px solid #444;padding-top:16px;margin-top:16px}</style></head><body><h1>${a.title}</h1><img src="${a.image_url || landscape()}" onerror="this.style.display='none'"><p>${a.content}</p><div class="comment"><h3>评论</h3><div id="comments"></div><textarea id="commentInput" placeholder="写下评论..." style="width:100%;padding:12px;background:#2c2c2e;color:#fff;border-radius:12px;margin-top:12px;"></textarea><button onclick="postComment()" style="margin-top:8px;background:#0071e3;color:#fff;border:none;border-radius:12px;padding:10px 20px;cursor:pointer;">发送</button></div><script>
+    const articleId=${a.id};
+    async function loadComments(){const res=await fetch('${SUPABASE_URL}/rest/v1/comments?article_id=eq.'+articleId+'&order=created_at',{headers:{apikey:'${SUPABASE_KEY}',Authorization:'Bearer ${SUPABASE_KEY}'}});const data=await res.json();document.getElementById('comments').innerHTML=data.map(c=>\`<p><b>\${c.nickname}</b>：\${c.content}</p>\`).join('');}
+    async function postComment(){const input=document.getElementById('commentInput');if(!input.value.trim())return;await fetch('${SUPABASE_URL}/rest/v1/comments',{method:'POST',headers:{apikey:'${SUPABASE_KEY}',Authorization:'Bearer ${SUPABASE_KEY}','Content-Type':'application/json'},body:JSON.stringify({article_id:articleId,nickname:'${user?.nickname||"匿名"}',content:input.value.trim()})});input.value='';loadComments();}
+    loadComments();
+  <\/script></body></html>`);
+};
+window.openPublish = (cat) => { if (!isAdmin) return T('无权操作'); $('#genericContent').innerHTML = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="6"></textarea><input id="pubImage" placeholder="图片URL"><button class="main" onclick="publishArticle('${cat}')">发布</button>`; $('#genericModal').classList.add('show'); };
+window.publishArticle = async (cat) => { const title = document.getElementById('pubTitle')?.value.trim(), content = document.getElementById('pubContent')?.value.trim(), img = document.getElementById('pubImage')?.value.trim() || null; if (!title || !content) return T('标题和内容不能为空'); const { error } = await supabase.from('articles').insert([{ title, content, category: cat, author: user.nickname, image_url: img }]); if (error) return T('发布失败'); T('发布成功'); $('#genericModal').classList.remove('show'); loadArticles(cat); };
+window.deleteArticle = async (id, cat) => { if (!confirm('确认删除？')) return; const { error } = await supabase.from('articles').delete().eq('id', id); if (error) return T('删除失败'); T('已删除'); loadArticles(cat); };
 
-window.openArticleInNewTab = (encodedArticle) => {
-  const a = JSON.parse(decodeURIComponent(encodedArticle));
-  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${a.title}</title><style>body{font-family:Inter,sans-serif;background:#1c1c1e;color:#f5f5f7;padding:40px;max-width:800px;margin:auto;line-height:1.6}h1{font-family:'Playfair Display',serif}img{max-width:100%;border-radius:16px;margin:20px 0}</style></head><body><h1>${a.title}</h1><img src="${a.image_url || randomPhoto()}" onerror="this.style.display='none'"><p>${a.content}</p></body></html>`;
-  const newWindow = window.open('about:blank', '_blank');
-  if (newWindow) newWindow.document.write(html);
-  else T('请允许弹窗以查看文章');
-};
-
-window.openPublish = (cat) => {
-  if (!isAdmin) return T('无权操作');
-  $('#genericContent').innerHTML = `<h3>发布文章到 ${cat}</h3><input id="pubTitle" placeholder="标题"><textarea id="pubContent" placeholder="内容" rows="6"></textarea><input id="pubImage" placeholder="图片URL"><button class="main" onclick="publishArticle('${cat}')">发布</button>`;
-  $('#genericModal').classList.add('show');
-};
-window.publishArticle = async (cat) => {
-  const title = document.getElementById('pubTitle')?.value.trim(), content = document.getElementById('pubContent')?.value.trim(), img = document.getElementById('pubImage')?.value.trim() || null;
-  if (!title || !content) return T('标题和内容不能为空');
-  const { error } = await supabase.from('articles').insert([{ title, content, category: cat, author: user.nickname, image_url: img }]);
-  if (error) return T('发布失败');
-  T('发布成功'); $('#genericModal').classList.remove('show'); loadArticles(cat);
-};
-window.deleteArticle = async (id, cat) => {
-  if (!confirm('确认删除？')) return;
-  const { error } = await supabase.from('articles').delete().eq('id', id);
-  if (error) return T('删除失败');
-  T('已删除'); loadArticles(cat);
-};
-
-// ==================== 论坛（管理员删除、公告，新标签页打开详情） ====================
+// ==================== 论坛（正规化：公告、管理员删除、上传图片） ====================
 async function loadForumPosts() {
   const container = document.getElementById('forumPosts');
   if (!container) return;
@@ -995,7 +924,7 @@ async function loadForumPosts() {
   const forumNotice = localStorage.getItem('forum_notice') || '';
   container.innerHTML = (forumNotice ? `<div style="background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:14px;margin-bottom:20px;font-style:italic">${forumNotice}</div>` : '') +
     postsWithComments.map(p => `
-    <div class="forum-post" onclick="event.stopPropagation(); openForumPostInNewTab('${encodeURIComponent(JSON.stringify(p))}')">
+    <div class="forum-post" onclick="event.stopPropagation(); openForumInNewTab('${encodeURIComponent(JSON.stringify(p))}')">
       ${isAdmin ? `<button class="forum-post-delete" onclick="event.stopPropagation();deleteForumPost(${p.id})">×</button>` : ''}
       <div class="forum-post-header">
         <div class="forum-post-avatar">${p.nickname?.charAt(0)}</div>
@@ -1007,10 +936,7 @@ async function loadForumPosts() {
         ${p.comments.map(c => `
           <div class="forum-comment-item">
             <div class="forum-comment-avatar">${c.nickname?.charAt(0)}</div>
-            <div class="forum-comment-body">
-              <div class="forum-comment-meta"><span class="forum-comment-nickname">${c.nickname}</span><span class="forum-comment-time">${new Date(c.created_at).toLocaleString()}</span></div>
-              <div class="forum-comment-content">${c.content}</div>
-            </div>
+            <div class="forum-comment-body"><div class="forum-comment-meta"><span class="forum-comment-nickname">${c.nickname}</span><span class="forum-comment-time">${new Date(c.created_at).toLocaleString()}</span></div><div class="forum-comment-content">${c.content}</div></div>
           </div>
         `).join('')}
       </div>
@@ -1021,24 +947,6 @@ async function loadForumPosts() {
     </div>
   `).join('');
 }
-
-window.openForumPostInNewTab = (encodedPost) => {
-  const p = JSON.parse(decodeURIComponent(encodedPost));
-  const commentsHtml = (p.comments || []).map(c => `
-    <div style="display:flex;gap:10px;margin-bottom:12px;">
-      <div style="width:32px;height:32px;border-radius:50%;background:#0071e3;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;">${c.nickname?.charAt(0)}</div>
-      <div>
-        <div style="display:flex;gap:8px;"><span style="font-weight:600;">${c.nickname}</span><span style="color:#aaa;font-size:0.8rem;">${new Date(c.created_at).toLocaleString()}</span></div>
-        <div>${c.content}</div>
-      </div>
-    </div>
-  `).join('');
-  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${p.nickname} 的帖子</title><style>body{font-family:Inter,sans-serif;background:#1c1c1e;color:#f5f5f7;padding:40px;max-width:800px;margin:auto;line-height:1.6}h2{font-family:'Playfair Display',serif}.meta{color:#aaa;font-size:0.9rem}img{max-width:100%;border-radius:12px;margin:10px 0}.comment{border-top:1px solid #444;padding-top:16px;margin-top:16px}</style></head><body><h2>${p.nickname} 的帖子</h2><div class="meta">${new Date(p.created_at).toLocaleString()}</div><p>${p.content}</p>${p.image_url ? `<img src="${p.image_url}" onerror="this.style.display='none'">` : ''}<div class="comment"><h3>评论</h3>${commentsHtml || '暂无评论'}</div></body></html>`;
-  const newWindow = window.open('about:blank', '_blank');
-  if (newWindow) newWindow.document.write(html);
-  else T('请允许弹窗以查看帖子');
-};
-
 window.submitForumComment = async function(postId) {
   if (!user) return T('请先登录');
   const input = document.getElementById(`comment-input-${postId}`);
@@ -1047,50 +955,45 @@ window.submitForumComment = async function(postId) {
   if (error) return T('评论失败');
   input.value = ''; loadForumPosts();
 };
-window.openForumPost = () => {
-  if (!user) return T('请先登录');
-  $('#genericContent').innerHTML = `<h3>发帖</h3><textarea id="forumContent" placeholder="说点什么..." rows="4"></textarea><input type="file" id="forumFile" accept="image/*"><button class="main" onclick="submitForumPost()">发布</button>`;
-  $('#genericModal').classList.add('show');
-};
+window.openForumPost = () => { if (!user) return T('请先登录'); $('#genericContent').innerHTML = `<h3>发帖</h3><textarea id="forumContent" placeholder="说点什么..." rows="4"></textarea><input type="file" id="forumFile" accept="image/*"><button class="main" onclick="submitForumPost()">发布</button>`; $('#genericModal').classList.add('show'); };
 window.submitForumPost = async () => {
   const content = document.getElementById('forumContent')?.value.trim(), file = document.getElementById('forumFile')?.files[0];
   if (!content) return T('内容不能为空');
-  let image_url = null;
-  if (file) {
-    const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image();
-    img.src = URL.createObjectURL(file); await new Promise(r => img.onload = r);
-    let w = img.width, h = img.height; if (w > 800) { h *= 800/w; w = 800; }
-    canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h);
-    const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.7));
-    const name = `forum_${Date.now()}.jpg`;
-    await supabase.storage.from('chat-images').upload(name, blob);
-    image_url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
-  }
+  const image_url = await uploadImage(file, 'forum');
   const { error } = await supabase.from('forum_posts').insert([{ user_email: user.email, nickname: user.nickname, content, image_url }]);
   if (error) return T('发布失败');
   T('发布成功'); $('#genericModal').classList.remove('show'); loadForumPosts();
 };
-window.deleteForumPost = async (id) => {
-  if (!isAdmin) return;
-  if (!confirm('确定删除这个帖子吗？')) return;
-  const { error } = await supabase.from('forum_posts').delete().eq('id', id);
-  if (error) return T('删除失败');
-  T('已删除'); loadForumPosts();
+window.deleteForumPost = async (id) => { if (!isAdmin) return; if (!confirm('确定删除这个帖子吗？')) return; const { error } = await supabase.from('forum_posts').delete().eq('id', id); if (error) return T('删除失败'); T('已删除'); loadForumPosts(); };
+window.showForumAdmin = () => { const notice = localStorage.getItem('forum_notice') || ''; $('#genericContent').innerHTML = `<h3>论坛管理</h3><textarea id="forumNotice" placeholder="公告内容...">${notice}</textarea><button class="main" onclick="saveForumSettings()">保存</button>`; $('#genericModal').classList.add('show'); };
+window.saveForumSettings = () => { const notice = document.getElementById('forumNotice')?.value || ''; localStorage.setItem('forum_notice', notice); T('已保存'); $('#genericModal').classList.remove('show'); loadForumPosts(); };
+window.openForumInNewTab = (encoded) => {
+  const p = JSON.parse(decodeURIComponent(encoded));
+  const w = window.open('about:blank', '_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${p.nickname} 的帖子</title><style>body{font-family:Inter,sans-serif;background:#1c1c1e;color:#f5f5f7;padding:40px;max-width:800px;margin:auto;line-height:1.6}h2{font-family:'Playfair Display',serif}.meta{color:#aaa;font-size:0.9rem}img{max-width:100%;border-radius:12px;margin:10px 0}.comment{border-top:1px solid #444;padding-top:16px;margin-top:16px}</style></head><body><h2>${p.nickname} 的帖子</h2><div class="meta">${new Date(p.created_at).toLocaleString()}</div><p>${p.content}</p>${p.image_url?`<img src="${p.image_url}" onerror="this.style.display='none'">`:''}<div class="comment"><h3>评论</h3><div id="comments"></div><textarea id="commentInput" placeholder="写下评论..." style="width:100%;padding:12px;background:#2c2c2e;color:#fff;border-radius:12px;margin-top:12px;"></textarea><button onclick="postComment()" style="margin-top:8px;background:#0071e3;color:#fff;border:none;border-radius:12px;padding:10px 20px;cursor:pointer;">发送</button></div><script>
+    const postId=${p.id};
+    async function loadComments(){const res=await fetch('${SUPABASE_URL}/rest/v1/forum_comments?post_id=eq.'+postId+'&order=created_at',{headers:{apikey:'${SUPABASE_KEY}',Authorization:'Bearer ${SUPABASE_KEY}'}});const data=await res.json();document.getElementById('comments').innerHTML=data.map(c=>\`<p><b>\${c.nickname}</b>：\${c.content}</p>\`).join('');}
+    async function postComment(){const input=document.getElementById('commentInput');if(!input.value.trim())return;await fetch('${SUPABASE_URL}/rest/v1/forum_comments',{method:'POST',headers:{apikey:'${SUPABASE_KEY}',Authorization:'Bearer ${SUPABASE_KEY}','Content-Type':'application/json'},body:JSON.stringify({post_id:postId,nickname:'${user?.nickname||"匿名"}',content:input.value.trim()})});input.value='';loadComments();}
+    loadComments();
+  <\/script></body></html>`);
 };
-window.showForumAdmin = () => {
-  const notice = localStorage.getItem('forum_notice') || '';
-  $('#genericContent').innerHTML = `
-    <h3>论坛管理</h3>
-    <textarea id="forumNotice" placeholder="公告内容...">${notice}</textarea>
-    <button class="main" onclick="saveForumSettings()">保存</button>
-  `;
-  $('#genericModal').classList.add('show');
-};
-window.saveForumSettings = () => {
-  const notice = document.getElementById('forumNotice')?.value || '';
-  localStorage.setItem('forum_notice', notice);
-  T('已保存'); $('#genericModal').classList.remove('show'); loadForumPosts();
-};
+
+// ==================== 图片上传辅助 ====================
+async function uploadImage(file, prefix = 'img') {
+  if (!file) return null;
+  const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image();
+  img.src = URL.createObjectURL(file);
+  await new Promise(r => img.onload = r);
+  let w = img.width, h = img.height;
+  if (w > 800) { h *= 800 / w; w = 800; }
+  canvas.width = w; canvas.height = h;
+  ctx.drawImage(img, 0, 0, w, h);
+  const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.7));
+  const name = `${prefix}_${Date.now()}.jpg`;
+  const { error } = await supabase.storage.from('chat-images').upload(name, blob);
+  if (error) { console.error(error); return null; }
+  return `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
+}
 
 // ==================== 聊天室 ====================
 let allRooms = [];
@@ -1112,177 +1015,30 @@ function filterRooms() {
   html += `<button class="nav-icon" style="width:auto;padding:8px 16px" onclick="startPrivateChat()"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> 私信</button>`;
   list.innerHTML = html || '<p style="color:var(--text3)">没有匹配的房间</p>';
 }
-window.showCreateRoom = () => {
-  let html = `<h3>创建房间</h3><input id="newRoomName" placeholder="房间名称"><input id="newRoomPass" type="password" placeholder="密码（可选）"><button class="main" onclick="createRoom()">创建</button>`;
-  $('#genericContent').innerHTML = html;
-  $('#genericModal').classList.add('show');
-};
-window.createRoom = async () => {
-  const name = document.getElementById('newRoomName')?.value.trim(), pass = document.getElementById('newRoomPass')?.value.trim();
-  if (!name) return T('请输入房间名称');
-  if (['大厅', '技术', '理论', '艺术'].includes(name)) return T('不能与公共房间重名');
-  const { error } = await supabase.from('rooms').insert([{ name, password: pass || '', created_by: user.email }]);
-  if (error) return T('创建失败');
-  T('房间已创建');
-  $('#genericModal').classList.remove('show');
-  renderRoomList();
-};
+window.showCreateRoom = () => { let html = `<h3>创建房间</h3><input id="newRoomName" placeholder="房间名称"><input id="newRoomPass" type="password" placeholder="密码（可选）"><button class="main" onclick="createRoom()">创建</button>`; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+window.createRoom = async () => { const name = document.getElementById('newRoomName')?.value.trim(), pass = document.getElementById('newRoomPass')?.value.trim(); if (!name) return T('请输入房间名称'); if (['大厅', '技术', '理论', '艺术'].includes(name)) return T('不能与公共房间重名'); const { error } = await supabase.from('rooms').insert([{ name, password: pass || '', created_by: user.email }]); if (error) return T('创建失败'); T('房间已创建'); $('#genericModal').classList.remove('show'); renderRoomList(); };
 window.joinPublicRoom = name => { if (!user) return T('请登录'); room = 'oskwk-' + name; startChat(); };
-window.joinCustomRoom = async (name, hasPass) => {
-  if (!user) return T('请登录');
-  if (hasPass) {
-    const pass = prompt('请输入房间密码：');
-    if (pass === null) return;
-    const { data, error } = await supabase.from('rooms').select('password').eq('name', name).single();
-    if (error) return T('验证失败');
-    if (String(data.password) !== String(pass)) return T('密码错误');
-  }
-  room = 'oskwk-' + name;
-  startChat();
-};
-window.startPrivateChat = () => {
-  if (!user) return T('请先登录');
-  const peer = prompt('对方邮箱');
-  if (!peer) return;
-  room = 'private-' + [user.email, peer].sort().join('_');
-  startChat();
-};
-async function startChat() {
-  document.getElementById('roomList').style.display = 'none';
-  document.getElementById('chatPanel').style.display = 'block';
-  const { data } = await supabase.from('messages').select('*').eq('room', room).order('created_at', { ascending: true }).limit(200);
-  const log = document.getElementById('chatLog');
-  log.innerHTML = '';
-  if (data) data.forEach(renderMsg);
-  if (realtime) supabase.removeChannel(realtime);
-  realtime = supabase.channel('room-' + room)
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `room=eq.${room}` }, payload => renderMsg(payload.new))
-    .subscribe();
-}
-function renderMsg(m) {
-  const log = document.getElementById('chatLog');
-  if (!log) return;
-  const isMine = m.nickname === user?.nickname;
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'msg ' + (isMine ? 'mine' : 'peer');
-  const avatarDiv = document.createElement('div');
-  avatarDiv.className = 'msg-avatar';
-  avatarDiv.textContent = m.nickname?.charAt(0) || '?';
-  const bodyDiv = document.createElement('div');
-  bodyDiv.className = 'msg-body';
-  bodyDiv.innerHTML = `<b>${m.nickname}</b><br>${m.message || ''}${m.image_url ? `<br><img src="${m.image_url}" style="max-width:200px;border-radius:8px" onerror="this.style.display='none'">` : ''}`;
-  const timeSpan = document.createElement('div');
-  timeSpan.className = 'msg-time';
-  timeSpan.textContent = new Date(m.created_at).toLocaleTimeString();
-  bodyDiv.appendChild(timeSpan);
-  msgDiv.appendChild(avatarDiv);
-  msgDiv.appendChild(bodyDiv);
-  log.appendChild(msgDiv);
-  log.scrollTop = log.scrollHeight;
-}
-window.sendMsg = async () => {
-  const inp = document.getElementById('msgInput'), txt = inp.value.trim();
-  if (!user) return T('请先登录');
-  if (!room) return T('请先进入聊天室');
-  if (!txt) return;
-  const { data, error } = await supabase.from('messages').insert([{ room, nickname: user.nickname, message: txt }]).select();
-  if (error) return T('发送失败');
-  if (data && data[0]) renderMsg(data[0]);
-  inp.value = '';
-};
-window.uploadImg = async () => {
-  const f = document.getElementById('imgUpload').files[0];
-  if (!user) return T('请先登录');
-  if (!room) return T('请先进入聊天室');
-  if (!f) return;
-  const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image();
-  img.src = URL.createObjectURL(f); await new Promise(r => img.onload = r);
-  let w = img.width, h = img.height; if (w > 800) { h *= 800/w; w = 800; }
-  canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h);
-  const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.7));
-  const name = `chat_${Date.now()}.jpg`;
-  const { error: uploadError } = await supabase.storage.from('chat-images').upload(name, blob);
-  if (uploadError) return T('图片上传失败');
-  const url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
-  const { data, error: insertError } = await supabase.from('messages').insert([{ room, nickname: user.nickname, image_url: url }]).select();
-  if (insertError) return T('发送失败');
-  if (data && data[0]) renderMsg(data[0]);
-  document.getElementById('imgUpload').value = '';
-};
-window.leaveRoom = () => {
-  if (realtime) supabase.removeChannel(realtime);
-  room = null;
-  document.getElementById('chatPanel').style.display = 'none';
-  document.getElementById('roomList').style.display = 'flex';
-};
+window.joinCustomRoom = async (name, hasPass) => { if (!user) return T('请登录'); if (hasPass) { const pass = prompt('请输入房间密码：'); if (pass === null) return; const { data, error } = await supabase.from('rooms').select('password').eq('name', name).single(); if (error) return T('验证失败'); if (String(data.password) !== String(pass)) return T('密码错误'); } room = 'oskwk-' + name; startChat(); };
+window.startPrivateChat = () => { if (!user) return T('请先登录'); const peer = prompt('对方邮箱'); if (!peer) return; room = 'private-' + [user.email, peer].sort().join('_'); startChat(); };
+async function startChat() { document.getElementById('roomList').style.display='none'; document.getElementById('chatPanel').style.display='block'; const { data } = await supabase.from('messages').select('*').eq('room', room).order('created_at', { ascending: true }).limit(200); const log = document.getElementById('chatLog'); log.innerHTML = ''; if (data) data.forEach(renderMsg); if (realtime) supabase.removeChannel(realtime); realtime = supabase.channel('room-' + room).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `room=eq.${room}` }, payload => renderMsg(payload.new)).subscribe(); }
+function renderMsg(m) { const log = document.getElementById('chatLog'); if (!log) return; const isMine = m.nickname === user?.nickname; const msgDiv = document.createElement('div'); msgDiv.className = 'msg ' + (isMine ? 'mine' : 'peer'); const avatarDiv = document.createElement('div'); avatarDiv.className = 'msg-avatar'; avatarDiv.textContent = m.nickname?.charAt(0) || '?'; const bodyDiv = document.createElement('div'); bodyDiv.className = 'msg-body'; bodyDiv.innerHTML = `<b>${m.nickname}</b><br>${m.message || ''}${m.image_url ? `<br><img src="${m.image_url}" style="max-width:200px;border-radius:8px" onerror="this.style.display='none'">` : ''}`; const timeSpan = document.createElement('div'); timeSpan.className = 'msg-time'; timeSpan.textContent = new Date(m.created_at).toLocaleTimeString(); bodyDiv.appendChild(timeSpan); msgDiv.appendChild(avatarDiv); msgDiv.appendChild(bodyDiv); log.appendChild(msgDiv); log.scrollTop = log.scrollHeight; }
+window.sendMsg = async () => { const inp = document.getElementById('msgInput'), txt = inp.value.trim(); if (!user) return T('请先登录'); if (!room) return T('请先进入聊天室'); if (!txt) return; const { data, error } = await supabase.from('messages').insert([{ room, nickname: user.nickname, message: txt }]).select(); if (error) return T('发送失败'); if (data && data[0]) renderMsg(data[0]); inp.value = ''; };
+window.uploadImg = async () => { const f = document.getElementById('imgUpload').files[0]; if (!user) return T('请先登录'); if (!room) return T('请先进入聊天室'); if (!f) return; const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image(); img.src = URL.createObjectURL(f); await new Promise(r => img.onload = r); let w = img.width, h = img.height; if (w > 800) { h *= 800/w; w = 800; } canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h); const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.7)); const name = `chat_${Date.now()}.jpg`; const { error: uploadError } = await supabase.storage.from('chat-images').upload(name, blob); if (uploadError) return T('图片上传失败'); const url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`; const { data, error: insertError } = await supabase.from('messages').insert([{ room, nickname: user.nickname, image_url: url }]).select(); if (insertError) return T('发送失败'); if (data && data[0]) renderMsg(data[0]); document.getElementById('imgUpload').value = ''; };
+window.leaveRoom = () => { if (realtime) supabase.removeChannel(realtime); room = null; document.getElementById('chatPanel').style.display = 'none'; document.getElementById('roomList').style.display = 'flex'; };
 
 // ==================== 动态/好友 ====================
-window.openPost = () => {
-  $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`;
-  $('#genericModal').classList.add('show');
-};
-window.submitPost = async () => {
-  const txt = document.getElementById('postText')?.value.trim(), file = document.getElementById('postFile')?.files[0];
-  let url = null;
-  if (file) {
-    const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), img = new Image();
-    img.src = URL.createObjectURL(file); await new Promise(r => img.onload = r);
-    let w = img.width, h = img.height; if (w > 800) { h *= 800/w; w = 800; }
-    canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h);
-    const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.7));
-    const name = `post_${Date.now()}.jpg`;
-    await supabase.storage.from('chat-images').upload(name, blob);
-    url = `${SUPABASE_URL}/storage/v1/object/public/chat-images/${name}`;
-  }
-  await supabase.from('posts').insert([{ email: user.email, nickname: user.nickname, content: txt || '', image_url: url }]);
-  T('已发布'); $('#genericModal').classList.remove('show'); loadFeed();
-};
-async function loadFeed() {
-  if (!user) return;
-  const { data: friends } = await supabase.from('friendships').select('*').or(`from_email.eq.${user.email},to_email.eq.${user.email}`).eq('status', 'accepted');
-  const emails = [user.email, ...(friends || []).map(f => f.from_email === user.email ? f.to_email : f.from_email)];
-  const { data: posts } = await supabase.from('posts').select('*').in('email', emails).order('created_at', { ascending: false }).limit(30);
-  document.getElementById('friendsFeed').innerHTML = (posts || []).map(p => `
-    <div class="card">
-      <div class="card-body"><b>${p.nickname}</b> ${p.content || ''}</div>
-      ${p.image_url ? `<img src="${p.image_url}" style="width:100%" onerror="this.style.display='none'">` : ''}
-    </div>
-  `).join('') || '<p style="color:var(--text3)">暂无动态</p>';
-}
-window.showRequests = async () => {
-  const { data } = await supabase.from('friendships').select('*').eq('to_email', user.email).eq('status', 'pending');
-  let html = '<h3>好友请求</h3>';
-  if (data?.length) data.forEach(r => html += `<p>${r.from_email} <button onclick="handleReq(${r.id},'accepted')">接受</button> <button onclick="handleReq(${r.id},'rejected')">拒绝</button></p>`);
-  else html += '<p>暂无</p>';
-  $('#genericContent').innerHTML = html;
-  $('#genericModal').classList.add('show');
-};
-window.handleReq = async (id, status) => {
-  await supabase.from('friendships').update({ status }).eq('id', id);
-  T('已处理'); window.showRequests();
-};
-window.addFriend = () => {
-  const email = prompt('对方邮箱');
-  if (email) supabase.from('friendships').insert([{ from_email: user.email, to_email: email }]).then(() => T('已发送'));
-};
+window.openPost = () => { $('#genericContent').innerHTML = `<textarea id="postText" placeholder="分享风景..."></textarea><input type="file" id="postFile" accept="image/*"><button class="main" onclick="submitPost()">发布</button>`; $('#genericModal').classList.add('show'); };
+window.submitPost = async () => { const txt = document.getElementById('postText')?.value.trim(), file = document.getElementById('postFile')?.files[0]; const image_url = await uploadImage(file, 'post'); await supabase.from('posts').insert([{ email: user.email, nickname: user.nickname, content: txt || '', image_url }]); T('已发布'); $('#genericModal').classList.remove('show'); loadFeed(); };
+async function loadFeed() { if (!user) return; const { data: friends } = await supabase.from('friendships').select('*').or(`from_email.eq.${user.email},to_email.eq.${user.email}`).eq('status', 'accepted'); const emails = [user.email, ...(friends || []).map(f => f.from_email === user.email ? f.to_email : f.from_email)]; const { data: posts } = await supabase.from('posts').select('*').in('email', emails).order('created_at', { ascending: false }).limit(30); document.getElementById('friendsFeed').innerHTML = (posts || []).map(p => `<div class="card"><div class="card-body"><b>${p.nickname}</b> ${p.content || ''}</div>${p.image_url ? `<img src="${p.image_url}" style="width:100%" onerror="this.style.display='none'">` : ''}</div>`).join('') || '<p style="color:var(--text3)">暂无动态</p>'; }
+window.showRequests = async () => { const { data } = await supabase.from('friendships').select('*').eq('to_email', user.email).eq('status', 'pending'); let html = '<h3>好友请求</h3>'; if (data?.length) data.forEach(r => html += `<p>${r.from_email} <button onclick="handleReq(${r.id},'accepted')">接受</button> <button onclick="handleReq(${r.id},'rejected')">拒绝</button></p>`); else html += '<p>暂无</p>'; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+window.handleReq = async (id, status) => { await supabase.from('friendships').update({ status }).eq('id', id); T('已处理'); window.showRequests(); };
+window.addFriend = () => { const email = prompt('对方邮箱'); if (email) supabase.from('friendships').insert([{ from_email: user.email, to_email: email }]).then(() => T('已发送')); };
 
-// ==================== 个人资料 ====================
+// ==================== 个人资料（含个性签名修复） ====================
 async function renderProfile() {
   if (!user) return;
   const sig = user.signature ? `<div class="signature-box">“${user.signature}”</div>` : '';
-  const html = `
-    <div class="card" style="text-align:center;padding:28px">
-      <div class="avatar" style="width:64px;height:64px;font-size:1.6rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div>
-      <h3>${user.nickname}</h3><p style="color:var(--text2)">${user.email}</p>
-      ${sig}
-      <button onclick="showRequests()">好友请求</button>
-      <button onclick="addFriend()">添加好友</button>
-      <button onclick="showEditProfile()">编辑资料</button>
-      <button onclick="searchUser()">搜索用户</button>
-      ${isAdmin ? '<button onclick="showAdmin()">用户管理</button>' : ''}
-      <button onclick="logout()">退出</button>
-    </div>
-  `;
+  const html = `<div class="card" style="text-align:center;padding:28px"><div class="avatar" style="width:64px;height:64px;font-size:1.6rem;margin:0 auto 16px">${user.nickname?.charAt(0)}</div><h3>${user.nickname}</h3><p style="color:var(--text2)">${user.email}</p>${sig}<button onclick="showRequests()">好友请求</button><button onclick="addFriend()">添加好友</button><button onclick="showEditProfile()">编辑资料</button><button onclick="searchUser()">搜索用户</button>${isAdmin ? '<button onclick="showAdmin()">用户管理</button>' : ''}<button onclick="logout()">退出</button></div>`;
   document.getElementById('profileArea').innerHTML = html;
 }
 window.showEditProfile = () => {
@@ -1291,86 +1047,42 @@ window.showEditProfile = () => {
   $('#genericModal').classList.add('show');
 };
 window.saveProfile = async () => {
-  const nick = document.getElementById('editNick')?.value.trim(), pass = document.getElementById('editPass')?.value.trim(), avatar = document.getElementById('editAvatar')?.value.trim(), sig = document.getElementById('editSignature')?.value.trim() || '';
+  const nick = document.getElementById('editNick')?.value.trim(),
+        pass = document.getElementById('editPass')?.value.trim(),
+        avatar = document.getElementById('editAvatar')?.value.trim(),
+        sig = document.getElementById('editSignature')?.value.trim() || '';
   if (!nick) return T('昵称不能为空');
   const { data, error } = await supabase.rpc('update_profile', { user_email: user.email, new_nickname: nick, new_password: pass || null, new_avatar_url: avatar || null, new_signature: sig });
-  if (error) return T('更新失败');
+  if (error) return T('更新失败：' + error.message);
   user = data[0];
   localStorage.setItem('oskwk_user', JSON.stringify(user));
   T('资料已更新'); $('#genericModal').classList.remove('show'); renderProfile();
   document.getElementById('avatarTxt').textContent = user.nickname?.charAt(0)?.toUpperCase() || '?';
   if (user.avatar_url) { document.getElementById('avatarBtn').style.backgroundImage = `url(${user.avatar_url})`; document.getElementById('avatarTxt').textContent = ''; }
 };
-window.searchUser = () => {
-  let html = `<h3>搜索用户</h3><input id="searchKeyword" placeholder="邮箱或昵称"><button class="main" onclick="doSearch()">搜索</button><div id="searchResult"></div>`;
-  $('#genericContent').innerHTML = html;
-  $('#genericModal').classList.add('show');
-};
-window.doSearch = async () => {
-  const kw = document.getElementById('searchKeyword')?.value.trim();
-  if (!kw) return T('请输入关键词');
-  const { data, error } = await supabase.from('profiles').select('email, nickname, avatar_url, signature').or(`email.ilike.%${kw}%,nickname.ilike.%${kw}%`).limit(10);
-  if (error) return T('搜索失败');
-  const list = document.getElementById('searchResult');
-  if (data && data.length) list.innerHTML = data.map(u => `<p><b>${u.nickname}</b> (${u.email}) ${u.signature ? '“'+u.signature+'”' : ''} <button onclick="addFriendByEmail('${u.email}')">加好友</button></p>`).join('');
-  else list.innerHTML = '<p>未找到用户</p>';
-};
-window.addFriendByEmail = (email) => {
-  if (email === user.email) return T('不能添加自己');
-  supabase.from('friendships').insert([{ from_email: user.email, to_email: email }]).then(() => T('请求已发送'));
-};
-window.showAdmin = async () => {
-  if (!isAdmin) return T('无权操作');
-  const { data } = await supabase.from('profiles').select('*');
-  let html = '<h3>用户管理</h3>';
-  data.forEach(u => html += `<p>${u.nickname} (${u.email}) ${u.is_banned ? '[BANNED]' : ''} <button onclick="toggleBan('${u.email}',${!u.is_banned})">${u.is_banned ? '解禁' : '拉黑'}</button></p>`);
-  $('#genericContent').innerHTML = html;
-  $('#genericModal').classList.add('show');
-};
-window.toggleBan = async (email, ban) => {
-  if (!isAdmin) return;
-  await supabase.from('profiles').update({ is_banned: ban }).eq('email', email);
-  T('已更新'); window.showAdmin();
-};
+window.searchUser = () => { let html = `<h3>搜索用户</h3><input id="searchKeyword" placeholder="邮箱或昵称"><button class="main" onclick="doSearch()">搜索</button><div id="searchResult"></div>`; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+window.doSearch = async () => { const kw = document.getElementById('searchKeyword')?.value.trim(); if (!kw) return T('请输入关键词'); const { data, error } = await supabase.from('profiles').select('email, nickname, avatar_url, signature').or(`email.ilike.%${kw}%,nickname.ilike.%${kw}%`).limit(10); if (error) return T('搜索失败'); const list = document.getElementById('searchResult'); if (data && data.length) list.innerHTML = data.map(u => `<p><b>${u.nickname}</b> (${u.email}) ${u.signature ? '“'+u.signature+'”' : ''} <button onclick="addFriendByEmail('${u.email}')">加好友</button></p>`).join(''); else list.innerHTML = '<p>未找到用户</p>'; };
+window.addFriendByEmail = (email) => { if (email === user.email) return T('不能添加自己'); supabase.from('friendships').insert([{ from_email: user.email, to_email: email }]).then(() => T('请求已发送')); };
+window.showAdmin = async () => { if (!isAdmin) return T('无权操作'); const { data } = await supabase.from('profiles').select('*'); let html = '<h3>用户管理</h3>'; data.forEach(u => html += `<p>${u.nickname} (${u.email}) ${u.is_banned ? '[BANNED]' : ''} <button onclick="toggleBan('${u.email}',${!u.is_banned})">${u.is_banned ? '解禁' : '拉黑'}</button></p>`); $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); };
+window.toggleBan = async (email, ban) => { if (!isAdmin) return; await supabase.from('profiles').update({ is_banned: ban }).eq('email', email); T('已更新'); window.showAdmin(); };
 
 // ==================== 通知 ====================
-async function fetchNotifs() {
-  if (!user) return;
-  const { data } = await supabase.from('notifications').select('*').eq('user_email', user.email).order('created_at', { ascending: false }).limit(20);
-  const unread = data?.filter(n => !n.read).length || 0;
-  const dot = document.getElementById('notifDot');
-  if (dot) dot.style.display = unread ? 'block' : 'none';
-  return data;
-}
-window.showNotifs = async () => {
-  const data = await fetchNotifs();
-  let html = '<h3>通知</h3>';
-  if (data?.length) data.forEach(n => html += `<p>${n.content} <small>${new Date(n.created_at).toLocaleString()}</small></p>`);
-  else html += '<p>暂无</p>';
-  $('#genericContent').innerHTML = html;
-  $('#genericModal').classList.add('show');
-  await supabase.from('notifications').update({ read: true }).eq('user_email', user.email).eq('read', false);
-};
-function subNotifs() {
-  if (!user) return;
-  if (notifSub) supabase.removeChannel(notifSub);
-  notifSub = supabase.channel('notif-' + user.email)
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_email=eq.${user.email}` }, () => fetchNotifs())
-    .subscribe();
-}
+async function fetchNotifs() { if (!user) return; const { data } = await supabase.from('notifications').select('*').eq('user_email', user.email).order('created_at', { ascending: false }).limit(20); const unread = data?.filter(n => !n.read).length || 0; const dot = document.getElementById('notifDot'); if (dot) dot.style.display = unread ? 'block' : 'none'; return data; }
+window.showNotifs = async () => { const data = await fetchNotifs(); let html = '<h3>通知</h3>'; if (data?.length) data.forEach(n => html += `<p>${n.content} <small>${new Date(n.created_at).toLocaleString()}</small></p>`); else html += '<p>暂无</p>'; $('#genericContent').innerHTML = html; $('#genericModal').classList.add('show'); await supabase.from('notifications').update({ read: true }).eq('user_email', user.email).eq('read', false); };
+function subNotifs() { if (!user) return; if (notifSub) supabase.removeChannel(notifSub); notifSub = supabase.channel('notif-' + user.email).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_email=eq.${user.email}` }, () => fetchNotifs()).subscribe(); }
 window.logout = () => { localStorage.removeItem('oskwk_user'); location.reload(); };
 
 // ==================== 初始化 ====================
 (() => {
   const saved = localStorage.getItem('oskwk_user');
-  if (saved) {
-    try { user = JSON.parse(saved); isAdmin = (user.email === ADMIN_EMAIL); enter(); }
-    catch (e) { localStorage.removeItem('oskwk_user'); }
-  } else { document.getElementById('authWrap').style.display = 'flex'; }
+  if (saved) { try { user = JSON.parse(saved); isAdmin = (user.email === ADMIN_EMAIL); enter(); } catch(e) { localStorage.removeItem('oskwk_user'); } }
+  else { document.getElementById('authWrap').style.display = 'flex'; }
   setTimeout(() => document.getElementById('loader').classList.add('done'), 600);
   const theme = localStorage.getItem('oskwk_theme'); if (theme) setTheme(theme);
   const fontSize = localStorage.getItem('oskwk_fontsize'); if (fontSize) updateFontSize(fontSize);
   const accent = localStorage.getItem('oskwk_accent'); if (accent) document.documentElement.style.setProperty('--accent', accent);
 })();
-setInterval(() => { const img = document.getElementById('heroBg'); if (img) img.src = `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&t=${Date.now()}`; }, 15000);
+setInterval(() => { const img = document.getElementById('heroBg'); if (img) img.src = landscape(); }, 15000);
 </script>
+</body>
+</html>
